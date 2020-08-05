@@ -15,7 +15,7 @@ class Anim0101Page extends StatefulWidget {
 class _Anim0101PageState extends State<Anim0101Page>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  Ball _ball;
+  Ball _ball = Ball(x: 50, y: 50, r: 30);
   double angle = 65 * math.pi / 180, a = 0.1, vx = 0, vy = 0;
 
   @override
@@ -23,7 +23,6 @@ class _Anim0101PageState extends State<Anim0101Page>
     _controller =
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
-    _ball = Ball(x: 50, y: 50, r: 30);
     _controller.addListener(() {
       double ax = math.cos(angle) * a;
       double ay = math.sin(angle) * a;

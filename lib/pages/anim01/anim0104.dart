@@ -41,21 +41,19 @@ class _Anim0104PageState extends State<Anim0104Page>
 
   @override
   Widget build(BuildContext context) {
-    // 外面传进去size和Canvas接受到的size不一样，iPhone X的height不等812/712
-    // 固定宽高或者传进去
-     size = MediaQuery.of(context).size;
-//    var w = MediaQuery.of(context).size.width;
-//    size = Size(w, w);
+//    size = MediaQuery.of(context).size;
+    var W = MediaQuery.of(context).size.width;
+    size = Size(W, W);
     return Scaffold(
       appBar: appBar(widget.title),
       body: Container(
         child: AnimatedBuilder(
           animation: _controller,
-          builder: (context, child) {
+          builder: (context1, child) {
             return Center(
               child: CustomPaint(
                 size: size,
-                painter: MyCustomPainter(ball: _ball, r: r, containerSize: size),
+                painter: MyCustomPainter(ball: _ball, r: r),
               ),
             );
           },
@@ -67,10 +65,9 @@ class _Anim0104PageState extends State<Anim0104Page>
 
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
-  final Size containerSize;
   final double r;
 
-  MyCustomPainter({this.ball, this.r, this.containerSize});
+  MyCustomPainter({this.ball, this.r});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -83,21 +80,21 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     _paint.style = PaintingStyle.stroke;
     _paint.color = Colors.black;
-    canvas.drawCircle(containerSize.center(Offset.zero), r, _paint);
+    canvas.drawCircle(size.center(Offset.zero), r, _paint);
 
-    canvas.drawLine(Offset(0, containerSize.height / 2.0),
-        Offset(containerSize.width, containerSize.height / 2.0), _paint);
-    canvas.drawLine(Offset(containerSize.width / 2.0, 0),
-        Offset(containerSize.width / 2.0, containerSize.height), _paint);
+    canvas.drawLine(Offset(0, size.height / 2.0),
+        Offset(size.width, size.height / 2.0), _paint);
+    canvas.drawLine(Offset(size.width / 2.0, 0),
+        Offset(size.width / 2.0, size.height), _paint);
 
     _paint.style = PaintingStyle.fill;
     _paint.color = Colors.blue;
     canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
 
     _paint.color = Colors.red;
-    canvas.drawLine(Offset(ball.x, 0), Offset(ball.x, containerSize.height), _paint);
-    canvas.drawLine(Offset(0, ball.y), Offset(containerSize.width, ball.y), _paint);
-    canvas.drawLine(containerSize.center(Offset.zero), Offset(ball.x, ball.y), _paint);
+    canvas.drawLine(Offset(ball.x, 0), Offset(ball.x, size.height), _paint);
+    canvas.drawLine(Offset(0, ball.y), Offset(size.width, ball.y), _paint);
+    canvas.drawLine(size.center(Offset.zero), Offset(ball.x, ball.y), _paint);
     canvas.restore();
   }
 

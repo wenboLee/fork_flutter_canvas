@@ -14,9 +14,8 @@ class MyApp extends StatelessWidget {
         brightness: Theme.of(context).brightness,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        primaryColorBrightness: Brightness.light,
+        primaryColorBrightness: Brightness.dark,
       ),
-      navigatorKey: globalNavigatorKey,
       initialRoute: RouteConstant.DebugMainPage,
       routes: routes(context),
       navigatorObservers: [

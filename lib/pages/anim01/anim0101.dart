@@ -52,8 +52,7 @@ class _Anim0101PageState extends State<Anim0101Page>
           builder: (context, child) {
             return CustomPaint(
               size: size,
-              painter: MyCustomPainter(
-                  ball: _ball, angle: angle, a: a, vx: vx, vy: vy),
+              painter: MyCustomPainter(ball: _ball),
             );
           },
         ),
@@ -64,9 +63,8 @@ class _Anim0101PageState extends State<Anim0101Page>
 
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
-  final double angle, a, vx, vy;
 
-  MyCustomPainter({this.ball, this.angle, this.a, this.vx, this.vy});
+  MyCustomPainter({this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

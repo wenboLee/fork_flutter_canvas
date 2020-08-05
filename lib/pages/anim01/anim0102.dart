@@ -16,7 +16,7 @@ class _Anim0102PageState extends State<Anim0102Page>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Ball _ball;
-  double angle = 60 * math.pi / 180, a = 0.05, vx = 0, vy = 0;
+  double vy = 0, ay = 0.1;
 
   @override
   void initState() {
@@ -25,11 +25,7 @@ class _Anim0102PageState extends State<Anim0102Page>
           ..repeat();
     _ball = Ball(x: 50, y: 50, r: 30);
     _controller.addListener(() {
-      double ax = math.cos(angle) * a;
-      double ay = math.sin(angle) * a;
-      _ball.x += vx;
       _ball.y += vy;
-      vx += ax;
       vy += ay;
     });
     super.initState();
@@ -53,7 +49,7 @@ class _Anim0102PageState extends State<Anim0102Page>
             return CustomPaint(
               size: size,
               painter: MyCustomPainter(
-                  ball: _ball, angle: angle, a: a, vx: vx, vy: vy),
+                  ball: _ball, vy: vy),
             );
           },
         ),
@@ -64,9 +60,9 @@ class _Anim0102PageState extends State<Anim0102Page>
 
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
-  final double angle, a, vx, vy;
+  final double vy;
 
-  MyCustomPainter({this.ball, this.angle, this.a, this.vx, this.vy});
+  MyCustomPainter({this.ball, this.vy});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

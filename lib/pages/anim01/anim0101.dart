@@ -16,7 +16,7 @@ class _Anim0101PageState extends State<Anim0101Page>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Ball _ball;
-  double angle = 60 * math.pi / 180, a = 0.05, vx = 0, vy = 0;
+  double angle = 65 * math.pi / 180, a = 0.1, vx = 0, vy = 0;
 
   @override
   void initState() {

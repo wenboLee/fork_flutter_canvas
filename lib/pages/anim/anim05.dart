@@ -29,8 +29,10 @@ class _Anim05PageState extends State<Anim05Page>
         x: math.Random().nextDouble() * _size.width,
         y: math.Random().nextDouble() * _size.height / 4.0,
         g: math.Random().nextDouble() * 0.2 + 0.1,
-        r: math.Random().nextDouble() * 2 + 3,
+        r: math.Random().nextDouble() * 5 + 3,
         fillStyle: randomColor(),
+        friction: 0.05,
+        firstMove: true,
       ),
     ).toList();
   }

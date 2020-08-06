@@ -32,7 +32,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
   void initState() {
     super.initState();
     _controller = ScrollController();
-    pagesKey = routes(context).keys.toList();
+    pagesKey = routes(null).keys.toList();
     pagesKey.forEach((key) => {
       titles.add((routes(null)[key](null) as dynamic).title)
     });

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/comm.dart';
-import 'package:flutter_canvas/widget/utils.dart';
+import 'package:flutter_canvas/widget/ball.dart';
 import 'dart:math' as math;
+
+import 'package:flutter_canvas/widget/utils.dart';
 
 class Anim05Page extends StatefulWidget {
   final String title;
@@ -14,9 +16,47 @@ class Anim05Page extends StatefulWidget {
 
 class _Anim05PageState extends State<Anim05Page>
     with SingleTickerProviderStateMixin {
+  final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
-  Ball _ball = Ball(x: 50, y: 50, r: 30);
-  double vy = 0.5;
+  Size _size = Size.zero;
+  List<Ball> _balls = [];
+
+  _move(Ball ball) {
+    if (ball.firstMove) {
+      ball.vy += ball.g;
+    }
+
+    if (ball.vy > 0 && ball.vy - ball.friction > 0) {
+      ball.vy -= ball.friction;
+    } else if (ball.vy < 0 && ball.vy + ball.friction < 0) {
+      ball.vy += ball.friction;
+    } else {
+      ball.vy = 0;
+    }
+
+    ball.y += ball.vy;
+
+    if (ball.y >= _size.height - ball.r) {
+      //反弹
+      ball.y = _size.height - ball.r;
+      ball.vy *= -1;
+    }
+
+    ball.firstMove = false;
+  }
+
+  _initBalls() {
+    _balls = List.generate(
+      100,
+      (index) => Ball(
+        x: math.Random().nextDouble() * _size.width,
+        y: math.Random().nextDouble() * _size.height / 2.0,
+        g: math.Random().nextDouble() * 0.2 + 0.1,
+        r: math.Random().nextDouble() * 2 + 3,
+        fillStyle: randomColor(),
+      ),
+    ).toList();
+  }
 
   @override
   void initState() {
@@ -24,7 +64,16 @@ class _Anim05PageState extends State<Anim05Page>
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
     _controller.addListener(() {
-      _ball.y += vy;
+      if (mounted) {
+        _size = _globalKey.currentContext.size;
+        if (_balls.length <= 0) {
+          _initBalls();
+        }
+      }
+      _balls.forEach((ball) {
+        _move(ball);
+        print('=== ${ball.y}');
+      });
     });
     super.initState();
   }
@@ -44,8 +93,9 @@ class _Anim05PageState extends State<Anim05Page>
           animation: _controller,
           builder: (context, child) {
             return CustomPaint(
+              key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
+              painter: MyCustomPainter(balls: _balls),
             );
           },
         ),
@@ -55,9 +105,9 @@ class _Anim05PageState extends State<Anim05Page>
 }
 
 class MyCustomPainter extends CustomPainter {
-  final Ball ball;
+  final List<Ball> balls;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -68,7 +118,10 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+    balls.forEach((ball) {
+      _paint.color = ball.fillStyle;
+      canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+    });
     canvas.restore();
   }
 

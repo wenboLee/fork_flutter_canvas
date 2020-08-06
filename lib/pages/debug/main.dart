@@ -100,7 +100,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
             ),
           ),
           subtitle: Text(
-            '${pagesKey[index]}=>${titles[index]}',
+            '${pagesKey[index]}[${titles[index]}]',
             style: TextStyle(
               color: _randomColor(),
               fontWeight: FontWeight.bold,

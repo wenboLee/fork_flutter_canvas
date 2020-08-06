@@ -15,6 +15,9 @@ class Ball {
   Color strokeStyle = Color.fromARGB(0, 0, 0, 0);
   Color fillStyle = Color.fromARGB(1, 57, 119, 224);
   double alpha = 1;
+  double g = 0;
+  double friction = 0.05;
+  bool firstMove = true;
 
   Ball({
     this.x,
@@ -31,5 +34,8 @@ class Ball {
     this.strokeStyle,
     this.fillStyle,
     this.alpha,
+    this.g,
+    this.friction,
+    this.firstMove
   });
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/ball.dart';
-import 'dart:math' as math;
-
 import 'package:flutter_canvas/widget/utils.dart';
+import 'dart:math' as math;
 
 class Anim05Page extends StatefulWidget {
   final String title;

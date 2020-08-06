@@ -42,7 +42,6 @@ class _Anim01PageState extends State<Anim01Page>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: appBar(widget.title),
       body: Container(
@@ -50,7 +49,7 @@ class _Anim01PageState extends State<Anim01Page>
           animation: _controller,
           builder: (context, child) {
             return CustomPaint(
-              size: size,
+              size: Size.infinite,
               painter: MyCustomPainter(ball: _ball),
             );
           },

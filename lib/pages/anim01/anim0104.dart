@@ -14,8 +14,9 @@ class Anim0104Page extends StatefulWidget {
 
 class _Anim0104PageState extends State<Anim0104Page>
     with SingleTickerProviderStateMixin {
+  final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
-  Size size;
+  Size _size = Size.zero;
   Ball _ball = Ball(x: 0, y: 0, r: 30);
   double angle = 0, speed = 0.01, r = 150;
 
@@ -25,8 +26,11 @@ class _Anim0104PageState extends State<Anim0104Page>
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
     _controller.addListener(() {
-      _ball.x = size.width / 2.0 + r * math.cos(angle);
-      _ball.y = size.height / 2.0 + r * math.sin(angle);
+      if (mounted) {
+        _size = _globalKey.currentContext.size;
+      }
+      _ball.x = _size.width / 2.0 + r * math.cos(angle);
+      _ball.y = _size.height / 2.0 + r * math.sin(angle);
       angle += speed;
       angle %= math.pi * 2;
     });
@@ -41,20 +45,16 @@ class _Anim0104PageState extends State<Anim0104Page>
 
   @override
   Widget build(BuildContext context) {
-//    size = MediaQuery.of(context).size;
-    var W = MediaQuery.of(context).size.width;
-    size = Size(W, W);
     return Scaffold(
       appBar: appBar(widget.title),
       body: Container(
         child: AnimatedBuilder(
           animation: _controller,
-          builder: (context1, child) {
-            return Center(
-              child: CustomPaint(
-                size: size,
-                painter: MyCustomPainter(ball: _ball, r: r),
-              ),
+          builder: (context, child) {
+            return CustomPaint(
+              key: _globalKey,
+              size: Size.infinite,
+              painter: MyCustomPainter(ball: _ball, r: r),
             );
           },
         ),

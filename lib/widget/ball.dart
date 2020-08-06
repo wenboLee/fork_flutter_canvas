@@ -40,28 +40,4 @@ class Ball {
     this.friction = 0.05,
     this.firstMove = true,
   });
-
-  move(double height) {
-    if (!firstMove) {
-      vy += g;
-    }
-
-    if (vy > 0 && vy - friction > 0) {
-      vy -= friction;
-    } else if (vy < 0 && vy + friction < 0) {
-      vy += friction;
-    } else {
-      vy = 0;
-    }
-
-    y += vy;
-
-    if (y >= height - r) {
-      //反弹
-      y = height - r;
-      vy *= -1;
-    }
-
-    firstMove = false;
-  }
 }

@@ -28,12 +28,36 @@ class _Anim05PageState extends State<Anim05Page>
         x: math.Random().nextDouble() * _size.width,
         y: math.Random().nextDouble() * _size.height / 4.0,
         g: math.Random().nextDouble() * 0.2 + 0.1,
-        r: math.Random().nextDouble() * 5 + 3,
+        r: math.Random().nextDouble() * 4 + 3,
         fillStyle: randomColor(),
         friction: 0.05,
         firstMove: true,
       ),
     ).toList();
+  }
+
+  _move(Ball ball, double height) {
+    if (!ball.firstMove) {
+      ball.vy += ball.g;
+    }
+
+    if (ball.vy > 0 && ball.vy - ball.friction > 0) {
+      ball.vy -= ball.friction;
+    } else if (ball.vy < 0 && ball.vy + ball.friction < 0) {
+      ball.vy += ball.friction;
+    } else {
+      ball.vy = 0;
+    }
+
+    ball.y += ball.vy;
+
+    if (ball.y >= height - ball.r) {
+      //反弹
+      ball.y = height - ball.r;
+      ball.vy *= -1;
+    }
+
+    ball.firstMove = false;
   }
 
   @override
@@ -69,7 +93,7 @@ class _Anim05PageState extends State<Anim05Page>
           animation: _controller,
           builder: (context, child) {
             _balls.forEach((ball) {
-              ball.move(_size.height);
+              _move(ball, _size.height);
             });
             return CustomPaint(
               key: _globalKey,

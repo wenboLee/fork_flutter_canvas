@@ -21,36 +21,13 @@ class _Anim05PageState extends State<Anim05Page>
   Size _size = Size.zero;
   List<Ball> _balls = [];
 
-  _move(Ball ball) {
-    if (ball.firstMove) {
-      ball.vy += ball.g;
-    }
-
-    if (ball.vy > 0 && ball.vy - ball.friction > 0) {
-      ball.vy -= ball.friction;
-    } else if (ball.vy < 0 && ball.vy + ball.friction < 0) {
-      ball.vy += ball.friction;
-    } else {
-      ball.vy = 0;
-    }
-
-    ball.y += ball.vy;
-
-    if (ball.y >= _size.height - ball.r) {
-      //反弹
-      ball.y = _size.height - ball.r;
-      ball.vy *= -1;
-    }
-
-    ball.firstMove = false;
-  }
-
   _initBalls() {
     _balls = List.generate(
       100,
       (index) => Ball(
+        id: index,
         x: math.Random().nextDouble() * _size.width,
-        y: math.Random().nextDouble() * _size.height / 2.0,
+        y: math.Random().nextDouble() * _size.height / 4.0,
         g: math.Random().nextDouble() * 0.2 + 0.1,
         r: math.Random().nextDouble() * 2 + 3,
         fillStyle: randomColor(),
@@ -70,10 +47,6 @@ class _Anim05PageState extends State<Anim05Page>
           _initBalls();
         }
       }
-      _balls.forEach((ball) {
-        _move(ball);
-        print('=== ${ball.y}');
-      });
     });
     super.initState();
   }
@@ -89,9 +62,14 @@ class _Anim05PageState extends State<Anim05Page>
     return Scaffold(
       appBar: appBar(widget.title),
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
+            _balls.forEach((ball) {
+              ball.move(_size.height);
+            });
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,

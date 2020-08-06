@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Ball {
+  int id;
   double x;
   double y;
   double x3d;
@@ -20,6 +21,7 @@ class Ball {
   bool firstMove;
 
   Ball({
+    this.id = 0,
     this.x = 0,
     this.y = 0,
     this.x3d = 0,
@@ -38,4 +40,28 @@ class Ball {
     this.friction = 0.05,
     this.firstMove = true,
   });
+
+  move(double height) {
+    if (!firstMove) {
+      vy += g;
+    }
+
+    if (vy > 0 && vy - friction > 0) {
+      vy -= friction;
+    } else if (vy < 0 && vy + friction < 0) {
+      vy += friction;
+    } else {
+      vy = 0;
+    }
+
+    y += vy;
+
+    if (y >= height - r) {
+      //反弹
+      y = height - r;
+      vy *= -1;
+    }
+
+    firstMove = false;
+  }
 }

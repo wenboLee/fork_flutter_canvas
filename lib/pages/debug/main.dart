@@ -12,8 +12,8 @@ class DebugMainPage extends StatefulWidget {
 }
 
 class _DebugMainPageState extends State<DebugMainPage> {
-  List<String> pagesKey = routes(null).keys.toList();
-  ScrollController _controller = ScrollController();
+  List<String> pagesKey = [], titles = [];
+  ScrollController _controller;
   bool showToTopBtn = true;
   double offset = 44.0 * 5;
 
@@ -31,6 +31,11 @@ class _DebugMainPageState extends State<DebugMainPage> {
   @override
   void initState() {
     super.initState();
+    _controller = ScrollController();
+    pagesKey = routes(context).keys.toList();
+    pagesKey.forEach((key) => {
+      titles.add((routes(null)[key](null) as dynamic).title)
+    });
   }
 
   @override
@@ -95,7 +100,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
             ),
           ),
           subtitle: Text(
-            '${pagesKey[index]}',
+            '${pagesKey[index]}=>${titles[index]}',
             style: TextStyle(
               color: _randomColor(),
               fontWeight: FontWeight.bold,

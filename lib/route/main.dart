@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_canvas/pages/anim01/anim0101.dart';
-import 'package:flutter_canvas/pages/anim01/anim0102.dart';
-import 'package:flutter_canvas/pages/anim01/anim0103.dart';
-import 'package:flutter_canvas/pages/anim01/anim0104.dart';
+import 'package:flutter_canvas/pages/anim/anim01.dart';
+import 'package:flutter_canvas/pages/anim/anim02.dart';
+import 'package:flutter_canvas/pages/anim/anim03.dart';
+import 'package:flutter_canvas/pages/anim/anim04.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -35,9 +35,9 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
   return {
     RouteConstant.MainPage: (context) => MainPage(title: 'main'),
     RouteConstant.DebugMainPage: (context) => DebugMainPage(title: 'debug-route'),
-    RouteConstant.Anim0101Page: (context) => Anim0101Page(title: '任意方向上的加速度'),
-    RouteConstant.Anim0102Page: (context) => Anim0102Page(title: '单轴加速度'),
-    RouteConstant.Anim0103Page: (context) => Anim0103Page(title: '单轴运动'),
-    RouteConstant.Anim0104Page: (context) => Anim0104Page(title: '圆周运动'),
+    RouteConstant.Anim0101Page: (context) => Anim01Page(title: '任意方向上的加速度'),
+    RouteConstant.Anim0102Page: (context) => Anim02Page(title: '单轴加速度'),
+    RouteConstant.Anim0103Page: (context) => Anim03Page(title: '单轴运动'),
+    RouteConstant.Anim0104Page: (context) => Anim04Page(title: '圆周运动'),
   };
 }

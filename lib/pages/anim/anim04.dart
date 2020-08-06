@@ -3,16 +3,16 @@ import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 import 'dart:math' as math;
 
-class Anim0104Page extends StatefulWidget {
+class Anim04Page extends StatefulWidget {
   final String title;
 
-  Anim0104Page({this.title});
+  Anim04Page({this.title});
 
   @override
-  _Anim0104PageState createState() => _Anim0104PageState();
+  _Anim04PageState createState() => _Anim04PageState();
 }
 
-class _Anim0104PageState extends State<Anim0104Page>
+class _Anim04PageState extends State<Anim04Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;

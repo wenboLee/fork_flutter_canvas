@@ -3,20 +3,20 @@ import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 import 'dart:math' as math;
 
-class Anim0103Page extends StatefulWidget {
+class Anim01Page extends StatefulWidget {
   final String title;
 
-  Anim0103Page({this.title});
+  Anim01Page({this.title});
 
   @override
-  _Anim0103PageState createState() => _Anim0103PageState();
+  _Anim01PageState createState() => _Anim01PageState();
 }
 
-class _Anim0103PageState extends State<Anim0103Page>
+class _Anim01PageState extends State<Anim01Page>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Ball _ball = Ball(x: 50, y: 50, r: 30);
-  double vy = 0.5;
+  double angle = 65 * math.pi / 180, a = 0.1, vx = 0, vy = 0;
 
   @override
   void initState() {
@@ -24,7 +24,12 @@ class _Anim0103PageState extends State<Anim0103Page>
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
     _controller.addListener(() {
+      double ax = math.cos(angle) * a;
+      double ay = math.sin(angle) * a;
+      _ball.x += vx;
       _ball.y += vy;
+      vx += ax;
+      vy += ay;
     });
     super.initState();
   }

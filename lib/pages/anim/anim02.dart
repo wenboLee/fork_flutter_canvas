@@ -3,16 +3,16 @@ import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 import 'dart:math' as math;
 
-class Anim0102Page extends StatefulWidget {
+class Anim02Page extends StatefulWidget {
   final String title;
 
-  Anim0102Page({this.title});
+  Anim02Page({this.title});
 
   @override
-  _Anim0102PageState createState() => _Anim0102PageState();
+  _Anim02PageState createState() => _Anim02PageState();
 }
 
-class _Anim0102PageState extends State<Anim0102Page>
+class _Anim02PageState extends State<Anim02Page>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Ball _ball = Ball(x: 50, y: 50, r: 30);

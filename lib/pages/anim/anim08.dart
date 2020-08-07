@@ -54,7 +54,6 @@ class _Anim08PageState extends State<Anim08Page>
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
-            var w = MediaQuery.of(context).size.width;
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,

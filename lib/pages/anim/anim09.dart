@@ -102,16 +102,16 @@ class MyCustomPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
-    _paint.color = Colors.red;
-    canvas.drawArc(
-        Rect.fromCenter(
-            center: Offset(ball.x, ball.y),
-            height: ball.r * 3,
-            width: ball.r * 3),
-        0,
-        angle,
-        true,
-        _paint);
+//    _paint.color = Colors.red;
+//    canvas.drawArc(
+//        Rect.fromCenter(
+//            center: Offset(ball.x, ball.y),
+//            height: ball.r * 3,
+//            width: ball.r * 3),
+//        0,
+//        angle,
+//        true,
+//        _paint);
     canvas.restore();
   }
 

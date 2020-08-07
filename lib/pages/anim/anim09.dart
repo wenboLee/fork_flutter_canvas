@@ -18,7 +18,7 @@ class _Anim09PageState extends State<Anim09Page>
   AnimationController _controller;
   Size _size = Size.zero;
   Arrow _arrow;
-  double speed = 3, vr = 2 * math.pi / 180; //角速度
+  double speed = 3;
 
   @override
   void initState() {
@@ -32,7 +32,6 @@ class _Anim09PageState extends State<Anim09Page>
           _arrow =
               Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
         }
-        _arrow.rotation += vr;
       }
     });
     super.initState();
@@ -51,14 +50,23 @@ class _Anim09PageState extends State<Anim09Page>
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              key: _globalKey,
-              size: Size.infinite,
-              painter: MyCustomPainter(arrow: _arrow),
-            );
+        child: Listener(
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return CustomPaint(
+                key: _globalKey,
+                size: Size.infinite,
+                painter: MyCustomPainter(arrow: _arrow),
+              );
+            },
+          ),
+          behavior: HitTestBehavior.opaque,
+          onPointerHover: (event) {
+            print('onPointerHover ${event.localPosition}');
+          },
+          onPointerDown: (event) {
+            print('onPointerDown ${event.localPosition}');
           },
         ),
       ),

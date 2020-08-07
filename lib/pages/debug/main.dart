@@ -121,7 +121,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
               ),
               onPressed: () {
                 _controller.animateTo(0.0,
-                    duration: Duration(milliseconds: 200), curve: Curves.ease);
+                    duration: Duration(milliseconds: 300), curve: Curves.ease);
               })
           : Container(),
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_canvas/widget/arrow.dart';
 import 'package:flutter_canvas/widget/comm.dart';
-import 'package:flutter_canvas/widget/ball.dart';
-import 'package:flutter_canvas/widget/utils.dart';
 import 'dart:math' as math;
 
 class Anim08Page extends StatefulWidget {
@@ -18,8 +17,8 @@ class _Anim08PageState extends State<Anim08Page>
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
-  double angle = 0, speed = 0.015, ovalW = 300, ovalH = 600;
+  Arrow _arrow;
+  double vr = 2 * math.pi / 180; //角速度
 
   @override
   void initState() {
@@ -29,13 +28,10 @@ class _Anim08PageState extends State<Anim08Page>
     _controller.addListener(() {
       if (mounted) {
         _size = _globalKey.currentContext.size;
-        if (_ball == null) {
-          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+        if (_arrow == null) {
+          _arrow = Arrow(x: _size.width / 2, y: _size.height / 2, w: 140, h: 60);
         }
-        _ball.x = _size.width / 2 + (ovalW / 2) * math.cos(angle);
-        _ball.y = _size.height / 2 + (ovalH / 2) * math.sin(angle);
-        angle += speed;
-        angle %= math.pi * 2;
+        _arrow.rotation += vr;
       }
     });
     super.initState();
@@ -60,7 +56,7 @@ class _Anim08PageState extends State<Anim08Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball, ovalW: ovalW, ovalH: ovalH),
+              painter: MyCustomPainter(arrow: _arrow),
             );
           },
         ),
@@ -70,10 +66,9 @@ class _Anim08PageState extends State<Anim08Page>
 }
 
 class MyCustomPainter extends CustomPainter {
-  final Ball ball;
-  final double ovalW, ovalH;
+  final Arrow arrow;
 
-  MyCustomPainter({this.ball, this.ovalW, this.ovalH});
+  MyCustomPainter({this.arrow});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -82,27 +77,22 @@ class MyCustomPainter extends CustomPainter {
     ..strokeWidth = 1
     ..style = PaintingStyle.fill;
 
+  _createPath(Canvas canvas, double w, double h) {
+    Path path = Path();
+    path.moveTo(-w/2, -h/2);
+    path.lineTo(w/10, -h/2);
+    path.lineTo(w/10, -h);
+    path.lineTo(w/2, 0);
+    path.lineTo(w/10, h);
+    path.lineTo(w/10, h/2);
+    path.lineTo(-w/2, h/2);
+    path.close();
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    _paint.color = Colors.black;
-    _paint.style = PaintingStyle.stroke;
-    Offset center = size.center(Offset.zero);
-    canvas.drawOval(
-        Rect.fromCenter(
-            center: center, width: ovalW, height: ovalH),
-        _paint);
-    canvas.drawLine(Offset(0, center.dy), Offset(size.width, center.dy), _paint);
-    canvas.drawLine(Offset(center.dx, 0), Offset(center.dx, size.height), _paint);
 
-    _paint.color = ball.fillStyle;
-    _paint.style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
-    _paint.color = Colors.red;
-
-    canvas.drawLine(center, Offset(ball.x, ball.y), _paint);
-    canvas.drawLine(Offset(0, ball.y), Offset(size.width, ball.y), _paint);
-    canvas.drawLine(Offset(ball.x, 0), Offset(ball.x, size.height), _paint);
     canvas.restore();
   }
 

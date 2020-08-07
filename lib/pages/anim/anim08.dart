@@ -57,7 +57,7 @@ class _Anim08PageState extends State<Anim08Page>
             var w = MediaQuery.of(context).size.width;
             return CustomPaint(
               key: _globalKey,
-              size: Size(w, w),
+              size: Size.infinite,
               painter: MyCustomPainter(arrow: _arrow),
             );
           },
@@ -113,7 +113,15 @@ class MyCustomPainter extends CustomPainter {
     // 平移画布， 画布正方形才能居中旋转
     canvas.translate(center.dx - newX, center.dy - newY);
     canvas.rotate(arrow.rotation);
+
+    // 以画布宽 绘制背景正方形
+    _paint.color = Colors.red[100];
+    canvas.drawRect(
+        Rect.fromCenter(center: center, width: size.width, height: size.width),
+        _paint);
+
     var path = _createPath(canvas, arrow.w, arrow.h, size.center(Offset.zero));
+    _paint.color = Colors.blue;
     canvas.drawPath(path, _paint);
     canvas.restore();
   }

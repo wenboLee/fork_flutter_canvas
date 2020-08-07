@@ -27,7 +27,9 @@ class _Anim08PageState extends State<Anim08Page>
           ..repeat();
     _controller.addListener(() {
       if (mounted) {
-        _size = _globalKey.currentContext.size;
+        if (_size == Size.zero) {
+          _size = _globalKey.currentContext.size;
+        }
         if (_arrow == null) {
           _arrow =
               Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);

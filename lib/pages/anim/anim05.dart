@@ -67,7 +67,9 @@ class _Anim05PageState extends State<Anim05Page>
           ..repeat();
     _controller.addListener(() {
       if (mounted) {
-        _size = _globalKey.currentContext.size;
+        if (_size == Size.zero) {
+          _size = _globalKey.currentContext.size;
+        }
         if (_balls.length <= 0) {
           _initBalls();
         }

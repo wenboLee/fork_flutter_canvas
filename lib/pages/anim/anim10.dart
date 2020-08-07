@@ -3,22 +3,22 @@ import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/ball.dart';
 import 'dart:math' as math;
 
-class Anim07Page extends StatefulWidget {
+class Anim10Page extends StatefulWidget {
   final String title;
 
-  Anim07Page({this.title});
+  Anim10Page({this.title});
 
   @override
-  _Anim07PageState createState() => _Anim07PageState();
+  _Anim10PageState createState() => _Anim10PageState();
 }
 
-class _Anim07PageState extends State<Anim07Page>
+class _Anim10PageState extends State<Anim10Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
   Ball _ball;
-  double angle = 0, speed = 0.015, ovalW = 300, ovalH = 600;
+  double angle = 0, vx = 0.5, swing = 60; //增幅
 
   @override
   void initState() {
@@ -27,15 +27,20 @@ class _Anim07PageState extends State<Anim07Page>
           ..repeat();
     _controller.addListener(() {
       if (mounted) {
-        if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
-        }
+        _size = _globalKey.currentContext.size;
         if (_ball == null) {
-          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+          _ball = Ball(x: 30, y: _size.height / 2, r: 30);
         }
-        _ball.x = _size.width / 2 + (ovalW / 2) * math.cos(angle);
-        _ball.y = _size.height / 2 + (ovalH / 2) * math.sin(angle);
-        angle += speed;
+        if (_ball.x > _size.width - _ball.r) {
+          vx *= 1;
+        } else if(_ball.x - _ball.r < 0) {
+          vx *= -1;
+        }
+
+        _ball.x += vx;
+
+        _ball.y = _size.height / 2 + math.sin(angle) * swing;
+        angle += 0.05;
         angle %= math.pi * 2;
       }
     });
@@ -53,15 +58,13 @@ class _Anim07PageState extends State<Anim07Page>
     return Scaffold(
       appBar: appBar(widget.title),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball, ovalW: ovalW, ovalH: ovalH),
+              painter: MyCustomPainter(ball: _ball),
             );
           },
         ),
@@ -72,9 +75,8 @@ class _Anim07PageState extends State<Anim07Page>
 
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
-  final double ovalW, ovalH;
 
-  MyCustomPainter({this.ball, this.ovalW, this.ovalH});
+  MyCustomPainter({this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -86,24 +88,22 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    _paint.color = Colors.black;
     _paint.style = PaintingStyle.stroke;
-    Offset center = size.center(Offset.zero);
-    canvas.drawOval(
-        Rect.fromCenter(
-            center: center, width: ovalW, height: ovalH),
-        _paint);
-    canvas.drawLine(Offset(0, center.dy), Offset(size.width, center.dy), _paint);
-    canvas.drawLine(Offset(center.dx, 0), Offset(center.dx, size.height), _paint);
+    _paint.color = Colors.black;
+//    canvas.drawCircle(size.center(Offset.zero), r, _paint);
 
-    _paint.color = ball.fillStyle;
+    canvas.drawLine(Offset(0, size.height / 2.0),
+        Offset(size.width, size.height / 2.0), _paint);
+    canvas.drawLine(Offset(size.width / 2.0, 0),
+        Offset(size.width / 2.0, size.height), _paint);
+
     _paint.style = PaintingStyle.fill;
+    _paint.color = Colors.blue;
     canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
-    _paint.color = Colors.red;
 
-    canvas.drawLine(center, Offset(ball.x, ball.y), _paint);
-    canvas.drawLine(Offset(0, ball.y), Offset(size.width, ball.y), _paint);
+    _paint.color = Colors.red;
     canvas.drawLine(Offset(ball.x, 0), Offset(ball.x, size.height), _paint);
+    canvas.drawLine(Offset(0, ball.y), Offset(size.width, ball.y), _paint);
     canvas.restore();
   }
 

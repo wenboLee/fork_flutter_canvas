@@ -27,7 +27,9 @@ class _Anim04PageState extends State<Anim04Page>
           ..repeat();
     _controller.addListener(() {
       if (mounted) {
-        _size = _globalKey.currentContext.size;
+        if (_size == Size.zero) {
+          _size = _globalKey.currentContext.size;
+        }
       }
       _ball.x = _size.width / 2.0 + r * math.cos(angle);
       _ball.y = _size.height / 2.0 + r * math.sin(angle);

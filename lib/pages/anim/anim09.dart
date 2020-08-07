@@ -28,7 +28,9 @@ class _Anim09PageState extends State<Anim09Page>
           ..repeat();
     _controller.addListener(() {
       if (mounted) {
-        _size = _globalKey.currentContext.size;
+        if (_size == Size.zero) {
+          _size = _globalKey.currentContext.size;
+        }
         if (_ball == null) {
           _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
         }

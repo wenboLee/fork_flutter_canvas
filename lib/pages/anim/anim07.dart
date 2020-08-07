@@ -19,7 +19,7 @@ class _Anim07PageState extends State<Anim07Page>
   AnimationController _controller;
   Size _size = Size.zero;
   Ball _ball;
-  double angle = 0, speed = 0.02, ovalW = 300, ovalH = 600;
+  double angle = 0, speed = 0.015, ovalW = 300, ovalH = 600;
 
   @override
   void initState() {

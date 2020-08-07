@@ -18,7 +18,7 @@ class _Anim09PageState extends State<Anim09Page>
   AnimationController _controller;
   Size _size = Size.zero;
   Arrow _arrow;
-  double vr = 2 * math.pi / 180; //角速度
+  double speed = 3, vr = 2 * math.pi / 180; //角速度
 
   @override
   void initState() {

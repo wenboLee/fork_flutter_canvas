@@ -33,9 +33,8 @@ class _DebugMainPageState extends State<DebugMainPage> {
     super.initState();
     _controller = ScrollController();
     pagesKey = routes(null).keys.toList();
-    pagesKey.forEach((key) => {
-      titles.add((routes(null)[key](null) as dynamic).title)
-    });
+    pagesKey.forEach(
+        (key) => {titles.add((routes(null)[key](null) as dynamic).title)});
   }
 
   @override
@@ -115,6 +114,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
       ),
       floatingActionButton: showToTopBtn
           ? FloatingActionButton(
+              backgroundColor: Color.fromARGB(100, 0, 0, 255),
               child: Icon(
                 Icons.arrow_upward,
                 size: 30,

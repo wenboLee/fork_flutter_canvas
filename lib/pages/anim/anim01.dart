@@ -68,6 +68,7 @@ class MyCustomPainter extends CustomPainter {
     ..strokeCap = StrokeCap.round
     ..color = Colors.blue
     ..isAntiAlias = true
+    ..strokeWidth = 1
     ..style = PaintingStyle.fill;
 
   @override

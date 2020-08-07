@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/ball.dart';
+import 'package:flutter_canvas/widget/utils.dart';
 import 'dart:math' as math;
 
-class Anim02Page extends StatefulWidget {
+class Anim06Page extends StatefulWidget {
   final String title;
 
-  Anim02Page({this.title});
+  Anim06Page({this.title});
 
   @override
-  _Anim02PageState createState() => _Anim02PageState();
+  _Anim06PageState createState() => _Anim06PageState();
 }
 
-class _Anim02PageState extends State<Anim02Page>
+class _Anim06PageState extends State<Anim06Page>
     with SingleTickerProviderStateMixin {
+  final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
-  Ball _ball = Ball(x: 50, y: 50, r: 30);
-  double vy = 0, ay = 0.1;
+  Size _size = Size.zero;
+  Ball _ball;
+  double angle = 0, swing = 0; // 振幅
 
   @override
   void initState() {
@@ -24,8 +27,16 @@ class _Anim02PageState extends State<Anim02Page>
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
     _controller.addListener(() {
-      _ball.y += vy;
-      vy += ay;
+      if (mounted) {
+        _size = _globalKey.currentContext.size;
+        if (_ball == null) {
+          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+          swing = _size.width / 2 - _ball.r;
+        }
+        _ball.x = _size.width / 2 + math.sin(angle) * swing;
+        angle += 0.05;
+        angle %= math.pi * 2;
+      }
     });
     super.initState();
   }
@@ -41,10 +52,13 @@ class _Anim02PageState extends State<Anim02Page>
     return Scaffold(
       appBar: appBar(widget.title),
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
             return CustomPaint(
+              key: _globalKey,
               size: Size.infinite,
               painter: MyCustomPainter(ball: _ball),
             );
@@ -70,7 +84,10 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    _paint.color = ball.fillStyle;
     canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+    _paint.color = Colors.red;
+    canvas.drawLine(Offset(size.width / 2, 0), Offset(ball.x, ball.y), _paint);
     canvas.restore();
   }
 

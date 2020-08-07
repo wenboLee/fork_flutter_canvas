@@ -4,6 +4,7 @@ import 'package:flutter_canvas/pages/anim/anim02.dart';
 import 'package:flutter_canvas/pages/anim/anim03.dart';
 import 'package:flutter_canvas/pages/anim/anim04.dart';
 import 'package:flutter_canvas/pages/anim/anim05.dart';
+import 'package:flutter_canvas/pages/anim/anim06.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -16,6 +17,7 @@ class RouteConstant {
   static const String Anim03Page = '/anim03Page';
   static const String Anim04Page = '/anim04Page';
   static const String Anim05Page = '/anim05Page';
+  static const String Anim06Page = '/anim06Page';
 }
 
 ///通过 routeName名称 返回 Widget的名称
@@ -29,6 +31,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim03Page: 'Anim03Page',
     RouteConstant.Anim04Page: 'Anim04Page',
     RouteConstant.Anim05Page: 'Anim05Page',
+    RouteConstant.Anim06Page: 'Anim06Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -43,5 +46,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim03Page: (context) => Anim03Page(title: '单轴运动'),
     RouteConstant.Anim04Page: (context) => Anim04Page(title: '圆周运动'),
     RouteConstant.Anim05Page: (context) => Anim05Page(title: '小球的掉落'),
+    RouteConstant.Anim06Page: (context) => Anim06Page(title: '平滑运动'),
   };
 }

@@ -82,12 +82,12 @@ class MyCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.save();
+    canvas.restore();
     _paint.color = ball.fillStyle;
     canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
     _paint.color = Colors.red;
     canvas.drawLine(Offset(size.width / 2, 0), Offset(ball.x, ball.y), _paint);
-    canvas.restore();
+    canvas.save();
   }
 
   @override

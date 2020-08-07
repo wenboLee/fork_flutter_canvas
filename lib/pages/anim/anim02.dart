@@ -68,9 +68,9 @@ class MyCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.restore();
-    canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
     canvas.save();
+    canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+    canvas.restore();
   }
 
   @override

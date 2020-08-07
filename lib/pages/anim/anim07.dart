@@ -83,7 +83,7 @@ class MyCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.restore();
+    canvas.save();
     _paint.color = Colors.black;
     _paint.style = PaintingStyle.stroke;
     Offset center = size.center(Offset.zero);
@@ -102,7 +102,7 @@ class MyCustomPainter extends CustomPainter {
     canvas.drawLine(center, Offset(ball.x, ball.y), _paint);
     canvas.drawLine(Offset(0, ball.y), Offset(size.width, ball.y), _paint);
     canvas.drawLine(Offset(ball.x, 0), Offset(ball.x, size.height), _paint);
-    canvas.save();
+    canvas.restore();
   }
 
   @override

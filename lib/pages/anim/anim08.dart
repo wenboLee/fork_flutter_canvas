@@ -91,9 +91,10 @@ class MyCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.restore();
-
     canvas.save();
+
+
+    canvas.restore();
   }
 
   @override

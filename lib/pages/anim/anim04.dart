@@ -78,7 +78,7 @@ class MyCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.restore();
+    canvas.save();
     _paint.style = PaintingStyle.stroke;
     _paint.color = Colors.black;
     canvas.drawCircle(size.center(Offset.zero), r, _paint);
@@ -96,7 +96,7 @@ class MyCustomPainter extends CustomPainter {
     canvas.drawLine(Offset(ball.x, 0), Offset(ball.x, size.height), _paint);
     canvas.drawLine(Offset(0, ball.y), Offset(size.width, ball.y), _paint);
     canvas.drawLine(size.center(Offset.zero), Offset(ball.x, ball.y), _paint);
-    canvas.save();
+    canvas.restore();
   }
 
   @override

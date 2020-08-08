@@ -20,6 +20,7 @@ class _Anim10PageState extends State<Anim10Page>
   Ball _ball;
   double angle = 0, vx = 0.5, swing = 60; //增幅
   bool directionRight = true; //方向右
+  Map<String, Offset> _pointerMap = Map<String, Offset>();
 
   @override
   void initState() {
@@ -30,11 +31,12 @@ class _Anim10PageState extends State<Anim10Page>
       if (mounted) {
         _size = _globalKey.currentContext.size;
         if (_ball == null) {
-          _ball = Ball(x: 30, y: _size.height / 2, r: 30);
+          // 原点开始
+          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
         }
         if (_ball.x >= _size.width - _ball.r) {
           directionRight = false;
-        } else if (_ball.x - _ball.r <= 0){
+        } else if (_ball.x - _ball.r <= 0) {
           directionRight = true;
         }
 
@@ -69,7 +71,7 @@ class _Anim10PageState extends State<Anim10Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
+              painter: MyCustomPainter(ball: _ball, pointerMap: _pointerMap),
             );
           },
         ),
@@ -80,8 +82,9 @@ class _Anim10PageState extends State<Anim10Page>
 
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
+  Map<String, Offset> pointerMap;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({this.ball, this.pointerMap});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -95,7 +98,16 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     _paint.style = PaintingStyle.stroke;
     _paint.color = Colors.black;
-//    canvas.drawCircle(size.center(Offset.zero), r, _paint);
+    String key = '${ball.x}_${ball.y}';
+    if (!pointerMap.containsKey(key)) {
+      pointerMap[key] = Offset(ball.x, ball.y);
+    }
+    // 绘制三角函数曲线
+    Path path = Path();
+    // 左边高 h/2 , 右边宽w/2
+    path.addPolygon(pointerMap.values.toList(), false);
+    canvas.drawPath(path, _paint);
+//    canvas.drawCircle(Offset(ball.x, ball.y), 1, _paint);
 
     canvas.drawLine(Offset(0, size.height / 2.0),
         Offset(size.width, size.height / 2.0), _paint);

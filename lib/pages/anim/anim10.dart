@@ -100,7 +100,7 @@ class MyCustomPainter extends CustomPainter {
     _paint.color = Colors.black;
     // 控制精度，提高渲染效率
     String key = '${ball.x.toInt()}_${ball.y.toInt()}';
-    if (!pointerMap.containsKey(key) && pointerMap.length <= 10000) {
+    if (!pointerMap.containsKey(key) && pointerMap.length <= 5000) {
       pointerMap[key] = Offset(ball.x, ball.y);
     }
     // 绘制运动三角函数曲线

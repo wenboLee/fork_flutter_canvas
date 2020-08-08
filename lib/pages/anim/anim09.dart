@@ -44,6 +44,7 @@ class _Anim09PageState extends State<Anim09Page>
 
           _arrow.x += vx;
           _arrow.y += vy;
+          _arrow.rotation = angle;
         }
       }
     });
@@ -100,13 +101,14 @@ class MyCustomPainter extends CustomPainter {
     ..strokeWidth = 1
     ..style = PaintingStyle.fill;
 
-  Path _createPath(Canvas canvas, double w, double h, Offset center) {
-    //左上第一个点
+  Path _createPath(
+      Canvas canvas, double w, double h, Offset center, double rotation) {
+    //正方形左上第一个点,虚点
     double firstX = center.dx - w / 2, firstY = center.dy - h / 2;
     Path path = Path();
     // 左边高 h/2 , 右边宽w/2
     path.moveTo(firstX, firstY);
-    path.addPolygon([
+    List<Offset> list = [
       Offset(firstX, firstY + h / 4),
       Offset(firstX + w / 2, firstY + h / 4),
       Offset(firstX + w / 2, firstY),
@@ -114,7 +116,13 @@ class MyCustomPainter extends CustomPainter {
       Offset(firstX + w / 2, firstY + h),
       Offset(firstX + w / 2, firstY + h * 3 / 4),
       Offset(firstX, firstY + h * 3 / 4),
-    ], true);
+    ];
+    // 计算旋转后的点
+    var newList = list.map(
+        (e) => Offset(e.dx, e.dy)).toList();
+
+
+    path.addPolygon(newList, true);
     path.close();
     return path;
   }
@@ -123,7 +131,8 @@ class MyCustomPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     // 箭头坐标作为参照点
-    var path = _createPath(canvas, arrow.w, arrow.h, Offset(arrow.x, arrow.y));
+    var path = _createPath(
+        canvas, arrow.w, arrow.h, Offset(arrow.x, arrow.y), arrow.rotation);
     _paint.color = Colors.blue;
     canvas.drawPath(path, _paint);
     canvas.restore();

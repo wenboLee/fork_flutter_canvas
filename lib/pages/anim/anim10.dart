@@ -98,16 +98,15 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     _paint.style = PaintingStyle.stroke;
     _paint.color = Colors.black;
-    String key = '${ball.x}_${ball.y}';
-    if (!pointerMap.containsKey(key)) {
+    // 控制精度，提高渲染效率
+    String key = '${ball.x.toInt()}_${ball.y.toInt()}';
+    if (!pointerMap.containsKey(key) && pointerMap.length <= 10000) {
       pointerMap[key] = Offset(ball.x, ball.y);
     }
-    // 绘制三角函数曲线
+    // 绘制运动三角函数曲线
     Path path = Path();
-    // 左边高 h/2 , 右边宽w/2
     path.addPolygon(pointerMap.values.toList(), false);
     canvas.drawPath(path, _paint);
-//    canvas.drawCircle(Offset(ball.x, ball.y), 1, _paint);
 
     canvas.drawLine(Offset(0, size.height / 2.0),
         Offset(size.width, size.height / 2.0), _paint);

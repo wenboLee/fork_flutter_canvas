@@ -118,9 +118,14 @@ class MyCustomPainter extends CustomPainter {
       Offset(firstX, firstY + h * 3 / 4),
     ];
     // 计算旋转后的点
-    var newList = list.map(
-        (e) => Offset(e.dx, e.dy)).toList();
-
+    var newList = list.map((e) {
+//      var dy = center.dy - e.dy;
+//      var dx = center.dx - e.dx;
+//      var da = math.atan2(dy, dx);
+//      return Offset(e.dx + dx * math.cos(rotation + da),
+//          e.dy + dy * math.sin(rotation + da));
+      return e;
+    }).toList();
 
     path.addPolygon(newList, true);
     path.close();

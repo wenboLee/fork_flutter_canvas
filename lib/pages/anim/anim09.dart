@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_canvas/widget/ball.dart';
+import 'package:flutter_canvas/widget/arrow.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'dart:math' as math;
 
@@ -17,7 +17,7 @@ class _Anim09PageState extends State<Anim09Page>
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Arrow _arrow;
   double speed = 3, dx = 0, dy = 0, angle = 0, vx = 0, vy = 0;
   Offset _pointer = Offset.zero;
 
@@ -31,19 +31,19 @@ class _Anim09PageState extends State<Anim09Page>
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
         }
-        if (_ball == null) {
-          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+        if (_arrow == null) {
+          _arrow = Arrow(x: _size.width / 2, y: _size.height / 2, w: 60, h: 30);
         }
         if (_pointer != Offset.zero) {
-          dx = _pointer.dx - _ball.x;
-          dy = _pointer.dy - _ball.y;
+          dx = _pointer.dx - _arrow.x;
+          dy = _pointer.dy - _arrow.y;
           angle = math.atan2(dy, dx);
 
           vx = speed * math.cos(angle);
           vy = speed * math.sin(angle);
 
-          _ball.x += vx;
-          _ball.y += vy;
+          _arrow.x += vx;
+          _arrow.y += vy;
         }
       }
     });
@@ -72,7 +72,7 @@ class _Anim09PageState extends State<Anim09Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(ball: _ball, angle: angle),
+                painter: MyCustomPainter(arrow: _arrow, angle: angle),
               );
             },
           ),
@@ -88,10 +88,10 @@ class _Anim09PageState extends State<Anim09Page>
 }
 
 class MyCustomPainter extends CustomPainter {
-  final Ball ball;
+  final Arrow arrow;
   final double angle;
 
-  MyCustomPainter({this.ball, this.angle});
+  MyCustomPainter({this.arrow, this.angle});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -100,20 +100,31 @@ class MyCustomPainter extends CustomPainter {
     ..strokeWidth = 1
     ..style = PaintingStyle.fill;
 
+  Path _createPath(Canvas canvas, double w, double h, Offset center) {
+    //左上第一个点
+    double firstX = center.dx - w / 2, firstY = center.dy - h / 2;
+    Path path = Path();
+    // 左边高 h/2 , 右边宽w/2
+    path.moveTo(firstX, firstY);
+    path.addPolygon([
+      Offset(firstX, firstY + h / 4),
+      Offset(firstX + w / 2, firstY + h / 4),
+      Offset(firstX + w / 2, firstY),
+      Offset(firstX + w, firstY + h / 2),
+      Offset(firstX + w / 2, firstY + h),
+      Offset(firstX + w / 2, firstY + h * 3 / 4),
+      Offset(firstX, firstY + h * 3 / 4),
+    ], true);
+    path.close();
+    return path;
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
-//    _paint.color = Colors.red;
-//    canvas.drawArc(
-//        Rect.fromCenter(
-//            center: Offset(ball.x, ball.y),
-//            height: ball.r * 3,
-//            width: ball.r * 3),
-//        0,
-//        angle,
-//        true,
-//        _paint);
+    var path = _createPath(canvas, arrow.w, arrow.h, Offset(arrow.x, arrow.y));
+    _paint.color = Colors.blue;
+    canvas.drawPath(path, _paint);
     canvas.restore();
   }
 

@@ -19,6 +19,7 @@ class _Anim10PageState extends State<Anim10Page>
   Size _size = Size.zero;
   Ball _ball;
   double angle = 0, vx = 0.5, swing = 60; //增幅
+  bool directionRight = true; //方向右
 
   @override
   void initState() {
@@ -31,13 +32,17 @@ class _Anim10PageState extends State<Anim10Page>
         if (_ball == null) {
           _ball = Ball(x: 30, y: _size.height / 2, r: 30);
         }
-        if (_ball.x > _size.width - _ball.r) {
-          vx *= 1;
-        } else if(_ball.x - _ball.r < 0) {
-          vx *= -1;
+        if (_ball.x >= _size.width - _ball.r) {
+          directionRight = false;
+        } else if (_ball.x - _ball.r <= 0){
+          directionRight = true;
         }
 
-        _ball.x += vx;
+        if (directionRight) {
+          _ball.x += vx;
+        } else {
+          _ball.x -= vx;
+        }
 
         _ball.y = _size.height / 2 + math.sin(angle) * swing;
         angle += 0.05;

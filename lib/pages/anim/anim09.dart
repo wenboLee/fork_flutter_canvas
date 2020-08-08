@@ -101,8 +101,7 @@ class MyCustomPainter extends CustomPainter {
     ..strokeWidth = 1
     ..style = PaintingStyle.fill;
 
-  Path _createPath(
-      Canvas canvas, double w, double h, Offset center, double rotation) {
+  Path _createPath(double w, double h, Offset center, double rotation) {
     //正方形左上第一个点,虚点
     double firstX = center.dx - w / 2, firstY = center.dy - h / 2;
     Path path = Path();
@@ -136,8 +135,8 @@ class MyCustomPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     // 箭头坐标作为参照点
-    var path = _createPath(
-        canvas, arrow.w, arrow.h, Offset(arrow.x, arrow.y), arrow.rotation);
+    var path =
+        _createPath(arrow.w, arrow.h, Offset(arrow.x, arrow.y), arrow.rotation);
     _paint.color = Colors.blue;
     canvas.drawPath(path, _paint);
     canvas.restore();

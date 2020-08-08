@@ -122,6 +122,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    // 箭头坐标作为参照点
     var path = _createPath(canvas, arrow.w, arrow.h, Offset(arrow.x, arrow.y));
     _paint.color = Colors.blue;
     canvas.drawPath(path, _paint);

@@ -118,12 +118,13 @@ class MyCustomPainter extends CustomPainter {
     ];
     // 计算旋转后的点
     var newList = list.map((e) {
-//      var dy = center.dy - e.dy;
-//      var dx = center.dx - e.dx;
-//      var da = math.atan2(dy, dx);
-//      return Offset(e.dx + dx * math.cos(rotation + da),
-//          e.dy + dy * math.sin(rotation + da));
-      return e;
+      var dy = center.dy - e.dy;
+      var dx = center.dx - e.dx;
+      var da = math.atan2(dy, dx);
+      var r = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2));
+      // 正负决定箭头方向
+      return Offset(arrow.x - r * math.cos(arrow.rotation + da),
+          arrow.y - r * math.sin(arrow.rotation + da));
     }).toList();
 
     path.addPolygon(newList, true);

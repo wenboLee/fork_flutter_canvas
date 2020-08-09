@@ -102,7 +102,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    var center = size.center(Offset.zero);
+    var center = Offset(arrow.x, arrow.y);
     // 画布左上角离画布中心点距离， 即为旋转半径
     var r =
         math.sqrt(math.pow(size.width / 2, 2) + math.pow(size.height / 2, 2));
@@ -121,7 +121,7 @@ class MyCustomPainter extends CustomPainter {
         Rect.fromCenter(center: center, width: size.width, height: size.width),
         _paint);
 
-    var path = _createPath(canvas, arrow.w, arrow.h, size.center(Offset.zero));
+    var path = _createPath(canvas, arrow.w, arrow.h, center);
     _paint.color = Colors.blue;
     canvas.drawPath(path, _paint);
     canvas.restore();

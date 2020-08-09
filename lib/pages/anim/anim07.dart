@@ -18,7 +18,7 @@ class _Anim07PageState extends State<Anim07Page>
   AnimationController _controller;
   Size _size = Size.zero;
   Ball _ball;
-  double angle = 0, speed = 0.015, ovalW = 300, ovalH = 600;
+  double angle = 0, speed = 0.015, ovalW = 0, ovalH = 0;
 
   @override
   void initState() {
@@ -32,6 +32,8 @@ class _Anim07PageState extends State<Anim07Page>
         }
         if (_ball == null) {
           _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+          ovalW = _size.width * 0.4;
+          ovalH = _size.height * 0.8;
         }
         _ball.x = _size.width / 2 + (ovalW / 2) * math.cos(angle);
         _ball.y = _size.height / 2 + (ovalH / 2) * math.sin(angle);

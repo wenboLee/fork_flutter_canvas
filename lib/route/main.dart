@@ -15,6 +15,7 @@ import 'package:flutter_canvas/pages/anim/anim13.dart';
 import 'package:flutter_canvas/pages/anim/anim14.dart';
 import 'package:flutter_canvas/pages/anim/anim15.dart';
 import 'package:flutter_canvas/pages/anim/anim16.dart';
+import 'package:flutter_canvas/pages/anim/anim17.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -38,6 +39,7 @@ class RouteConstant {
   static const String Anim14Page = '/anim14Page';
   static const String Anim15Page = '/anim15Page';
   static const String Anim16Page = '/anim16Page';
+  static const String Anim17Page = '/anim17Page';
 }
 
 ///通过 routeName名称 返回 Widget的名称
@@ -62,6 +64,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim14Page: 'Anim14Page',
     RouteConstant.Anim15Page: 'Anim15Page',
     RouteConstant.Anim16Page: 'Anim16Page',
+    RouteConstant.Anim17Page: 'Anim17Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -78,7 +81,7 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim05Page: (context) => Anim05Page(title: '05小球的掉落'),
     RouteConstant.Anim06Page: (context) => Anim06Page(title: '06平滑运动'),
     RouteConstant.Anim07Page: (context) => Anim07Page(title: '07椭圆运动'),
-    RouteConstant.Anim08Page: (context) => Anim08Page(title: '08箭头旋转运动'),
+    RouteConstant.Anim08Page: (context) => Anim08Page(title: '08箭头旋转运动旋转canvas'),
     RouteConstant.Anim09Page: (context) => Anim09Page(title: '09箭头跟随手指运动'),
     RouteConstant.Anim10Page: (context) => Anim10Page(title: '10线性运动'),
     RouteConstant.Anim11Page: (context) => Anim11Page(title: '11脉冲运动'),
@@ -87,5 +90,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim14Page: (context) => Anim14Page(title: '14速度的合成'),
     RouteConstant.Anim15Page: (context) => Anim15Page(title: '15重力加速度'),
     RouteConstant.Anim16Page: (context) => Anim16Page(title: '16角速度旋转点'),
+    RouteConstant.Anim17Page: (context) => Anim17Page(title: '17箭头旋转运动旋转点'),
   };
 }

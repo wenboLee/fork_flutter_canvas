@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       theme: ThemeData(
-        platform: TargetPlatform.iOS,
+//        platform: TargetPlatform.iOS,
         brightness: Theme.of(context).brightness,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,

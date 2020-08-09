@@ -13,6 +13,7 @@ import 'package:flutter_canvas/pages/anim/anim11.dart';
 import 'package:flutter_canvas/pages/anim/anim12.dart';
 import 'package:flutter_canvas/pages/anim/anim13.dart';
 import 'package:flutter_canvas/pages/anim/anim14.dart';
+import 'package:flutter_canvas/pages/anim/anim15.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -34,6 +35,7 @@ class RouteConstant {
   static const String Anim12Page = '/anim12Page';
   static const String Anim13Page = '/anim13Page';
   static const String Anim14Page = '/anim14Page';
+  static const String Anim15Page = '/anim15Page';
 }
 
 ///通过 routeName名称 返回 Widget的名称
@@ -56,6 +58,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim12Page: 'Anim12Page',
     RouteConstant.Anim13Page: 'Anim13Page',
     RouteConstant.Anim14Page: 'Anim14Page',
+    RouteConstant.Anim15Page: 'Anim15Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -79,5 +82,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim12Page: (context) => Anim12Page(title: '12角速度'),
     RouteConstant.Anim13Page: (context) => Anim13Page(title: '13速度的分解'),
     RouteConstant.Anim14Page: (context) => Anim14Page(title: '14速度的合成'),
+    RouteConstant.Anim15Page: (context) => Anim15Page(title: '15重力加速度'),
   };
 }

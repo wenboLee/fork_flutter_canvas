@@ -3,16 +3,16 @@ import 'package:flutter_canvas/widget/arrow.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'dart:math' as math;
 
-class Anim12Page extends StatefulWidget {
+class Anim16Page extends StatefulWidget {
   final String title;
 
-  Anim12Page({this.title});
+  Anim16Page({this.title});
 
   @override
-  _Anim12PageState createState() => _Anim12PageState();
+  _Anim16PageState createState() => _Anim16PageState();
 }
 
-class _Anim12PageState extends State<Anim12Page>
+class _Anim16PageState extends State<Anim16Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
@@ -98,7 +98,7 @@ class MyCustomPainter extends CustomPainter {
     Path path = Path();
     // 左边高 h/2 , 右边宽w/2
     path.moveTo(firstX, firstY);
-    path.addPolygon([
+    var points = [
       Offset(firstX, firstY + h / 4),
       Offset(firstX + w / 2, firstY + h / 4),
       Offset(firstX + w / 2, firstY),
@@ -106,7 +106,18 @@ class MyCustomPainter extends CustomPainter {
       Offset(firstX + w / 2, firstY + h),
       Offset(firstX + w / 2, firstY + h * 3 / 4),
       Offset(firstX, firstY + h * 3 / 4),
-    ], true);
+    ];
+    // 计算旋转后的点
+    var newList = points.map((e) {
+      var dy = center.dy - e.dy;
+      var dx = center.dx - e.dx;
+      var da = math.atan2(dy, dx);
+      var r = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2));
+      // 正负决定箭头方向
+      return Offset(arrow.x - r * math.cos(arrow.rotation + da),
+          arrow.y - r * math.sin(arrow.rotation + da));
+    }).toList();
+    path.addPolygon(newList, true);
     path.close();
     return path;
   }
@@ -114,18 +125,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    var center = Offset(arrow.x, arrow.y);
-    // 画布左上角离画布中心点距离， 即为旋转半径
-    var r =
-        math.sqrt(math.pow(size.width / 2, 2) + math.pow(size.height / 2, 2));
-    // 计算画布中心点初始弧度
-    double startAngle = math.atan2(center.dy,  center.dx);
-    // 计算旋转后的画布中心点
-    final newX = r * math.cos(arrow.rotation + startAngle);
-    final newY = r * math.sin(arrow.rotation + startAngle);
-    // 平移画布， 画布正方形才能居中旋转
-    canvas.translate(center.dx - newX, center.dy - newY);
-    canvas.rotate(arrow.rotation);
+    Offset center = Offset(arrow.x, arrow.y);
 
     // 以画布宽 绘制背景正方形
     _paint.color = Colors.red[100];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_canvas/main.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/ball.dart';
 import 'dart:math' as math;
@@ -35,6 +36,13 @@ class _Anim06PageState extends State<Anim06Page>
           swing = _size.width / 2 - _ball.r;
         }
         _ball.x = _size.width / 2 + math.sin(angle) * swing;
+        // 扇形弧度半个
+        var ay = math.atan2(_size.width / 2 - _ball.x, _ball.y);
+        // 扇形半径
+        var r = math
+            .sqrt(math.pow(_size.width / 2, 2) + math.pow(_size.height / 2, 2));
+
+        _ball.y = r * math.cos(ay);
         angle += 0.05;
         angle %= math.pi * 2;
       }

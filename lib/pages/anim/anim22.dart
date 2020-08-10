@@ -30,7 +30,6 @@ class _Anim22PageState extends State<Anim22Page>
       if (mounted) {
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
-          setState(() {});
         }
         if (_ball == null) {
           _ball = Ball(x: 50, y: 50, r: 30, firstMove: true);

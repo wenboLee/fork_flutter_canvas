@@ -4,62 +4,22 @@ import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'dart:math' as math;
 
-class Anim21Page extends StatefulWidget {
+class Anim23Page extends StatefulWidget {
   final String title;
 
-  Anim21Page({this.title});
+  Anim23Page({this.title});
 
   @override
-  _Anim21PageState createState() => _Anim21PageState();
+  _Anim23PageState createState() => _Anim23PageState();
 }
 
-class _Anim21PageState extends State<Anim21Page>
+class _Anim23PageState extends State<Anim23Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
-
-  List<Ball> _initBalls({int num}) {
-    return List.generate(
-      num,
-      (index) => Ball(
-        id: index,
-        x: _size.width / 2,
-        y: _size.height / 2,
-        r: randomScope([30, 50]),
-        fillStyle: randomColor(),
-        vx: randomScope([-5, 5]),
-        vy: randomScope([-6, 7]),
-      ),
-    );
-  }
-
-  _updateBall(Ball ball) {
-    ball.x += ball.vx;
-    ball.y += ball.vy;
-    // 边界处理
-    if (ball.x - ball.r <= 0) {
-      // 左
-      ball.x = ball.r;
-      ball.vx *= -1;
-    }
-    if (ball.x + ball.r >= _size.width) {
-      //右
-      ball.x = _size.width - ball.r;
-      ball.vx *= -1;
-    }
-    if (ball.y - ball.r <= 0) {
-      //上
-      ball.y = ball.r;
-      ball.vy *= -1;
-    }
-    if (ball.y + ball.r >= _size.height) {
-      //下
-      ball.y = _size.height - ball.r;
-      ball.vy *= -1;
-    }
-  }
+  Ball _ball;
+  double angle = toRad(60), speed = randomScope([30, 50]), friction = 0.9;
 
   @override
   void initState() {
@@ -71,10 +31,29 @@ class _Anim21PageState extends State<Anim21Page>
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
         }
-        if (_balls == null) {
-          _balls = _initBalls(num: 10);
+        if (_ball == null) {
+          _ball = Ball(x: 50, y: 50, r: 30, firstMove: true);
         }
-        _balls.forEach(_updateBall);
+
+        if (speed.abs() > 0.001) {
+          speed *= friction;
+          var vx = speed * math.cos(angle);
+          var vy = speed * math.sin(angle);
+
+          _ball.x += vx;
+          _ball.y += vy;
+        }
+
+        if (speed < 0.001 && _ball.firstMove) {
+          _ball.firstMove = false;
+          Future.delayed(Duration(seconds: 1)).whenComplete(() {
+            //复原
+            _ball.x = 50;
+            _ball.y = 50;
+            speed = randomScope([30, 50]);
+            _ball.firstMove = true;
+          });
+        }
       }
     });
     super.initState();
@@ -99,7 +78,7 @@ class _Anim21PageState extends State<Anim21Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(balls: _balls),
+              painter: MyCustomPainter(ball: _ball),
             );
           },
         ),
@@ -109,9 +88,9 @@ class _Anim21PageState extends State<Anim21Page>
 }
 
 class MyCustomPainter extends CustomPainter {
-  final List<Ball> balls;
+  final Ball ball;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -123,10 +102,8 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    balls.forEach((ball) {
-      _paint.color = ball.fillStyle;
-      canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
-    });
+    _paint.color = ball.fillStyle;
+    canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
     canvas.restore();
   }
 

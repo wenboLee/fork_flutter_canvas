@@ -114,9 +114,9 @@ class _Anim20PageState extends State<Anim20Page>
               },
             ),
             Positioned(
-              left: 10,
-              right: 10,
-              bottom: 10,
+              left: 40,
+              right: 40,
+              bottom: 40,
               child: SizedBox(
                 width: _size?.width ?? 0,
                 child: Row(
@@ -130,15 +130,26 @@ class _Anim20PageState extends State<Anim20Page>
                     _buildGestureDetector(
                       onPanDown: (e) => vr = 5,
                       onPanEnd: (e) => vr = 0,
-                      margin: EdgeInsets.only(left: 10, right: 10),
+                      margin: EdgeInsets.only(left: 20, right: 20),
                       child: Icon(Icons.keyboard_arrow_right),
                     ),
                     Expanded(child: Container()),
-                    _buildGestureDetector(
-                      onPanDown: (e) => a = 0.5,
-                      onPanEnd: (e) => a = 0,
-                      child: Icon(Icons.keyboard_arrow_up),
-                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildGestureDetector(
+                          onPanDown: (e) => a = 0.5,
+                          onPanEnd: (e) => a = 0,
+                          margin: EdgeInsets.only(bottom: 20),
+                          child: Icon(Icons.keyboard_arrow_up),
+                        ),
+                        _buildGestureDetector(
+                          onPanDown: (e) => a = -0.5,
+                          onPanEnd: (e) => a = 0,
+                          child: Icon(Icons.keyboard_arrow_down),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),

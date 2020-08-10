@@ -15,7 +15,17 @@ Color randomColor() {
 double randomScope(List<int> scope) {
   // 默认从小到大scope.sort()
   scope.sort((a, b) => a.compareTo(b));
-  return Random().nextDouble() * (scope[1]-scope[0]) + scope[0];
+  return Random().nextDouble() * (scope[1] - scope[0]) + scope[0];
+}
+
+// 角度转弧度
+double toRad(angle) {
+  return pi / 180 * angle;
+}
+
+// 弧度转角度
+double toAngle(rad) {
+  return rad * 180 / pi;
 }
 
 class Toast {
@@ -35,33 +45,33 @@ class Toast {
     if (_overlayEntry == null) {
       _overlayEntry = OverlayEntry(
           builder: (BuildContext context) => Positioned(
-            top: top > 0 ? top : MediaQuery.of(context).size.height * 2 / 3,
-            child: Container(
-                padding: EdgeInsets.all(80),
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width,
+                top: top > 0 ? top : MediaQuery.of(context).size.height * 2 / 3,
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xff3470e1),
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  padding: EdgeInsets.only(
-                      left: 15, right: 15, top: 5, bottom: 5),
-                  child: AnimatedOpacity(
-                    opacity: _showing ? 1.0 : 0.0,
-                    duration: _showing
-                        ? Duration(milliseconds: 100)
-                        : Duration(milliseconds: 400),
-                    child: Text(
-                      _msg,
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        decoration: TextDecoration.none,
-                        color: Colors.white,
+                    padding: EdgeInsets.all(80),
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xff3470e1),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      padding: EdgeInsets.only(
+                          left: 15, right: 15, top: 5, bottom: 5),
+                      child: AnimatedOpacity(
+                        opacity: _showing ? 1.0 : 0.0,
+                        duration: _showing
+                            ? Duration(milliseconds: 100)
+                            : Duration(milliseconds: 400),
+                        child: Text(
+                          _msg,
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            decoration: TextDecoration.none,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )),
-          ));
+                    )),
+              ));
       overlayState.insert(_overlayEntry);
     } else {
       if (_overlayEntry != null) {

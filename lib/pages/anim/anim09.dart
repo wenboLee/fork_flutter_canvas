@@ -73,7 +73,7 @@ class _Anim09PageState extends State<Anim09Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(arrow: _arrow, angle: angle),
+                painter: MyCustomPainter(arrow: _arrow),
               );
             },
           ),
@@ -90,9 +90,8 @@ class _Anim09PageState extends State<Anim09Page>
 
 class MyCustomPainter extends CustomPainter {
   final Arrow arrow;
-  final double angle;
 
-  MyCustomPainter({this.arrow, this.angle});
+  MyCustomPainter({this.arrow});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

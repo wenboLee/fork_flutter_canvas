@@ -46,7 +46,7 @@ class _Anim23PageState extends State<Anim23Page>
 
         if (speed < 0.001 && _ball.firstMove) {
           _ball.firstMove = false;
-          Future.delayed(Duration(seconds: 1)).whenComplete(() {
+          Future.delayed(Duration(milliseconds: 500)).whenComplete(() {
             //复原
             _ball.x = 50;
             _ball.y = 50;

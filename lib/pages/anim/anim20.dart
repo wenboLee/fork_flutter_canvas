@@ -72,6 +72,27 @@ class _Anim20PageState extends State<Anim20Page>
     super.dispose();
   }
 
+  GestureDetector _buildGestureDetector(
+      {Function(DragDownDetails) onPanDown,
+      Function(DragEndDetails) onPanEnd,
+      Widget child,
+      EdgeInsetsGeometry margin = EdgeInsets.zero}) {
+    return GestureDetector(
+      onPanDown: onPanDown,
+      onPanEnd: onPanEnd,
+      child: Container(
+        width: 50,
+        height: 50,
+        margin: margin,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+          color: Colors.green[200],
+        ),
+        child: child,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,51 +122,22 @@ class _Anim20PageState extends State<Anim20Page>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    GestureDetector(
-                      onPanDown: (e) {
-                        vr = -5;
-                      },
-                      onPanEnd: (e) {
-                        vr = 0;
-                      },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        color: Colors.green[200],
-                        child: Icon(Icons.keyboard_arrow_left),
-                      ),
+                    _buildGestureDetector(
+                      onPanDown: (e) => vr = -5,
+                      onPanEnd: (e) => vr = 0,
+                      child: Icon(Icons.keyboard_arrow_left),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onPanDown: (e) {
-                        vr = 5;
-                      },
-                      onPanEnd: (e) {
-                        vr = 0;
-                      },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        color: Colors.green[200],
-                        child: Icon(Icons.keyboard_arrow_right),
-                      ),
+                    _buildGestureDetector(
+                      onPanDown: (e) => vr = 5,
+                      onPanEnd: (e) => vr = 0,
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: Icon(Icons.keyboard_arrow_right),
                     ),
                     Expanded(child: Container()),
-                    GestureDetector(
-                      onPanDown: (e) {
-                        a = 0.5;
-                      },
-                      onPanEnd: (e) {
-                        a = 0;
-                      },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        color: Colors.green[200],
-                        child: Icon(Icons.keyboard_arrow_up),
-                      ),
+                    _buildGestureDetector(
+                      onPanDown: (e) => a = 0.5,
+                      onPanEnd: (e) => a = 0,
+                      child: Icon(Icons.keyboard_arrow_up),
                     ),
                   ],
                 ),

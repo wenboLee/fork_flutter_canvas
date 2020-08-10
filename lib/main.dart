@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/route/main.dart';
 
@@ -8,9 +9,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       theme: ThemeData(
-//        platform: TargetPlatform.iOS,
+        platform: defaultTargetPlatform == TargetPlatform.android
+            ? TargetPlatform.iOS
+            : defaultTargetPlatform,
         brightness: Theme.of(context).brightness,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,

@@ -16,6 +16,7 @@ import 'package:flutter_canvas/pages/anim/anim14.dart';
 import 'package:flutter_canvas/pages/anim/anim15.dart';
 import 'package:flutter_canvas/pages/anim/anim16.dart';
 import 'package:flutter_canvas/pages/anim/anim17.dart';
+import 'package:flutter_canvas/pages/anim/anim18.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -40,6 +41,7 @@ class RouteConstant {
   static const String Anim15Page = '/anim15Page';
   static const String Anim16Page = '/anim16Page';
   static const String Anim17Page = '/anim17Page';
+  static const String Anim18Page = '/anim18Page';
 }
 
 ///通过 routeName名称 返回 Widget的名称
@@ -65,6 +67,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim15Page: 'Anim15Page',
     RouteConstant.Anim16Page: 'Anim16Page',
     RouteConstant.Anim17Page: 'Anim17Page',
+    RouteConstant.Anim18Page: 'Anim18Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -91,5 +94,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim15Page: (context) => Anim15Page(title: '15重力加速度'),
     RouteConstant.Anim16Page: (context) => Anim16Page(title: '16角速度旋转点'),
     RouteConstant.Anim17Page: (context) => Anim17Page(title: '17箭头旋转运动旋转点'),
+    RouteConstant.Anim18Page: (context) => Anim18Page(title: '18超出边界移除'),
   };
 }

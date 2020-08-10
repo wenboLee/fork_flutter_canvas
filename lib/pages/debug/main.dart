@@ -18,9 +18,9 @@ class _DebugMainPageState extends State<DebugMainPage> {
   double offset = 44.0 * 5;
 
   Color _randomColor() {
-    var red = Random.secure().nextInt(255);
-    var greed = Random.secure().nextInt(255);
-    var blue = Random.secure().nextInt(255);
+    var red = 55 + Random().nextInt(200);
+    var greed = 55 + Random().nextInt(200);
+    var blue = 55 + Random().nextInt(200);
     if (red > 100 && greed > 100 && blue > 100) {
       return _randomColor();
     } else {

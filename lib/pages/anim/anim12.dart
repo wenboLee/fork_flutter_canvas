@@ -49,7 +49,7 @@ class _Anim12PageState extends State<Anim12Page>
     super.dispose();
   }
 
-  void _pointerDistance(event) => _pointer = event.localPosition;
+  void _pointerEvent(event) => _pointer = event.localPosition;
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +71,9 @@ class _Anim12PageState extends State<Anim12Page>
           ),
           behavior: HitTestBehavior.opaque,
           // ignore: deprecated_member_use
-          onPointerHover: _pointerDistance,
-          onPointerDown: _pointerDistance,
-          onPointerMove: _pointerDistance,
+          onPointerHover: _pointerEvent,
+          onPointerDown: _pointerEvent,
+          onPointerMove: _pointerEvent,
         ),
       ),
     );

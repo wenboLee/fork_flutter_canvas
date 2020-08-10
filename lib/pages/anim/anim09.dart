@@ -51,7 +51,7 @@ class _Anim09PageState extends State<Anim09Page>
     super.initState();
   }
 
-  void _pointerDistance(event) => _pointer = event.localPosition;
+  void _pointerEvent(event) => _pointer = event.localPosition;
 
   @override
   void dispose() {
@@ -79,9 +79,9 @@ class _Anim09PageState extends State<Anim09Page>
           ),
           behavior: HitTestBehavior.opaque,
           // ignore: deprecated_member_use
-          onPointerHover: _pointerDistance,
-          onPointerDown: _pointerDistance,
-          onPointerMove: _pointerDistance,
+          onPointerHover: _pointerEvent,
+          onPointerDown: _pointerEvent,
+          onPointerMove: _pointerEvent,
         ),
       ),
     );

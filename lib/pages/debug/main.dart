@@ -1,7 +1,7 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/route/main.dart';
 import 'package:flutter_canvas/widget/comm.dart';
+import 'package:flutter_canvas/widget/utils.dart';
 
 class DebugMainPage extends StatefulWidget {
   final String title;
@@ -16,17 +16,6 @@ class _DebugMainPageState extends State<DebugMainPage> {
   ScrollController _controller;
   bool showToTopBtn = true;
   double offset = 44.0 * 5;
-
-  Color _randomColor() {
-    var red = 55 + Random().nextInt(200);
-    var greed = 55 + Random().nextInt(200);
-    var blue = 55 + Random().nextInt(200);
-    if (red > 100 && greed > 100 && blue > 100) {
-      return _randomColor();
-    } else {
-      return Color.fromARGB(255, red, greed, blue);
-    }
-  }
 
   @override
   void initState() {
@@ -67,7 +56,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
             height: 44,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: _randomColor(),
+              color: randomColor(),
               boxShadow: [
                 BoxShadow(
                     color: Color(0xff3470e1),
@@ -94,21 +83,21 @@ class _DebugMainPageState extends State<DebugMainPage> {
           title: Text(
             '${routeWidgetName(pagesKey[index])}',
             style: TextStyle(
-              color: _randomColor(),
+              color: randomColor(),
               fontWeight: FontWeight.bold,
             ),
           ),
           subtitle: Text(
             '${pagesKey[index]}[${titles[index]}]',
             style: TextStyle(
-              color: _randomColor(),
+              color: randomColor(),
               fontWeight: FontWeight.bold,
             ),
           ),
           trailing: Icon(
             Icons.keyboard_arrow_right,
             size: 30,
-            color: _randomColor(),
+            color: randomColor(),
           ),
         ),
       ),

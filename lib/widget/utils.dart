@@ -2,14 +2,20 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 Color randomColor() {
-  var red = Random.secure().nextInt(255);
-  var greed = Random.secure().nextInt(255);
-  var blue = Random.secure().nextInt(255);
+  var red = 55 + Random().nextInt(201);
+  var greed = 55 + Random().nextInt(201);
+  var blue = 55 + Random().nextInt(201);
   if (red > 100 && greed > 100 && blue > 100) {
     return randomColor();
   } else {
     return Color.fromARGB(255, red, greed, blue);
   }
+}
+
+double randomScope(List<int> scope) {
+  // 默认从小到大scope.sort()
+  scope.sort((a, b) => a.compareTo(b));
+  return Random().nextDouble() * (scope[1]-scope[0]) + scope[0];
 }
 
 class Toast {

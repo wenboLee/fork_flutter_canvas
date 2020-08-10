@@ -5,53 +5,54 @@ import 'dart:math' as math;
 
 import 'package:flutter_canvas/widget/utils.dart';
 
-class Anim18Page extends StatefulWidget {
+class Anim19Page extends StatefulWidget {
   final String title;
 
-  Anim18Page({this.title});
+  Anim19Page({this.title});
 
   @override
-  _Anim18PageState createState() => _Anim18PageState();
+  _Anim19PageState createState() => _Anim19PageState();
 }
 
-class _Anim18PageState extends State<Anim18Page>
+class _Anim19PageState extends State<Anim19Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
   List<Ball> _balls;
-
-  void _ballMove(Ball ball) {
-    ball.x += ball.vx;
-    ball.y += ball.vy;
-    if (ball.x - ball.r >= _size.width ||
-        ball.x + ball.r <= 0 ||
-        ball.y - ball.r >= _size.height ||
-        ball.y + ball.r <= 0) {
-      _balls.remove(ball);
-      String str;
-      if (_balls.length > 0) {
-        str = 'id:${ball.id} 小球被移除了!';
-      } else {
-        str = '所有的小球都被移除了!';
-      }
-      Toast.show(context, str);
-    }
-  }
+  double g = 0.05;
 
   List<Ball> _initBalls({int num}) {
     return List.generate(
       num,
       (index) => Ball(
         id: index,
-        x: math.Random().nextDouble() * _size.width,
-        y: math.Random().nextDouble() * _size.height,
-        r: math.Random().nextDouble() * 10 + 20,
+        x: _size.width / 2,
+        y: _size.height,
+        r: math.Random().nextDouble() > 0.9
+            ? randomScope([25, 40])
+            : randomScope([15, 30]),
         fillStyle: randomColor(),
-        vx: (math.Random().nextDouble() - 0.5) * 3,
-        vy: (math.Random().nextDouble() - 0.5) * 3,
+        vx: randomScope([-3, 3]),
+        vy: randomScope([0, -10]),
       ),
     );
+  }
+
+  _updateBall(ball) {
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+    ball.vy += g;
+    if (ball.x - ball.r >= _size.width ||
+        ball.x + ball.r <= 0 ||
+        ball.y - ball.r >= _size.height ||
+        ball.y + ball.r <= 0) {
+      // 出去后归位
+      ball.x = _size.width / 2;
+      ball.y = _size.height;
+      ball.vx = randomScope([-3, 3]);
+      ball.vy = randomScope([0, -10]);
+    }
   }
 
   @override
@@ -65,12 +66,9 @@ class _Anim18PageState extends State<Anim18Page>
           _size = _globalKey.currentContext.size;
         }
         if (_balls == null) {
-          _balls = _initBalls(num: 10);
+          _balls = _initBalls(num: 100);
         }
-        var i = _balls.length;
-        while (i-- > 0) {
-          _ballMove(_balls[i]);
-        }
+        _balls.forEach(_updateBall);
       }
     });
     super.initState();

@@ -23,10 +23,10 @@ import 'package:flutter_canvas/pages/anim/anim21.dart';
 import 'package:flutter_canvas/pages/anim/anim22.dart';
 import 'package:flutter_canvas/pages/anim/anim23.dart';
 import 'package:flutter_canvas/pages/anim/anim24.dart';
+import 'package:flutter_canvas/pages/anim/anim25.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
-///路由表url名称
 class RouteConstant {
   static const String DebugMainPage = '/';
   static const String MainPage = '/main';
@@ -54,9 +54,9 @@ class RouteConstant {
   static const String Anim22Page = '/anim22Page';
   static const String Anim23Page = '/anim23Page';
   static const String Anim24Page = '/anim24Page';
+  static const String Anim25Page = '/anim25Page';
 }
 
-///通过 routeName名称 返回 Widget的名称
 String routeWidgetName(String routeName) {
   var defaultRouteName = 'MainPage';
   var map = {
@@ -86,11 +86,11 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim22Page: 'Anim22Page',
     RouteConstant.Anim23Page: 'Anim23Page',
     RouteConstant.Anim24Page: 'Anim24Page',
+    RouteConstant.Anim25Page: 'Anim25Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
 
-///路由表  部分title不是页面需要，但是必填是为了直观查看
 Map<String, WidgetBuilder> routes(BuildContext context) {
   return {
     RouteConstant.MainPage: (context) => MainPage(title: 'main'),
@@ -119,5 +119,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim22Page: (context) => Anim22Page(title: '22摩擦力正确方法'),
     RouteConstant.Anim23Page: (context) => Anim23Page(title: '23摩擦力简单方法'),
     RouteConstant.Anim24Page: (context) => Anim24Page(title: '24带运动的拖拽'),
+    RouteConstant.Anim25Page: (context) => Anim25Page(title: '25投掷物体'),
   };
 }

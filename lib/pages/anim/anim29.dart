@@ -3,22 +3,22 @@ import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'dart:math' as math;
 
-class Anim26Page extends StatefulWidget {
+class Anim29Page extends StatefulWidget {
   final String title;
 
-  Anim26Page({this.title});
+  Anim29Page({this.title});
 
   @override
-  _Anim26PageState createState() => _Anim26PageState();
+  _Anim29PageState createState() => _Anim29PageState();
 }
 
-class _Anim26PageState extends State<Anim26Page>
+class _Anim29PageState extends State<Anim29Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
   Ball _ball;
-  double dx = 0, dy = 0;
+  double dx = 0, dy = 0, easing = 0.05; //缓动系数
   bool isMouseDown = false;
 
   @override
@@ -34,6 +34,14 @@ class _Anim26PageState extends State<Anim26Page>
         if (_ball == null) {
           _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
         }
+
+        if (!isMouseDown) {
+          var vx = (_size.width / 2 - _ball.x) * easing;
+          var vy = (_size.height / 2 - _ball.y) * easing;
+
+          _ball.x += vx;
+          _ball.y += vy;
+        }
       }
     });
     super.initState();
@@ -46,7 +54,7 @@ class _Anim26PageState extends State<Anim26Page>
   }
 
   void _pointerDownEvent(event) {
-    var pointer = event.localPosition;
+    Offset pointer = event.localPosition;
     isMouseDown = false;
     if (_isPoint(_ball, pointer)) {
       isMouseDown = true;
@@ -56,7 +64,7 @@ class _Anim26PageState extends State<Anim26Page>
   }
 
   void _pointerMoveEvent(event) {
-    var pointer = event.localPosition;
+    Offset pointer = event.localPosition;
     if (isMouseDown) {
       _ball.x = pointer.dx - dx;
       _ball.y = pointer.dy - dy;

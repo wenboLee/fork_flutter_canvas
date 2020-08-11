@@ -27,6 +27,7 @@ import 'package:flutter_canvas/pages/anim/anim25.dart';
 import 'package:flutter_canvas/pages/anim/anim26.dart';
 import 'package:flutter_canvas/pages/anim/anim27.dart';
 import 'package:flutter_canvas/pages/anim/anim28.dart';
+import 'package:flutter_canvas/pages/anim/anim29.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -61,6 +62,7 @@ class RouteConstant {
   static const String Anim26Page = '/anim26Page';
   static const String Anim27Page = '/anim27Page';
   static const String Anim28Page = '/anim28Page';
+  static const String Anim29Page = '/anim29Page';
 }
 
 String routeWidgetName(String routeName) {
@@ -96,6 +98,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim26Page: 'Anim26Page',
     RouteConstant.Anim27Page: 'Anim27Page',
     RouteConstant.Anim28Page: 'Anim28Page',
+    RouteConstant.Anim29Page: 'Anim29Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -132,5 +135,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim26Page: (context) => Anim26Page(title: '26拖拽对象'),
     RouteConstant.Anim27Page: (context) => Anim27Page(title: '27两个物体弹动'),
     RouteConstant.Anim28Page: (context) => Anim28Page(title: '28以鼠标为目标点缓动'),
+    RouteConstant.Anim29Page: (context) => Anim29Page(title: '29和鼠标交互的缓动'),
   };
 }

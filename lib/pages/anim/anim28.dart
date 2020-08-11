@@ -84,6 +84,7 @@ class _Anim28PageState extends State<Anim28Page>
           onPointerHover: _pointerEvent,
           onPointerDown: _pointerEvent,
           onPointerMove: _pointerEvent,
+          onPointerUp: _pointerEvent,
         ),
       ),
     );

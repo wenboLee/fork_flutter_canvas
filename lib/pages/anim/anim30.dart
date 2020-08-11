@@ -4,64 +4,34 @@ import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 import 'dart:math' as math;
 
-class Anim27Page extends StatefulWidget {
+class Anim30Page extends StatefulWidget {
   final String title;
 
-  Anim27Page({this.title});
+  Anim30Page({this.title});
 
   @override
-  _Anim27PageState createState() => _Anim27PageState();
+  _Anim30PageState createState() => _Anim30PageState();
 }
 
-class _Anim27PageState extends State<Anim27Page>
+class _Anim30PageState extends State<Anim30Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball1, _ball2;
+  List<Ball> _balls;
+  double dx = 0, dy = 0, springLength = 200, friction = 0.9, spring = 0.03; //弹动系数
+  Ball draggedBall;
 
-  // 弹动系数, 弹簧长度, 摩擦力
-  double spring = 0.03, springLength = 200, friction = 0.9;
-
-  // 被拖拽对象
-  bool ball1Draging = false, ball2Draging = false;
-
-  @override
-  void initState() {
-    _controller =
-        AnimationController(duration: Duration(seconds: 1), vsync: this)
-          ..repeat();
-    _controller.addListener(() {
-      if (mounted) {
-        if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
-        }
-        if (_ball1 == null) {
-          _ball1 = Ball(
-            x: randomScope([50, _size.width - 50]),
-            y: randomScope([50, _size.height - 50]),
-            r: 20,
-          );
-        }
-        if (_ball2 == null) {
-          _ball2 = Ball(
-            x: randomScope([50, _size.width - 50]),
-            y: randomScope([50, _size.height - 50]),
-            r: 20,
-          );
-        }
-        // 取反为了初次没有选择的时候弹动
-        if (!ball1Draging) {
-          // ball1向ball2弹动
-          _springTo(_ball1, _ball2);
-        }
-        if (!ball2Draging) {
-          // ball2向ball1弹动
-          _springTo(_ball2, _ball1);
-        }
-      }
-    });
-    super.initState();
+  List<Ball> _initBalls({int num}) {
+    return List.generate(
+      num,
+      (index) => Ball(
+        id: index,
+        x: randomScope([50, _size.width - 50]),
+        y: randomScope([50, _size.height - 50]),
+        r: 30,
+      ),
+    );
   }
 
   // ball1向ball2弹动
@@ -90,6 +60,34 @@ class _Anim27PageState extends State<Anim27Page>
     ball1.y += ball1.vy;
   }
 
+  @override
+  void initState() {
+    _controller =
+        AnimationController(duration: Duration(seconds: 1), vsync: this)
+          ..repeat();
+    _controller.addListener(() {
+      if (mounted) {
+        if (_size == Size.zero) {
+          _size = _globalKey.currentContext.size;
+        }
+        if (_balls == null) {
+          _balls = _initBalls(num: 8);
+        }
+
+        _balls.forEach((ball) {
+          if (!ball.dragged) {
+            var tmpBalls = _balls.where((element) => element.id != ball.id);
+            tmpBalls.forEach((element) {
+              // ball 向其它所有弹动
+              _springTo(ball, element);
+            });
+          }
+        });
+      }
+    });
+    super.initState();
+  }
+
   bool _isPoint(Ball ball, Offset point) {
     return ball.r >=
         math.sqrt(
@@ -97,27 +95,28 @@ class _Anim27PageState extends State<Anim27Page>
   }
 
   void _pointerDownEvent(event) {
-    var pointer = event.localPosition;
-    ball1Draging = false;
-    ball2Draging = false;
-    if (_isPoint(_ball1, pointer)) {
-      ball1Draging = true;
-    }
-    if (_isPoint(_ball2, pointer)) {
-      ball2Draging = true;
-    }
+    Offset pointer = event.localPosition;
+    _balls.forEach((ball) {
+      if (_isPoint(ball, pointer)) {
+        ball.dragged = true;
+        dx = pointer.dx - ball.x;
+        dy = pointer.dy - ball.y;
+        draggedBall = ball;
+      }
+    });
   }
 
   void _pointerMoveEvent(event) {
-    var pointer = event.localPosition;
-    if (ball1Draging) {
-      _ball1.x = pointer.dx;
-      _ball1.y = pointer.dy;
+    Offset pointer = event.localPosition;
+    if (draggedBall != null) {
+      draggedBall.x = pointer.dx - dx;
+      draggedBall.y = pointer.dy - dy;
     }
-    if (ball2Draging) {
-      _ball2.x = pointer.dx;
-      _ball2.y = pointer.dy;
-    }
+  }
+
+  void _pointerUpEvent(event) {
+    draggedBall.dragged = false;
+    draggedBall = null;
   }
 
   @override
@@ -140,13 +139,14 @@ class _Anim27PageState extends State<Anim27Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(ball1: _ball1, ball2: _ball2),
+                painter: MyCustomPainter(balls: _balls),
               );
             },
           ),
           behavior: HitTestBehavior.opaque,
           onPointerDown: _pointerDownEvent,
           onPointerMove: _pointerMoveEvent,
+          onPointerUp: _pointerUpEvent,
         ),
       ),
     );
@@ -154,9 +154,9 @@ class _Anim27PageState extends State<Anim27Page>
 }
 
 class MyCustomPainter extends CustomPainter {
-  final Ball ball1, ball2;
+  final List<Ball> balls;
 
-  MyCustomPainter({this.ball1, this.ball2});
+  MyCustomPainter({this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -168,14 +168,22 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    Path path = Path();
+    if (balls.length > 0) {
+      path.moveTo(balls[0].x, balls[0].y);
+      path.addPolygon(balls.map((e) => Offset(e.x, e.y)).toList(), false);
+      path.close();
+    }
     _paint.color = Colors.red;
     _paint.strokeWidth = 4;
-    canvas.drawLine(Offset(ball1.x, ball1.y), Offset(ball2.x, ball2.y), _paint);
+    _paint.style = PaintingStyle.stroke;
+    canvas.drawPath(path, _paint);
 
-    _paint.color = ball1.fillStyle;
-    canvas.drawCircle(Offset(ball1.x, ball1.y), ball1.r, _paint);
-    _paint.color = ball2.fillStyle;
-    canvas.drawCircle(Offset(ball2.x, ball2.y), ball2.r, _paint);
+    balls.forEach((ball) {
+      _paint.color = ball.fillStyle;
+      _paint.style = PaintingStyle.fill;
+      canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+    });
     canvas.restore();
   }
 

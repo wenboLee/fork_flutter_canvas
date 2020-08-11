@@ -19,6 +19,7 @@ class Ball {
   double g; // 重力
   double friction; // 摩擦力
   bool firstMove;
+  bool dragged;
 
   Ball({
     this.id = 0,
@@ -39,5 +40,6 @@ class Ball {
     this.g = 0,
     this.friction = 0.05,
     this.firstMove = true,
+    this.dragged = false,
   });
 }

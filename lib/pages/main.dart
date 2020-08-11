@@ -52,8 +52,12 @@ class _MainPageState extends State<MainPage>
           ball.x = center.dx + latitudeR;
           ball.y = y;
           ball.r = 3 * scale;
-          ball.fillStyle = Color.fromARGB(ball.fillStyle.alpha,
-              ball.fillStyle.red, ball.fillStyle.green, ball.fillStyle.blue);
+          ball.fillStyle = Color.fromARGB(
+            alpha.toInt(),
+            ball.fillStyle.red,
+            ball.fillStyle.green,
+            ball.fillStyle.blue,
+          );
           _ballsMap[key] = ball;
         }
       });

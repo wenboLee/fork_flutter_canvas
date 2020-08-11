@@ -72,7 +72,7 @@ class MyCustomPainter extends CustomPainter {
         var xRad = toRad((xIndex + 1) * 10);
         // 纬度半径
         var latitudeR = r * math.cos(rad) * math.cos(xRad);
-        var scale = 1 + 0.5 * math.sin(xRad);
+        var scale = 2 + 1 * math.sin(xRad);
         if (xIndex + 1 > 18) {
           _paint.color = Colors.pink;
         } else {

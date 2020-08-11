@@ -77,8 +77,13 @@ class _Anim27PageState extends State<Anim27Page>
     ball1.vx += (targetX - ball1.x) * spring;
     ball1.vy += (targetY - ball1.y) * spring;
 
-    ball1.vx *= friction;
-    ball1.vy *= friction;
+    if (ball1.vx.abs() < 0.001 && ball1.vy.abs() < 0.001) {
+      ball1.vx = 0;
+      ball1.vy = 0;
+    } else {
+      ball1.vx *= friction;
+      ball1.vy *= friction;
+    }
 
     ball1.x += ball1.vx;
     ball1.y += ball1.vy;

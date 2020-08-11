@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage>
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
     _controller.addListener(() {
-      axRad += 0.2;
+      axRad += 0.5;
     });
     super.initState();
   }
@@ -75,7 +75,7 @@ class MyCustomPainter extends CustomPainter {
     List.generate(xNum.toInt(), (xIndex) {
       List.generate(yNum.toInt(), (yIndex) {
         // 纬度弧度
-        var yRad = toRad((yIndex + 1) * ay - 90) + dRad;
+        var yRad = toRad((yIndex + 1) * ay - 90);
         var y = center.dy + r * math.sin(yRad);
         // 经度弧度
         var xRad = toRad((xIndex + 1) * ax) + dRad;
@@ -83,8 +83,8 @@ class MyCustomPainter extends CustomPainter {
         var latitudeR = r * math.cos(yRad) * math.cos(xRad);
         // 1.5-1-1.5
         var scale = 1 + 0.5 * math.sin(xRad).abs();
-        // 0.6-0.8-1.0
-        var alpha = (0.8 + 0.2 * math.sin(xRad)) * 255;
+        // 0.4-0.7-1.0
+        var alpha = (0.7 + 0.3 * math.sin(xRad)) * 255;
         _paint.color = Color.fromARGB(alpha.toInt(), 0, 255, 0);
         _paint.style = PaintingStyle.fill;
         _paint.strokeWidth = 1;

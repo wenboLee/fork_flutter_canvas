@@ -60,6 +60,17 @@ class MyCustomPainter extends CustomPainter {
     ..strokeWidth = 1
     ..style = PaintingStyle.fill;
 
+  void _draw3DBall(Canvas canvas, Size size) {
+    double r = 300;
+    canvas.drawArc(
+      Rect.fromCenter(center: size.center(Offset.zero), width: r, height: r),
+      -math.pi / 2,
+      math.pi,
+      true,
+      _paint,
+    );
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
@@ -81,6 +92,7 @@ class MyCustomPainter extends CustomPainter {
 //    // 文字左上角起始点
 //    Offset offset = Offset(50, 50);
 //    canvas.drawParagraph(paragraph, offset);
+    _draw3DBall(canvas, size);
     canvas.restore();
   }
 

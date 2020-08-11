@@ -62,6 +62,8 @@ class MyCustomPainter extends CustomPainter {
 
   void _draw3DBall(Canvas canvas, Size size, Offset center) {
     double r = 300;
+    _paint.strokeWidth = 5;
+    _paint.style = PaintingStyle.stroke;
     canvas.drawArc(
       Rect.fromCenter(center: center, width: r, height: r),
       -math.pi / 2,
@@ -95,6 +97,7 @@ class MyCustomPainter extends CustomPainter {
     Offset center = size.center(Offset.zero);
     _draw3DBall(canvas, size, center);
 
+    _paint.strokeWidth = 1;
     _paint.color = Colors.red;
     canvas.drawLine(
         Offset(0, center.dy), Offset(size.width, center.dy), _paint);

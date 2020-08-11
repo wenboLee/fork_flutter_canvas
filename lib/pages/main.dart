@@ -17,13 +17,16 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
+  double axRad = 0;
 
   @override
   void initState() {
     _controller =
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
-    _controller.addListener(() {});
+    _controller.addListener(() {
+      axRad += 0.2;
+    });
     super.initState();
   }
 
@@ -43,7 +46,7 @@ class _MainPageState extends State<MainPage>
           builder: (context, child) {
             return CustomPaint(
               size: Size.infinite,
-              painter: MyCustomPainter(),
+              painter: MyCustomPainter(axRad: axRad),
             );
           },
         ),
@@ -53,7 +56,8 @@ class _MainPageState extends State<MainPage>
 }
 
 class MyCustomPainter extends CustomPainter {
-  MyCustomPainter();
+  final double axRad;
+  MyCustomPainter({this.axRad});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -63,24 +67,28 @@ class MyCustomPainter extends CustomPainter {
     ..style = PaintingStyle.fill;
 
   void _draw3DBall(Canvas canvas, Size size, Offset center) {
+    // 水平方向旋转10弧度
+    var dRad = toRad(axRad);
     double r = 150;
-    List.generate(36, (xIndex) {
-      List.generate(18, (yIndex) {
-        var rad = toRad((yIndex + 1) * 10 - 90);
-        var y = center.dy + r * math.sin(rad);
+    double ax = 30 , ay = 20;
+    double xNum = 360 / ax, yNum = 360 / ay;
+    List.generate(xNum.toInt(), (xIndex) {
+      List.generate(yNum.toInt(), (yIndex) {
+        // 纬度弧度
+        var yRad = toRad((yIndex + 1) * ay - 90) + dRad;
+        var y = center.dy + r * math.sin(yRad);
         // 经度弧度
-        var xRad = toRad((xIndex + 1) * 10);
+        var xRad = toRad((xIndex + 1) * ax) + dRad;
         // 纬度半径
-        var latitudeR = r * math.cos(rad) * math.cos(xRad);
-        var scale = 2 + 1 * math.sin(xRad);
-        if (xIndex + 1 > 18) {
-          _paint.color = Colors.pink;
-        } else {
-          _paint.color = Colors.green;
-        }
+        var latitudeR = r * math.cos(yRad) * math.cos(xRad);
+        // 1.5-1-1.5
+        var scale = 1 + 0.5 * math.sin(xRad).abs();
+        // 0.6-0.8-1.0
+        var alpha = (0.8 + 0.2 * math.sin(xRad)) * 255;
+        _paint.color = Color.fromARGB(alpha.toInt(), 0, 255, 0);
         _paint.style = PaintingStyle.fill;
         _paint.strokeWidth = 1;
-        canvas.drawCircle(Offset(center.dx + latitudeR, y), 2 * scale, _paint);
+        canvas.drawCircle(Offset(center.dx + latitudeR, y), 3 * scale, _paint);
       });
     });
   }
@@ -108,13 +116,6 @@ class MyCustomPainter extends CustomPainter {
 //    canvas.drawParagraph(paragraph, offset);
     Offset center = size.center(Offset.zero);
     _draw3DBall(canvas, size, center);
-
-    _paint.strokeWidth = 1;
-    _paint.color = Colors.red;
-    canvas.drawLine(
-        Offset(0, center.dy), Offset(size.width, center.dy), _paint);
-    canvas.drawLine(
-        Offset(center.dx, 0), Offset(center.dx, size.height), _paint);
     canvas.restore();
   }
 

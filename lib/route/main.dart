@@ -32,6 +32,7 @@ import 'package:flutter_canvas/pages/anim/anim30.dart';
 import 'package:flutter_canvas/pages/anim/anim31.dart';
 import 'package:flutter_canvas/pages/anim/anim32.dart';
 import 'package:flutter_canvas/pages/anim/anim33.dart';
+import 'package:flutter_canvas/pages/anim/anim34.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -71,6 +72,7 @@ class RouteConstant {
   static const String Anim31Page = '/anim31Page';
   static const String Anim32Page = '/anim32Page';
   static const String Anim33Page = '/anim33Page';
+  static const String Anim34Page = '/anim34Page';
 }
 
 String routeWidgetName(String routeName) {
@@ -111,6 +113,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim31Page: 'Anim31Page',
     RouteConstant.Anim32Page: 'Anim32Page',
     RouteConstant.Anim33Page: 'Anim33Page',
+    RouteConstant.Anim34Page: 'Anim34Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -152,5 +155,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim31Page: (context) => Anim31Page(title: '31多物体弹动2'),
     RouteConstant.Anim32Page: (context) => Anim32Page(title: '32弹动基本原理'),
     RouteConstant.Anim33Page: (context) => Anim33Page(title: '33弹绳效果'),
+    RouteConstant.Anim34Page: (context) => Anim34Page(title: '34缓动基本原理'),
   };
 }

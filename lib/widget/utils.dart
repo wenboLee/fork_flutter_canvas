@@ -12,7 +12,7 @@ Color randomColor() {
   }
 }
 
-double randomScope(List<int> scope) {
+double randomScope(List<double> scope) {
   // 默认从小到大scope.sort()
   scope.sort((a, b) => a.compareTo(b));
   return Random().nextDouble() * (scope[1] - scope[0]) + scope[0];

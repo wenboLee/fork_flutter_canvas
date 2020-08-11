@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/arrow.dart';
 import 'package:flutter_canvas/widget/comm.dart';
-import 'dart:math' as math;
-
 import 'package:flutter_canvas/widget/utils.dart';
+import 'dart:math' as math;
 
 class Anim20Page extends StatefulWidget {
   final String title;

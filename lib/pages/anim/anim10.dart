@@ -20,7 +20,7 @@ class _Anim10PageState extends State<Anim10Page>
   Ball _ball;
   double angle = 0, vx = 0.5, swing = 60; //增幅
   bool directionRight = true; //方向右
-  Map<String, Offset> _pointerMap = Map<String, Offset>();
+  List<Offset> _pointerList = [];
 
   @override
   void initState() {
@@ -71,7 +71,7 @@ class _Anim10PageState extends State<Anim10Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball, pointerMap: _pointerMap),
+              painter: MyCustomPainter(ball: _ball, pointerList: _pointerList),
             );
           },
         ),
@@ -82,9 +82,9 @@ class _Anim10PageState extends State<Anim10Page>
 
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
-  Map<String, Offset> pointerMap;
+  List<Offset> pointerList;
 
-  MyCustomPainter({this.ball, this.pointerMap});
+  MyCustomPainter({this.ball, this.pointerList});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -98,14 +98,13 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     _paint.style = PaintingStyle.stroke;
     _paint.color = Colors.black;
-    // 控制精度，提高渲染效率
-    String key = '${ball.x.toInt()}_${ball.y.toInt()}';
-    if (!pointerMap.containsKey(key) && pointerMap.length <= 5000) {
-      pointerMap[key] = Offset(ball.x, ball.y);
+    pointerList.add(Offset(ball.x, ball.y));
+    if (pointerList.length >= 1000) {
+      pointerList.removeAt(0);
     }
     // 绘制运动三角函数曲线
     Path path = Path();
-    path.addPolygon(pointerMap.values.toList(), false);
+    path.addPolygon(pointerList, false);
     canvas.drawPath(path, _paint);
 
     canvas.drawLine(Offset(0, size.height / 2.0),

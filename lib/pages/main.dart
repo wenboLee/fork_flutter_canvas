@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/comm.dart';
-import 'package:flutter_canvas/widget/ball.dart';
 import 'dart:math' as math;
 
 class MainPage extends StatefulWidget {
@@ -64,24 +63,24 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    // 文本构造器
-    ui.ParagraphBuilder pb = ui.ParagraphBuilder(
-      ui.ParagraphStyle(
-        textAlign: TextAlign.left,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,
-        fontSize: 15.0,
-      ),
-    );
-    pb.pushStyle(ui.TextStyle(color: Colors.black87));
-    pb.addText('Flutter Canvas');
-    // 文本的宽度约束
-    ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: 300);
-    // 这里需要先layout,将宽度约束填入,否则无法绘制
-    ui.Paragraph paragraph = pb.build()..layout(pc);
-    // 文字左上角起始点
-    Offset offset = Offset(50, 50);
-    canvas.drawParagraph(paragraph, offset);
+//    // 文本构造器
+//    ui.ParagraphBuilder pb = ui.ParagraphBuilder(
+//      ui.ParagraphStyle(
+//        textAlign: TextAlign.left,
+//        fontWeight: FontWeight.bold,
+//        fontStyle: FontStyle.normal,
+//        fontSize: 15.0,
+//      ),
+//    );
+//    pb.pushStyle(ui.TextStyle(color: Colors.black87));
+//    pb.addText('Flutter Canvas 请叫我code哥');
+//    // 文本的宽度约束
+//    ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: 300);
+//    // 这里需要先layout,将宽度约束填入,否则无法绘制
+//    ui.Paragraph paragraph = pb.build()..layout(pc);
+//    // 文字左上角起始点
+//    Offset offset = Offset(50, 50);
+//    canvas.drawParagraph(paragraph, offset);
     canvas.restore();
   }
 

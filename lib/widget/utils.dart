@@ -28,6 +28,26 @@ double toAngle(rad) {
   return rad * 180 / pi;
 }
 
+// 计算文本高度
+double calculateTextHeight({
+  BuildContext context,
+  String value,
+  TextStyle style,
+  double maxWidth,
+  int maxLines,
+}) {
+  TextPainter painter = TextPainter(
+    locale: Localizations.localeOf(context, nullOk: true),
+    maxLines: maxLines,
+    textDirection: TextDirection.ltr,
+    text: TextSpan(
+      text: value,
+      style: style,
+    ),
+  )..layout(maxWidth: maxWidth);
+  return painter.height;
+}
+
 class Toast {
   static OverlayEntry _overlayEntry;
   static bool _showing = false;

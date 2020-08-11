@@ -37,6 +37,12 @@ class _Anim09PageState extends State<Anim09Page>
         if (_pointer != Offset.zero) {
           dx = _pointer.dx - _arrow.x;
           dy = _pointer.dy - _arrow.y;
+
+          var dr = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2));
+          if (dr < speed) {
+            return;
+          }
+
           angle = math.atan2(dy, dx);
 
           vx = speed * math.cos(angle);

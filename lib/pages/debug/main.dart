@@ -83,6 +83,12 @@ class _DebugMainPageState extends State<DebugMainPage> {
           title: Text(
             '${routeWidgetName(pagesKey[index])}',
             style: TextStyle(
+              shadows: [
+                BoxShadow(
+                    color: Colors.black,
+                    offset: Offset.zero,
+                    blurRadius: 1)
+              ],
               color: randomColor(),
               fontWeight: FontWeight.bold,
             ),
@@ -90,6 +96,12 @@ class _DebugMainPageState extends State<DebugMainPage> {
           subtitle: Text(
             '[${titles[index]}]',
             style: TextStyle(
+              shadows: [
+                BoxShadow(
+                    color: Colors.black,
+                    offset: Offset.zero,
+                    blurRadius: 1)
+              ],
               color: randomColor(),
               fontWeight: FontWeight.bold,
             ),

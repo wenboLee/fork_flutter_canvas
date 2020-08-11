@@ -70,9 +70,9 @@ class _DebugMainPageState extends State<DebugMainPage> {
                 style: TextStyle(
                     shadows: [
                       BoxShadow(
-                          color: Color(0xff3470e1),
+                          color: Colors.black,
                           offset: Offset.zero,
-                          blurRadius: 5)
+                          blurRadius: 1)
                     ],
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

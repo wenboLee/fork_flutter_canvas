@@ -1,9 +1,9 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
-import 'dart:math' as math;
-
 import 'package:flutter_canvas/widget/utils.dart';
+import 'dart:math' as math;
 
 class MainPage extends StatefulWidget {
   final String title;
@@ -16,8 +16,49 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage>
     with SingleTickerProviderStateMixin {
+  final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
-  double axRad = 0;
+  Size _size = Size.zero;
+  double axRad = 0, ayRad = 0;
+  Map<String, Ball> _ballsMap = Map();
+
+  void _draw3DBall(Offset center) {
+    double r = 150;
+    double ax = 20, ay = 20;
+    double xNum = 360 / ax, yNum = 360 / ay;
+    List.generate(xNum.toInt(), (xIndex) {
+      List.generate(yNum.toInt(), (yIndex) {
+        // 纬度弧度
+        var yRad = toRad((yIndex + 1) * ay - 90) + ayRad;
+        var y = center.dy + r * math.sin(yRad);
+        // 经度弧度
+        var xRad = toRad((xIndex + 1) * ax) + axRad;
+        // 纬度半径
+        var latitudeR = r * math.cos(yRad) * math.cos(xRad);
+        // 1.5-1-1.5
+        var scale = 1 + 0.5 * math.sin(xRad).abs();
+        // 0.4-0.7-1.0
+        var alpha = (0.7 + 0.3 * math.sin(xRad)) * 255;
+        var key = '${xIndex}_$yIndex';
+        if (!_ballsMap.containsKey(key)) {
+          _ballsMap[key] = Ball(
+            x: center.dx + latitudeR,
+            y: y,
+            r: 3 * scale,
+            fillStyle: randomColor(alpha: alpha.toInt()),
+          );
+        } else {
+          var ball = _ballsMap[key];
+          ball.x = center.dx + latitudeR;
+          ball.y = y;
+          ball.r = 3 * scale;
+          ball.fillStyle = Color.fromARGB(ball.fillStyle.alpha,
+              ball.fillStyle.red, ball.fillStyle.green, ball.fillStyle.blue);
+          _ballsMap[key] = ball;
+        }
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -25,7 +66,16 @@ class _MainPageState extends State<MainPage>
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
     _controller.addListener(() {
-      axRad += 0.5;
+      if (mounted) {
+        if (_size == Size.zero) {
+          _size = _globalKey.currentContext.size;
+        }
+        axRad += 0.005;
+        ayRad += 0;
+        axRad %= math.pi * 2;
+        ayRad %= math.pi * 2;
+        _draw3DBall(_size.center(Offset.zero));
+      }
     });
     super.initState();
   }
@@ -41,12 +91,15 @@ class _MainPageState extends State<MainPage>
     return Scaffold(
       appBar: appBar(widget.title),
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
             return CustomPaint(
+              key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(axRad: axRad),
+              painter: MyCustomPainter(balls: _ballsMap.values.toList()),
             );
           },
         ),
@@ -56,8 +109,9 @@ class _MainPageState extends State<MainPage>
 }
 
 class MyCustomPainter extends CustomPainter {
-  final double axRad;
-  MyCustomPainter({this.axRad});
+  final List<Ball> balls;
+
+  MyCustomPainter({this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -65,33 +119,6 @@ class MyCustomPainter extends CustomPainter {
     ..isAntiAlias = true
     ..strokeWidth = 1
     ..style = PaintingStyle.fill;
-
-  void _draw3DBall(Canvas canvas, Size size, Offset center) {
-    // 水平方向旋转10弧度
-    var dRad = toRad(axRad);
-    double r = 150;
-    double ax = 30 , ay = 20;
-    double xNum = 360 / ax, yNum = 360 / ay;
-    List.generate(xNum.toInt(), (xIndex) {
-      List.generate(yNum.toInt(), (yIndex) {
-        // 纬度弧度
-        var yRad = toRad((yIndex + 1) * ay - 90);
-        var y = center.dy + r * math.sin(yRad);
-        // 经度弧度
-        var xRad = toRad((xIndex + 1) * ax) + dRad;
-        // 纬度半径
-        var latitudeR = r * math.cos(yRad) * math.cos(xRad);
-        // 1.5-1-1.5
-        var scale = 1 + 0.5 * math.sin(xRad).abs();
-        // 0.4-0.7-1.0
-        var alpha = (0.7 + 0.3 * math.sin(xRad)) * 255;
-        _paint.color = Color.fromARGB(alpha.toInt(), 0, 255, 0);
-        _paint.style = PaintingStyle.fill;
-        _paint.strokeWidth = 1;
-        canvas.drawCircle(Offset(center.dx + latitudeR, y), 3 * scale, _paint);
-      });
-    });
-  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -114,8 +141,10 @@ class MyCustomPainter extends CustomPainter {
 //    // 文字左上角起始点
 //    Offset offset = Offset(50, 50);
 //    canvas.drawParagraph(paragraph, offset);
-    Offset center = size.center(Offset.zero);
-    _draw3DBall(canvas, size, center);
+    balls.forEach((ball) {
+      _paint.color = ball.fillStyle;
+      canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+    });
     canvas.restore();
   }
 

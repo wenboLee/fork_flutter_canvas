@@ -1,14 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-Color randomColor() {
+Color randomColor({alpha = 255}) {
   var red = 55 + Random().nextInt(201);
   var greed = 55 + Random().nextInt(201);
   var blue = 55 + Random().nextInt(201);
   if (red > 100 && greed > 100 && blue > 100) {
-    return randomColor();
+    return randomColor(alpha: alpha);
   } else {
-    return Color.fromARGB(255, red, greed, blue);
+    return Color.fromARGB(alpha, red, greed, blue);
   }
 }
 

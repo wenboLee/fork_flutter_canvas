@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'dart:math' as math;
 
+import 'package:flutter_canvas/widget/utils.dart';
+
 class MainPage extends StatefulWidget {
   final String title;
 
@@ -61,16 +63,23 @@ class MyCustomPainter extends CustomPainter {
     ..style = PaintingStyle.fill;
 
   void _draw3DBall(Canvas canvas, Size size, Offset center) {
-    double r = 300;
-    _paint.strokeWidth = 5;
-    _paint.style = PaintingStyle.stroke;
-    canvas.drawArc(
-      Rect.fromCenter(center: center, width: r, height: r),
-      -math.pi / 2,
-      math.pi,
-      true,
-      _paint,
-    );
+    double r = 150;
+    List.generate(36, (xIndex) {
+      List.generate(18, (yIndex) {
+        var rad = toRad((yIndex + 1) * 10 - 90);
+        var y = center.dy + r * math.sin(rad);
+        // 纬度半径
+        var latitudeR = r * math.cos(rad) * math.cos(toRad((xIndex + 1) * 10));
+        if (xIndex + 1 > 18) {
+          _paint.color = Colors.pink;
+        } else {
+          _paint.color = Colors.green;
+        }
+        _paint.style = PaintingStyle.fill;
+        _paint.strokeWidth = 1;
+        canvas.drawCircle(Offset(center.dx + latitudeR, y), 2, _paint);
+      });
+    });
   }
 
   @override

@@ -68,8 +68,11 @@ class MyCustomPainter extends CustomPainter {
       List.generate(18, (yIndex) {
         var rad = toRad((yIndex + 1) * 10 - 90);
         var y = center.dy + r * math.sin(rad);
+        // 经度弧度
+        var xRad = toRad((xIndex + 1) * 10);
         // 纬度半径
-        var latitudeR = r * math.cos(rad) * math.cos(toRad((xIndex + 1) * 10));
+        var latitudeR = r * math.cos(rad) * math.cos(xRad);
+        var scale = 1 + 0.5 * math.sin(xRad);
         if (xIndex + 1 > 18) {
           _paint.color = Colors.pink;
         } else {
@@ -77,7 +80,7 @@ class MyCustomPainter extends CustomPainter {
         }
         _paint.style = PaintingStyle.fill;
         _paint.strokeWidth = 1;
-        canvas.drawCircle(Offset(center.dx + latitudeR, y), 2, _paint);
+        canvas.drawCircle(Offset(center.dx + latitudeR, y), 2 * scale, _paint);
       });
     });
   }

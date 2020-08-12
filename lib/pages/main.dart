@@ -1,5 +1,4 @@
 import 'dart:ui' as ui;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
@@ -167,6 +166,7 @@ class _MainPageState extends State<MainPage>
             ),
             Positioned(
               left: 20,
+              right: 20,
               bottom: 5,
               child: SizedBox(
                 width: _size?.width ?? 0,

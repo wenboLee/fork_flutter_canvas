@@ -21,22 +21,31 @@ class _MainPageState extends State<MainPage>
   Size _size = Size.zero;
   double axRad = 0, ayRad = 0; // 经纬度旋转弧度
   double ax = 10, ay = 10; // 经纬度
-  double pointR = 4; // 点半径
+  double pointR = 4, r3d = 0; // 点半径、3d球半径
   Map<String, Ball> _ballsMap = Map();
+  bool isMouseDown = false;
+  double startX = 0, startY = 0, vx = 0, vy = 0, friction = 0.98; // 摩擦力
+  Offset _pointer = Offset.zero;
 
   void _draw3DBall(Offset center, Size size) {
-    double r = (size.height > size.width ? size.width : size.height) * 0.8 / 2;
+    axRad += vx;
+    vx *= friction;
+    ayRad += vy;
+    vy *= friction;
+    axRad %= math.pi * 2;
+    ayRad %= math.pi * 2;
+    r3d = (size.height > size.width ? size.width : size.height) * 0.8 / 2;
     // 经纬线条数
     double xNum = 360 / ax, yNum = 360 / ay;
     List.generate(xNum.toInt(), (xIndex) {
       List.generate(yNum.toInt(), (yIndex) {
         // 纬度弧度
         var yRad = toRad((yIndex + 1) * ay - 90) + ayRad;
-        var y = center.dy + r * math.sin(yRad);
+        var y = center.dy + r3d * math.sin(yRad);
         // 经度弧度
         var xRad = toRad((xIndex + 1) * ax) + axRad;
         // 纬度半径
-        var latitudeR = r * math.cos(yRad) * math.cos(xRad);
+        var latitudeR = r3d * math.cos(yRad) * math.cos(xRad);
         // 2-0.5-2
         var scale = 0.5 + 1.5 * math.sin(xRad).abs();
         // 0.4-0.7-1.0
@@ -76,14 +85,48 @@ class _MainPageState extends State<MainPage>
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
         }
-        axRad += 0.005;
-        ayRad += 0.001;
-        axRad %= math.pi * 2;
-        ayRad %= math.pi * 2;
+
         _draw3DBall(_size.center(Offset.zero), _size);
+        _setSpeed();
       }
     });
     super.initState();
+  }
+
+  void _setSpeed() {
+    // 比较最后一帧和前一帧
+    // 先比较，再赋值
+    if (isMouseDown) {
+      vx = (_pointer.dx - startX) * 0.004;
+      vy = (_pointer.dy - startY) * 0.004;
+      startX = _pointer.dx;
+      startY = _pointer.dy;
+    }
+  }
+
+  bool _isPoint(double r3d, Offset center, Offset point) {
+    return r3d >=
+        math.sqrt(math.pow(point.dx - center.dx, 2) +
+            math.pow(point.dy - center.dy, 2));
+  }
+
+  void _pointerDownEvent(event) {
+    _pointer = event.localPosition;
+    isMouseDown = false;
+    if (_isPoint(r3d, _size.center(Offset.zero), _pointer)) {
+      isMouseDown = true;
+      startX = _pointer.dx;
+      startY = _pointer.dy;
+    }
+  }
+
+  void _pointerMoveEvent(event) {
+    _pointer = event.localPosition;
+  }
+
+  void _pointerUpEvent(event) {
+    _pointer = event.localPosition;
+    isMouseDown = false;
   }
 
   @override
@@ -99,15 +142,21 @@ class _MainPageState extends State<MainPage>
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              key: _globalKey,
-              size: Size.infinite,
-              painter: MyCustomPainter(balls: _ballsMap.values.toList()),
-            );
-          },
+        child: Listener(
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return CustomPaint(
+                key: _globalKey,
+                size: Size.infinite,
+                painter: MyCustomPainter(balls: _ballsMap.values.toList()),
+              );
+            },
+          ),
+          behavior: HitTestBehavior.opaque,
+          onPointerDown: _pointerDownEvent,
+          onPointerMove: _pointerMoveEvent,
+          onPointerUp: _pointerUpEvent,
         ),
       ),
     );

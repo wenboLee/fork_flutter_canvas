@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_canvas/widget/utils.dart';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
 
@@ -15,12 +16,10 @@ AppBar appBar(title) {
 double angle = 0;
 
 void drawAuthorText(Canvas canvas, Size size) {
-  double textW = 300;
-  angle += 0.005;
+  angle += 0.04;
   angle %= math.pi * 2;
 
-  var translationX = ((size.width - textW) / 8) * (math.sin(angle) + 1) * 0.14;
-  var textArr = ['Flutter Canvas', '请叫我code哥'];
+  var textArr = ['Flutter-Canvas', '请叫我code哥'];
   for (var j = 0; j < textArr.length; j++) {
     var text = textArr[j];
     List<String> charList = text.characters.toList();
@@ -35,19 +34,19 @@ void drawAuthorText(Canvas canvas, Size size) {
           fontSize: 15.0,
         ),
       );
-      var color = Colors.black54;
-      int alpha =
-          10 * translationX.toInt() > 255 ? 255 : 10 * translationX.toInt();
-      pb.pushStyle(ui.TextStyle(
-          color: Color.fromARGB(alpha, color.red, color.green, color.blue)));
+      pb.pushStyle(ui.TextStyle(color: Colors.black54));
       pb.addText(char);
       // 文本的宽度约束
-      ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: textW);
+      ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: 20);
       // 这里需要先layout,将宽度约束填入,否则无法绘制
       ui.Paragraph paragraph = pb.build()..layout(pc);
+      double spacing = 10, lineHeight = 30, swing = 15;
       // 文字左上角起始点
-      Offset offset =
-          Offset(translationX * (i + 1).toDouble(), 18 * (j + 1).toDouble());
+      Offset offset = Offset(
+          math.cos(angle + toRad(1 * i)) * spacing +
+              spacing * (i + 1).toDouble(),
+          lineHeight * (j + 1).toDouble() +
+              math.sin(angle + toRad(30 * i)) * swing);
       canvas.drawParagraph(paragraph, offset);
     }
   }

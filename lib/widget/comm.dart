@@ -47,7 +47,7 @@ void drawAuthorText(Canvas canvas, Size size) {
       ui.Paragraph paragraph = pb.build()..layout(pc);
       // 文字左上角起始点
       Offset offset =
-          Offset(translationX * (i + 1).toDouble(), 15 * (j + 1).toDouble());
+          Offset(translationX * (i + 1).toDouble(), 18 * (j + 1).toDouble());
       canvas.drawParagraph(paragraph, offset);
     }
   }

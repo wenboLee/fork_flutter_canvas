@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
@@ -20,7 +21,7 @@ class _MainPageState extends State<MainPage>
   AnimationController _controller;
   Size _size = Size.zero;
   double axRad = 0, ayRad = 0; // 经纬度旋转弧度
-  double ax = 10, ay = 10; // 经纬度
+  double ax = 10, ay = 10, rad3d = 180; // 经纬度, 3d圆弧
   double pointR = 4, r3d = 0; // 点半径、3d球半径
   Map<String, Ball> _ballsMap = Map();
   bool isMouseDown = false;
@@ -29,7 +30,7 @@ class _MainPageState extends State<MainPage>
 
   void _draw3DBall(Offset center) {
     // 经纬线条数
-    double xNum = 360 / ax, yNum = 360 / ay;
+    double xNum = rad3d / ax, yNum = rad3d / ay;
     List.generate(xNum.toInt(), (xIndex) {
       List.generate(yNum.toInt(), (yIndex) {
         // 纬度弧度
@@ -39,10 +40,10 @@ class _MainPageState extends State<MainPage>
         var xRad = toRad((xIndex + 1) * ax) + axRad;
         // 纬度半径
         var latitudeR = r3d * math.cos(yRad) * math.cos(xRad);
-        // 2-0.5-2
-        var scale = 0.5 + 1.5 * math.sin(xRad).abs();
-        // 0.4-0.7-1.0
-        var alpha = (0.7 + 0.3 * math.sin(xRad)) * 255;
+        // 1-2-3
+        var scale = 2 + 1 * math.sin(xRad);
+        // 1/3-2/3-1
+        var alpha = 255 / 3 * scale;
         var key = '${xIndex}_$yIndex';
         if (!_ballsMap.containsKey(key)) {
           _ballsMap[key] = Ball(
@@ -166,7 +167,6 @@ class _MainPageState extends State<MainPage>
             ),
             Positioned(
               left: 20,
-              right: 20,
               bottom: 5,
               child: SizedBox(
                 width: _size?.width ?? 0,
@@ -208,6 +208,25 @@ class _MainPageState extends State<MainPage>
                             });
                           },
                           value: ay,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text('3D圆弧 $rad3d'),
+                        Slider(
+                          min: 30,
+                          max: 360,
+                          label: '${rad3d.toInt()}',
+                          divisions: 11,
+                          onChanged: (value) {
+                            setState(() {
+                              rad3d = value.ceilToDouble();
+                              _ballsMap.clear();
+                            });
+                          },
+                          value: rad3d,
                         ),
                       ],
                     )

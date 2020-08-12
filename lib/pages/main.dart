@@ -165,9 +165,9 @@ class _MainPageState extends State<MainPage>
               onPointerUp: _pointerUpEvent,
             ),
             Positioned(
-              left: 40,
-              right: 40,
-              bottom: 40,
+              left: 20,
+              right: 20,
+              bottom: 5,
               child: SizedBox(
                 width: _size?.width ?? 0,
                 child: Column(

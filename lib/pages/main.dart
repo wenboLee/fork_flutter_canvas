@@ -20,7 +20,7 @@ class _MainPageState extends State<MainPage>
   Size _size = Size.zero;
   double axRad = 0, ayRad = 0; // 经纬度旋转弧度
   double ax = 10, ay = 10, rad3d = 180; // 经纬度, 3d圆弧
-  double pointR = 4, r3d = 0; // 点半径、3d球半径
+  double pointR = 5, r3d = 0; // 点半径、3d球半径
   Map<String, Ball> _ballsMap = Map();
   bool isMouseDown = false;
   double startX = 0, startY = 0, vx = 0, vy = 0, friction = 0.98; // 摩擦力
@@ -38,10 +38,10 @@ class _MainPageState extends State<MainPage>
         var xRad = toRad((xIndex + 1) * ax) + axRad;
         // 纬度半径
         var latitudeR = r3d * math.cos(yRad) * math.cos(xRad);
-        // 1-2-3 里-中-外
-        var scale = 2 + math.sin(xRad);
+        // 2-3-4 里-中-外
+        var scale = (3 + 1 * math.sin(xRad)) / 9 * 3;
         // 1/3-2/3-1
-        var alpha = 255 / 3 * scale;
+        var alpha = 255 / 3 * (2 + math.sin(xRad));
         var key = '${xIndex}_$yIndex';
         if (!_ballsMap.containsKey(key)) {
           _ballsMap[key] = Ball(
@@ -81,6 +81,7 @@ class _MainPageState extends State<MainPage>
           r3d = (_size.height > _size.width ? _size.width : _size.height) *
               0.8 /
               2;
+          setState(() {});
         }
 
         _draw3DBall(_size.center(Offset.zero));
@@ -139,6 +140,115 @@ class _MainPageState extends State<MainPage>
     super.dispose();
   }
 
+  Row _buildRow() {
+    var textStyle =
+        TextStyle(color: Colors.black54, fontWeight: FontWeight.bold);
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  '经度 ${ax.toInt()}',
+                  style: textStyle,
+                ),
+                Slider(
+                  min: 1,
+                  max: 180,
+                  label: '${ax.toInt()}',
+                  divisions: 179,
+                  onChanged: (value) {
+                    setState(() {
+                      ax = value.ceilToDouble();
+                      _ballsMap.clear();
+                    });
+                  },
+                  value: ax,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  '纬度 ${ay.toInt()}',
+                  style: textStyle,
+                ),
+                Slider(
+                  min: 1,
+                  max: 180,
+                  label: '${ay.toInt()}',
+                  divisions: 179,
+                  onChanged: (value) {
+                    setState(() {
+                      ay = value.ceilToDouble();
+                      _ballsMap.clear();
+                    });
+                  },
+                  value: ay,
+                ),
+              ],
+            ),
+          ],
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  '小球半径 ${pointR.toInt()}',
+                  style: textStyle,
+                ),
+                Slider(
+                  min: 1,
+                  max: r3d <= 0 ? pointR : r3d,
+                  label: '${pointR.toInt()}',
+                  divisions: 99,
+                  onChanged: (value) {
+                    setState(() {
+                      pointR = value.ceilToDouble();
+                      _ballsMap.clear();
+                    });
+                  },
+                  value: pointR,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  '3D圆弧 ${rad3d.toInt()}',
+                  style: textStyle,
+                ),
+                Slider(
+                  min: 1,
+                  max: 360,
+                  label: '${rad3d.toInt()}',
+                  divisions: 359,
+                  onChanged: (value) {
+                    setState(() {
+                      rad3d = value.ceilToDouble();
+                      _ballsMap.clear();
+                    });
+                  },
+                  value: rad3d,
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,90 +280,7 @@ class _MainPageState extends State<MainPage>
               left: 20,
               right: 20,
               bottom: 5,
-              child: SizedBox(
-                width: _size?.width ?? 0,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text('经度 $ax'),
-                        Slider(
-                          min: 1,
-                          max: 180,
-                          label: '${ax.toInt()}',
-                          divisions: 179,
-                          onChanged: (value) {
-                            setState(() {
-                              ax = value.ceilToDouble();
-                              _ballsMap.clear();
-                            });
-                          },
-                          value: ax,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text('纬度 $ay'),
-                        Slider(
-                          min: 1,
-                          max: 180,
-                          label: '${ay.toInt()}',
-                          divisions: 179,
-                          onChanged: (value) {
-                            setState(() {
-                              ay = value.ceilToDouble();
-                              _ballsMap.clear();
-                            });
-                          },
-                          value: ay,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text('小球半径 $pointR'),
-                        Slider(
-                          min: 1,
-                          max: r3d <= 0 ? 10 : r3d,
-                          label: '${pointR.toInt()}',
-                          divisions: 99,
-                          onChanged: (value) {
-                            setState(() {
-                              pointR = value.ceilToDouble();
-                              _ballsMap.clear();
-                            });
-                          },
-                          value: pointR,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text('3D圆弧 $rad3d'),
-                        Slider(
-                          min: 1,
-                          max: 360,
-                          label: '${rad3d.toInt()}',
-                          divisions: 359,
-                          onChanged: (value) {
-                            setState(() {
-                              rad3d = value.ceilToDouble();
-                              _ballsMap.clear();
-                            });
-                          },
-                          value: rad3d,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+              child: _buildRow(),
             ),
           ],
         ),
@@ -279,6 +306,12 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     drawAuthorText(canvas, size);
     balls.forEach((ball) {
+      double elevation = ball.alpha < 0
+          ? (1 - ball.alpha.abs()) * ball.r
+          : ball.alpha * ball.r;
+      if (elevation > 20) {
+        elevation = 20;
+      }
       canvas.drawShadow(
         Path()
           ..addOval(
@@ -290,7 +323,7 @@ class MyCustomPainter extends CustomPainter {
           )
           ..close(),
         ball.fillStyle,
-        ball.alpha < 0 ? (1 - ball.alpha.abs()) * 10 : ball.alpha * 10,
+        elevation,
         false,
       );
       _paint.color = ball.fillStyle;

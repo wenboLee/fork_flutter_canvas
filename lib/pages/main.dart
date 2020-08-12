@@ -259,7 +259,8 @@ class _MainPageState extends State<MainPage>
                   return CustomPaint(
                     key: _globalKey,
                     size: Size.infinite,
-                    painter: MyCustomPainter(balls: _ballsMap.values.toList()),
+                    painter: MyCustomPainter(
+                        balls: _ballsMap.values.toList(), r3d: r3d),
                   );
                 },
               ),
@@ -288,8 +289,9 @@ class _MainPageState extends State<MainPage>
 
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
+  final double r3d;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({this.balls, this.r3d});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -302,6 +304,20 @@ class MyCustomPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     drawAuthorText(canvas, size);
+    var rotateZ = 10 * math.pi / 180;
+    var transform = Matrix4.identity()
+      ..setEntry(3, 2, 0.001)
+      ..rotateX(0)
+      ..rotateY(0)
+      ..rotateZ(rotateZ);
+    canvas.transform(transform.storage);
+    canvas.translate(
+        r3d * (0.15 + math.sin(rotateZ)), r3d * (0.6 - math.cos(rotateZ)));
+    _paint.strokeWidth = 10;
+    _paint.color = Colors.pink;
+    Offset center = size.center(Offset.zero);
+    canvas.drawLine(Offset(size.width / 2, center.dy - r3d - 30),
+        Offset(size.width / 2, center.dy + r3d + 30), _paint);
     balls.forEach((ball) {
       double elevation = ball.alpha < 0
           ? (1 - ball.alpha.abs()) * ball.r

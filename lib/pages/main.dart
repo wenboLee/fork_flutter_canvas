@@ -201,7 +201,7 @@ class _MainPageState extends State<MainPage>
               ),
               Slider(
                 min: 1,
-                max: r3d <= 0 ? pointR : r3d,
+                max: r3d <= 0 ? pointR : r3d.ceilToDouble(),
                 label: '${pointR.toInt()}',
                 divisions: 99,
                 onChanged: (value) {

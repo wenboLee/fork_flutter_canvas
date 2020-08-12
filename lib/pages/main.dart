@@ -77,7 +77,9 @@ class _MainPageState extends State<MainPage>
       if (mounted) {
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
-          r3d = (_size.height > _size.width ? _size.width : _size.height) * 0.8 / 2;
+          r3d = (_size.height > _size.width ? _size.width : _size.height) *
+              0.8 /
+              2;
         }
 
         _draw3DBall(_size.center(Offset.zero));
@@ -143,21 +145,77 @@ class _MainPageState extends State<MainPage>
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: Listener(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return CustomPaint(
-                key: _globalKey,
-                size: Size.infinite,
-                painter: MyCustomPainter(balls: _ballsMap.values.toList()),
-              );
-            },
-          ),
-          behavior: HitTestBehavior.opaque,
-          onPointerDown: _pointerDownEvent,
-          onPointerMove: _pointerMoveEvent,
-          onPointerUp: _pointerUpEvent,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Listener(
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return CustomPaint(
+                    key: _globalKey,
+                    size: Size.infinite,
+                    painter: MyCustomPainter(balls: _ballsMap.values.toList()),
+                  );
+                },
+              ),
+              behavior: HitTestBehavior.opaque,
+              onPointerDown: _pointerDownEvent,
+              onPointerMove: _pointerMoveEvent,
+              onPointerUp: _pointerUpEvent,
+            ),
+            Positioned(
+              left: 40,
+              right: 40,
+              bottom: 40,
+              child: SizedBox(
+                width: _size?.width ?? 0,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text('经度 $ax'),
+                        Slider(
+                          min: 5,
+                          max: 180,
+                          label: '${ax.toInt()}',
+                          divisions: 35,
+                          onChanged: (value) {
+                            setState(() {
+                              ax = value.ceilToDouble();
+                              _ballsMap.clear();
+                            });
+                          },
+                          value: ax,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text('纬度 $ay'),
+                        Slider(
+                          min: 5,
+                          max: 180,
+                          label: '${ay.toInt()}',
+                          divisions: 35,
+                          onChanged: (value) {
+                            setState(() {
+                              ay = value.ceilToDouble();
+                              _ballsMap.clear();
+                            });
+                          },
+                          value: ay,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

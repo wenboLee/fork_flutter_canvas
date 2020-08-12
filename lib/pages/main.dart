@@ -22,8 +22,8 @@ class _MainPageState extends State<MainPage>
   double axRad = 0, ayRad = 0;
   Map<String, Ball> _ballsMap = Map();
 
-  void _draw3DBall(Offset center) {
-    double r = 150;
+  void _draw3DBall(Offset center, Size size) {
+    double r = size.height > size.width ? size.width : size.height * 0.8 / 2;
     double ax = 20, ay = 20;
     double xNum = 360 / ax, yNum = 360 / ay;
     List.generate(xNum.toInt(), (xIndex) {
@@ -35,8 +35,8 @@ class _MainPageState extends State<MainPage>
         var xRad = toRad((xIndex + 1) * ax) + axRad;
         // 纬度半径
         var latitudeR = r * math.cos(yRad) * math.cos(xRad);
-        // 1.5-1-1.5
-        var scale = 1 + 0.5 * math.sin(xRad).abs();
+        // 2-0.5-2
+        var scale = 0.5 + 1.5 * math.sin(xRad).abs();
         // 0.4-0.7-1.0
         var alpha = (0.7 + 0.3 * math.sin(xRad)) * 255;
         var key = '${xIndex}_$yIndex';
@@ -75,10 +75,10 @@ class _MainPageState extends State<MainPage>
           _size = _globalKey.currentContext.size;
         }
         axRad += 0.005;
-        ayRad += 0;
+        ayRad += 0.005;
         axRad %= math.pi * 2;
         ayRad %= math.pi * 2;
-        _draw3DBall(_size.center(Offset.zero));
+        _draw3DBall(_size.center(Offset.zero), _size);
       }
     });
     super.initState();

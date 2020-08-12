@@ -173,17 +173,17 @@ class _MainPageState extends State<MainPage>
               child: SizedBox(
                 width: _size?.width ?? 0,
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text('经度 $ax'),
                         Slider(
-                          min: 10,
+                          min: 1,
                           max: 180,
                           label: '${ax.toInt()}',
-                          divisions: 17,
+                          divisions: 179,
                           onChanged: (value) {
                             setState(() {
                               ax = value.ceilToDouble();
@@ -199,10 +199,10 @@ class _MainPageState extends State<MainPage>
                       children: [
                         Text('纬度 $ay'),
                         Slider(
-                          min: 10,
+                          min: 1,
                           max: 180,
                           label: '${ay.toInt()}',
-                          divisions: 17,
+                          divisions: 179,
                           onChanged: (value) {
                             setState(() {
                               ay = value.ceilToDouble();
@@ -216,12 +216,31 @@ class _MainPageState extends State<MainPage>
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
+                        Text('小球半径 $pointR'),
+                        Slider(
+                          min: 1,
+                          max: r3d <= 0 ? 10 : r3d,
+                          label: '${pointR.toInt()}',
+                          divisions: 99,
+                          onChanged: (value) {
+                            setState(() {
+                              pointR = value.ceilToDouble();
+                              _ballsMap.clear();
+                            });
+                          },
+                          value: pointR,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
                         Text('3D圆弧 $rad3d'),
                         Slider(
-                          min: 30,
+                          min: 1,
                           max: 360,
                           label: '${rad3d.toInt()}',
-                          divisions: 11,
+                          divisions: 359,
                           onChanged: (value) {
                             setState(() {
                               rad3d = value.ceilToDouble();

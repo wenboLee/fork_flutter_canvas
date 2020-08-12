@@ -140,111 +140,103 @@ class _MainPageState extends State<MainPage>
     super.dispose();
   }
 
-  Row _buildRow() {
-    var textStyle =
-        TextStyle(color: Colors.black54, fontWeight: FontWeight.bold);
-    return Row(
+  Column _buildRow(int type) {
+    var textStyle = TextStyle(color: Colors.red, fontWeight: FontWeight.bold);
+    return Column(
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  '经度 ${ax.toInt()}',
-                  style: textStyle,
-                ),
-                Slider(
-                  min: 1,
-                  max: 180,
-                  label: '${ax.toInt()}',
-                  divisions: 179,
-                  onChanged: (value) {
-                    setState(() {
-                      ax = value.ceilToDouble();
-                      _ballsMap.clear();
-                    });
-                  },
-                  value: ax,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  '纬度 ${ay.toInt()}',
-                  style: textStyle,
-                ),
-                Slider(
-                  min: 1,
-                  max: 180,
-                  label: '${ay.toInt()}',
-                  divisions: 179,
-                  onChanged: (value) {
-                    setState(() {
-                      ay = value.ceilToDouble();
-                      _ballsMap.clear();
-                    });
-                  },
-                  value: ay,
-                ),
-              ],
-            ),
-          ],
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  '小球半径 ${pointR.toInt()}',
-                  style: textStyle,
-                ),
-                Slider(
-                  min: 1,
-                  max: r3d <= 0 ? pointR : r3d,
-                  label: '${pointR.toInt()}',
-                  divisions: 99,
-                  onChanged: (value) {
-                    setState(() {
-                      pointR = value.ceilToDouble();
-                      _ballsMap.clear();
-                    });
-                  },
-                  value: pointR,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  '3D圆弧 ${rad3d.toInt()}',
-                  style: textStyle,
-                ),
-                Slider(
-                  min: 1,
-                  max: 360,
-                  label: '${rad3d.toInt()}',
-                  divisions: 359,
-                  onChanged: (value) {
-                    setState(() {
-                      rad3d = value.ceilToDouble();
-                      _ballsMap.clear();
-                    });
-                  },
-                  value: rad3d,
-                ),
-              ],
-            )
-          ],
-        ),
+        if (type == 0)
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                '经度 ${ax.toInt()}',
+                style: textStyle,
+              ),
+              Slider(
+                min: 1,
+                max: 180,
+                label: '${ax.toInt()}',
+                divisions: 179,
+                onChanged: (value) {
+                  setState(() {
+                    ax = value.ceilToDouble();
+                    _ballsMap.clear();
+                  });
+                },
+                value: ax,
+              ),
+            ],
+          ),
+        if (type == 0)
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                '纬度 ${ay.toInt()}',
+                style: textStyle,
+              ),
+              Slider(
+                min: 1,
+                max: 180,
+                label: '${ay.toInt()}',
+                divisions: 179,
+                onChanged: (value) {
+                  setState(() {
+                    ay = value.ceilToDouble();
+                    _ballsMap.clear();
+                  });
+                },
+                value: ay,
+              ),
+            ],
+          ),
+        if (type == 1)
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                '小球半径 ${pointR.toInt()}',
+                style: textStyle,
+              ),
+              Slider(
+                min: 1,
+                max: r3d <= 0 ? pointR : r3d,
+                label: '${pointR.toInt()}',
+                divisions: 99,
+                onChanged: (value) {
+                  setState(() {
+                    pointR = value.ceilToDouble();
+                    _ballsMap.clear();
+                  });
+                },
+                value: pointR,
+              ),
+            ],
+          ),
+        if (type == 1)
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                '3D圆弧 ${rad3d.toInt()}',
+                style: textStyle,
+              ),
+              Slider(
+                min: 1,
+                max: 360,
+                label: '${rad3d.toInt()}',
+                divisions: 359,
+                onChanged: (value) {
+                  setState(() {
+                    rad3d = value.ceilToDouble();
+                    _ballsMap.clear();
+                  });
+                },
+                value: rad3d,
+              ),
+            ],
+          ),
       ],
     );
   }
@@ -278,9 +270,14 @@ class _MainPageState extends State<MainPage>
             ),
             Positioned(
               left: 20,
-              right: 20,
+              right: 0,
               bottom: 5,
-              child: _buildRow(),
+              child: _buildRow(0),
+            ),
+            Positioned(
+              right: 0,
+              top: 10,
+              child: _buildRow(1),
             ),
           ],
         ),

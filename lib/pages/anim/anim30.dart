@@ -168,6 +168,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    drawAuthorText(canvas, size);
     Path path = Path();
     if (balls.length > 0) {
       path.moveTo(balls[0].x, balls[0].y);

@@ -113,6 +113,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    drawAuthorText(canvas, size);
     var center = Offset(arrow.x, arrow.y);
 
     // 以画布宽 绘制背景正方形

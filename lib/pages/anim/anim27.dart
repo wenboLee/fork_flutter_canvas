@@ -168,6 +168,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    drawAuthorText(canvas, size);
     _paint.color = Colors.red;
     _paint.strokeWidth = 4;
     canvas.drawLine(Offset(ball1.x, ball1.y), Offset(ball2.x, ball2.y), _paint);

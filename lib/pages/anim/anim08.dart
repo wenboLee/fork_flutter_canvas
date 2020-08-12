@@ -102,6 +102,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    drawAuthorText(canvas, size);
     var center = Offset(arrow.x, arrow.y);
     // 画布左上角离画布中心点距离， 即为旋转半径
     var r =

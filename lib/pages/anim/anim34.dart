@@ -92,6 +92,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    drawAuthorText(canvas, size);
     _paint.color = ball.fillStyle;
     _paint.style = PaintingStyle.fill;
     canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);

@@ -206,6 +206,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    drawAuthorText(canvas, size);
     // 箭头坐标作为参照点
     var path =
         _createPath(arrow.w, arrow.h, Offset(arrow.x, arrow.y), arrow.rotation);

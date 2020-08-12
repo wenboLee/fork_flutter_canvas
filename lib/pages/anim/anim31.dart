@@ -183,6 +183,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
+    drawAuthorText(canvas, size);
     Path path = Path();
     if (balls.length > 0) {
       path.addPolygon(balls.map((e) => Offset(e.x, e.y)).toList(), false);

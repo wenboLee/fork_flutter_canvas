@@ -270,8 +270,8 @@ class MyCustomPainter extends CustomPainter {
             ),
           )
           ..close(),
-        ball.alpha <= 0 ? Colors.transparent : ball.fillStyle,
-        10,
+        ball.fillStyle,
+        ball.alpha < 0 ? (1 - ball.alpha.abs()) * 10 : ball.alpha * 10,
         false,
       );
       _paint.color = ball.fillStyle;

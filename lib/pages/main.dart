@@ -23,7 +23,7 @@ class _MainPageState extends State<MainPage>
   Map<String, Ball> _ballsMap = Map();
 
   void _draw3DBall(Offset center, Size size) {
-    double r = size.height > size.width ? size.width : size.height * 0.8 / 2;
+    double r = (size.height > size.width ? size.width : size.height) * 0.8 / 2;
     double ax = 20, ay = 20;
     double xNum = 360 / ax, yNum = 360 / ay;
     List.generate(xNum.toInt(), (xIndex) {

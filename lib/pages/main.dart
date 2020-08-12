@@ -178,10 +178,10 @@ class _MainPageState extends State<MainPage>
                       children: [
                         Text('经度 $ax'),
                         Slider(
-                          min: 5,
+                          min: 10,
                           max: 180,
                           label: '${ax.toInt()}',
-                          divisions: 35,
+                          divisions: 17,
                           onChanged: (value) {
                             setState(() {
                               ax = value.ceilToDouble();
@@ -197,10 +197,10 @@ class _MainPageState extends State<MainPage>
                       children: [
                         Text('纬度 $ay'),
                         Slider(
-                          min: 5,
+                          min: 10,
                           max: 180,
                           label: '${ay.toInt()}',
-                          divisions: 35,
+                          divisions: 17,
                           onChanged: (value) {
                             setState(() {
                               ay = value.ceilToDouble();

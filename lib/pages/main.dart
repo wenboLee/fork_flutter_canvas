@@ -39,8 +39,8 @@ class _MainPageState extends State<MainPage>
         var xRad = toRad((xIndex + 1) * ax) + axRad;
         // 纬度半径
         var latitudeR = r3d * math.cos(yRad) * math.cos(xRad);
-        // 1-2-3
-        var scale = 2 + 1 * math.sin(xRad);
+        // 1-2-3 里-中-外
+        var scale = 2 + math.sin(xRad);
         // 1/3-2/3-1
         var alpha = 255 / 3 * scale;
         var key = '${xIndex}_$yIndex';
@@ -49,6 +49,7 @@ class _MainPageState extends State<MainPage>
             x: center.dx + latitudeR,
             y: y,
             r: pointR * scale,
+            alpha: math.sin(xRad),
             fillStyle: randomColor(alpha: alpha.toInt()),
           );
         } else {
@@ -56,6 +57,7 @@ class _MainPageState extends State<MainPage>
           ball.x = center.dx + latitudeR;
           ball.y = y;
           ball.r = pointR * scale;
+          ball.alpha = math.sin(xRad);
           ball.fillStyle = Color.fromARGB(
             alpha.toInt(),
             ball.fillStyle.red,
@@ -100,7 +102,7 @@ class _MainPageState extends State<MainPage>
     // 比较最后一帧和前一帧
     // 先比较，再赋值
     if (isMouseDown) {
-      vx = (_pointer.dx - startX) * 0.004;
+      vx = (_pointer.dx - startX) * -0.004;
       vy = (_pointer.dy - startY) * 0.004;
       startX = _pointer.dx;
       startY = _pointer.dy;
@@ -143,6 +145,7 @@ class _MainPageState extends State<MainPage>
     return Scaffold(
       appBar: appBar(widget.title),
       body: Container(
+        color: Colors.grey[400],
         width: double.infinity,
         height: double.infinity,
         child: Stack(
@@ -258,6 +261,20 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     drawAuthorText(canvas, size);
     balls.forEach((ball) {
+      canvas.drawShadow(
+        Path()
+          ..addOval(
+            Rect.fromCenter(
+              center: Offset(ball.x, ball.y),
+              width: ball.r * 2,
+              height: ball.r * 2,
+            ),
+          )
+          ..close(),
+        ball.alpha <= 0 ? Colors.transparent : ball.fillStyle,
+        10,
+        false,
+      );
       _paint.color = ball.fillStyle;
       canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
     });

@@ -21,7 +21,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
   void initState() {
     super.initState();
     _controller = ScrollController();
-    pagesKey = routes(null).keys.toList();
+    pagesKey = routes(null).keys.toList()..remove(RouteConstant.DebugMainPage);
     pagesKey.forEach(
         (key) => {titles.add((routes(null)[key](null) as dynamic).title)});
   }
@@ -85,9 +85,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
             style: TextStyle(
               shadows: [
                 BoxShadow(
-                    color: Colors.black,
-                    offset: Offset.zero,
-                    blurRadius: 1)
+                    color: Colors.black, offset: Offset.zero, blurRadius: 1)
               ],
               color: randomColor(),
               fontWeight: FontWeight.bold,
@@ -98,9 +96,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
             style: TextStyle(
               shadows: [
                 BoxShadow(
-                    color: Colors.black,
-                    offset: Offset.zero,
-                    blurRadius: 1)
+                    color: Colors.black, offset: Offset.zero, blurRadius: 1)
               ],
               color: randomColor(),
               fontWeight: FontWeight.bold,

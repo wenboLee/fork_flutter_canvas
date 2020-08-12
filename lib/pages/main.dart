@@ -311,8 +311,7 @@ class MyCustomPainter extends CustomPainter {
       ..rotateY(0)
       ..rotateZ(rotateZ);
     canvas.transform(transform.storage);
-    canvas.translate(
-        r3d * (0.15 + math.sin(rotateZ)), r3d * (0.6 - math.cos(rotateZ)));
+    canvas.translate(r3d * math.sin(rotateZ), r3d * (0.8 - math.cos(rotateZ)));
     _paint.strokeWidth = 10;
     _paint.color = Colors.pink;
     Offset center = size.center(Offset.zero);

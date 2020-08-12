@@ -27,14 +27,7 @@ class _MainPageState extends State<MainPage>
   double startX = 0, startY = 0, vx = 0, vy = 0, friction = 0.98; // 摩擦力
   Offset _pointer = Offset.zero;
 
-  void _draw3DBall(Offset center, Size size) {
-    axRad += vx;
-    vx *= friction;
-    ayRad += vy;
-    vy *= friction;
-    axRad %= math.pi * 2;
-    ayRad %= math.pi * 2;
-    r3d = (size.height > size.width ? size.width : size.height) * 0.8 / 2;
+  void _draw3DBall(Offset center) {
     // 经纬线条数
     double xNum = 360 / ax, yNum = 360 / ay;
     List.generate(xNum.toInt(), (xIndex) {
@@ -84,10 +77,18 @@ class _MainPageState extends State<MainPage>
       if (mounted) {
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
+          r3d = (_size.height > _size.width ? _size.width : _size.height) * 0.8 / 2;
         }
 
-        _draw3DBall(_size.center(Offset.zero), _size);
+        _draw3DBall(_size.center(Offset.zero));
         _setSpeed();
+
+        axRad += vx;
+        vx *= friction;
+        ayRad += vy;
+        vy *= friction;
+        axRad %= math.pi * 2;
+        ayRad %= math.pi * 2;
       }
     });
     super.initState();
@@ -178,24 +179,24 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-//    // 文本构造器
-//    ui.ParagraphBuilder pb = ui.ParagraphBuilder(
-//      ui.ParagraphStyle(
-//        textAlign: TextAlign.left,
-//        fontWeight: FontWeight.bold,
-//        fontStyle: FontStyle.normal,
-//        fontSize: 15.0,
-//      ),
-//    );
-//    pb.pushStyle(ui.TextStyle(color: Colors.black87));
-//    pb.addText('Flutter Canvas 请叫我code哥');
-//    // 文本的宽度约束
-//    ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: 300);
-//    // 这里需要先layout,将宽度约束填入,否则无法绘制
-//    ui.Paragraph paragraph = pb.build()..layout(pc);
-//    // 文字左上角起始点
-//    Offset offset = Offset(50, 50);
-//    canvas.drawParagraph(paragraph, offset);
+    // 文本构造器
+    ui.ParagraphBuilder pb = ui.ParagraphBuilder(
+      ui.ParagraphStyle(
+        textAlign: TextAlign.left,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.normal,
+        fontSize: 15.0,
+      ),
+    );
+    pb.pushStyle(ui.TextStyle(color: Colors.black87));
+    pb.addText('Flutter Canvas \r\n请叫我code哥');
+    // 文本的宽度约束
+    ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: 300);
+    // 这里需要先layout,将宽度约束填入,否则无法绘制
+    ui.Paragraph paragraph = pb.build()..layout(pc);
+    // 文字左上角起始点
+    Offset offset = Offset(50, 50);
+    canvas.drawParagraph(paragraph, offset);
     balls.forEach((ball) {
       _paint.color = ball.fillStyle;
       canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);

@@ -19,12 +19,14 @@ class _MainPageState extends State<MainPage>
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  double axRad = 0, ayRad = 0;
+  double axRad = 0, ayRad = 0; // 经纬度旋转弧度
+  double ax = 10, ay = 10; // 经纬度
+  double pointR = 4; // 点半径
   Map<String, Ball> _ballsMap = Map();
 
   void _draw3DBall(Offset center, Size size) {
     double r = (size.height > size.width ? size.width : size.height) * 0.8 / 2;
-    double ax = 20, ay = 20;
+    // 经纬线条数
     double xNum = 360 / ax, yNum = 360 / ay;
     List.generate(xNum.toInt(), (xIndex) {
       List.generate(yNum.toInt(), (yIndex) {
@@ -44,14 +46,14 @@ class _MainPageState extends State<MainPage>
           _ballsMap[key] = Ball(
             x: center.dx + latitudeR,
             y: y,
-            r: 3 * scale,
+            r: pointR * scale,
             fillStyle: randomColor(alpha: alpha.toInt()),
           );
         } else {
           var ball = _ballsMap[key];
           ball.x = center.dx + latitudeR;
           ball.y = y;
-          ball.r = 3 * scale;
+          ball.r = pointR * scale;
           ball.fillStyle = Color.fromARGB(
             alpha.toInt(),
             ball.fillStyle.red,
@@ -75,7 +77,7 @@ class _MainPageState extends State<MainPage>
           _size = _globalKey.currentContext.size;
         }
         axRad += 0.005;
-        ayRad += 0.005;
+        ayRad += 0.001;
         axRad %= math.pi * 2;
         ayRad %= math.pi * 2;
         _draw3DBall(_size.center(Offset.zero), _size);

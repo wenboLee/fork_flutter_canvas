@@ -39,6 +39,24 @@ double getDist(Offset p1, Offset p2) {
   return sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));
 }
 
+// 对小球进行边界反弹处理
+void checkBallBounce(Ball ball, Size size, double bounce) {
+  if (ball.x - ball.r <= 0) {
+    ball.x = ball.r;
+    ball.vx *= bounce;
+  } else if (ball.x + ball.r >= size.width) {
+    ball.x = size.width - ball.r;
+    ball.vx *= bounce;
+  }
+  if (ball.y - ball.r <= 0) {
+    ball.y = ball.r;
+    ball.vy *= bounce;
+  } else if (ball.y + ball.r >= size.height) {
+    ball.y = size.height - ball.r;
+    ball.vy *= bounce;
+  }
+}
+
 // 计算文本高度
 double calculateTextHeight({
   BuildContext context,

@@ -20,6 +20,7 @@ class Ball {
   double friction; // 摩擦力
   bool firstMove;
   bool dragged;
+  bool inside; // 球远离屏幕面
 
   Ball({
     this.id = 0,
@@ -41,5 +42,6 @@ class Ball {
     this.friction = 0.05,
     this.firstMove = true,
     this.dragged = false,
+    this.inside = false,
   });
 }

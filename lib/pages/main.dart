@@ -304,19 +304,11 @@ class MyCustomPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     drawAuthorText(canvas, size);
-    var rotateZ = 10 * math.pi / 180;
     var transform = Matrix4.identity()
       ..setEntry(3, 2, 0.001)
-      ..rotateX(0)
-      ..rotateY(0)
-      ..rotateZ(rotateZ);
+      ..rotateX(toRad(10))
+      ..rotateY(toRad(10));
     canvas.transform(transform.storage);
-    canvas.translate(r3d * math.sin(rotateZ), r3d * (0.8 - math.cos(rotateZ)));
-    _paint.strokeWidth = 10;
-    _paint.color = Colors.pink;
-    Offset center = size.center(Offset.zero);
-    canvas.drawLine(Offset(size.width / 2, center.dy - r3d - 30),
-        Offset(size.width / 2, center.dy + r3d + 30), _paint);
     balls.forEach((ball) {
       double elevation = ball.alpha < 0
           ? (1 - ball.alpha.abs()) * ball.r

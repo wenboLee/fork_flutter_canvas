@@ -1,71 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_canvas/widget/utils.dart';
 import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
+import 'package:flutter_canvas/widget/utils.dart';
 
-class Anim24Page extends StatefulWidget {
+class Anim36Page extends StatefulWidget {
   final String title;
 
-  Anim24Page({this.title});
+  Anim36Page({this.title});
 
   @override
-  _Anim24PageState createState() => _Anim24PageState();
+  _Anim36PageState createState() => _Anim36PageState();
 }
 
-class _Anim24PageState extends State<Anim24Page>
+class _Anim36PageState extends State<Anim36Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
-  double dx = 0,
-      dy = 0,
-      vx = randomScope([-10, 10]),
-      vy = -10,
-      g = 0.2,
-      bounce = -0.7;
-  Offset _pointer = Offset.zero;
-  bool isMouseMove = false;
-
-  void _bounceMove() {
-    vy += g;
-    _ball.x += vx;
-    _ball.y += vy;
-
-    if (_ball.x + _ball.r >= _size.width) {
-      _ball.x = _size.width - _ball.r;
-      vx *= bounce;
-    } else if (_ball.x - _ball.r <= 0) {
-      _ball.x = _ball.r;
-      vx *= bounce;
-    }
-
-    if (_ball.y + _ball.r >= _size.height) {
-      _ball.y = _size.height - _ball.r;
-      vy *= bounce;
-    } else if (_ball.y - _ball.r <= 0) {
-      _ball.y = _ball.r;
-      vy *= bounce;
-    }
-  }
+  Ball _ball1, _ball2, _activeBall;
+  double dx = 0, dy = 0;
 
   @override
   void initState() {
     _controller =
-    AnimationController(duration: Duration(seconds: 1), vsync: this)
-      ..repeat();
+        AnimationController(duration: Duration(seconds: 1), vsync: this)
+          ..repeat();
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
         }
-        if (_ball == null) {
-          _ball = Ball(
-              x: _size.width / 2, y: _size.height / 2, r: 30);
+        if (_ball1 == null) {
+          _ball1 = Ball(x: 50, y: 50, r: 30);
+        }
+        if (_ball2 == null) {
+          _ball2 = Ball(x: _size.width / 2, y: _size.height / 2, r: 60);
         }
 
-        if (!isMouseMove) {
-          _bounceMove();
+        if (getDist(Offset(_ball1.x, _ball1.y), Offset(_ball2.x, _ball2.y)) <=
+            _ball1.r + _ball2.r) {
+          Toast.show(context, '小球发生碰撞');
         }
       }
     });
@@ -73,27 +47,26 @@ class _Anim24PageState extends State<Anim24Page>
   }
 
   void _pointerDownEvent(event) {
-    _pointer = event.localPosition;
-    isMouseMove = false;
-    if (isPoint(_ball, _pointer)) {
-      isMouseMove = true;
-      dx = _pointer.dx - _ball.x;
-      dy = _pointer.dy - _ball.y;
+    Offset point = event.localPosition;
+    if (isPoint(_ball1, point)) {
+      _activeBall = _ball1;
     }
+    if (isPoint(_ball2, point)) {
+      _activeBall = _ball2;
+    }
+    dx = point.dx - _activeBall.x;
+    dy = point.dy - _activeBall.y;
   }
 
   void _pointerMoveEvent(event) {
-    if (isMouseMove) {
-      _pointer = event.localPosition;
-      _ball.x = _pointer.dx - dx;
-      _ball.y = _pointer.dy - dy;
+    Offset point = event.localPosition;
+    if (_activeBall != null) {
+      _activeBall.x = point.dx - dx;
+      _activeBall.y = point.dy - dy;
     }
   }
 
-  void _pointerUpEvent(event) {
-    _pointer = event.localPosition;
-    isMouseMove = false;
-  }
+  void _pointerUpEvent(event) => _activeBall = null;
 
   @override
   void dispose() {
@@ -115,11 +88,10 @@ class _Anim24PageState extends State<Anim24Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(ball: _ball),
+                painter: MyCustomPainter(ball1: _ball1, ball2: _ball2),
               );
             },
           ),
-          behavior: HitTestBehavior.opaque,
           onPointerDown: _pointerDownEvent,
           onPointerMove: _pointerMoveEvent,
           onPointerUp: _pointerUpEvent,
@@ -130,9 +102,9 @@ class _Anim24PageState extends State<Anim24Page>
 }
 
 class MyCustomPainter extends CustomPainter {
-  final Ball ball;
+  final Ball ball1, ball2;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({this.ball1, this.ball2});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -145,8 +117,12 @@ class MyCustomPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     drawAuthorText(canvas, size);
-    _paint.color = ball.fillStyle;
-    canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+
+    _paint.color = Colors.green;
+    canvas.drawCircle(Offset(ball1.x, ball1.y), ball1.r, _paint);
+
+    _paint.color = Colors.red;
+    canvas.drawCircle(Offset(ball2.x, ball2.y), ball2.r, _paint);
     canvas.restore();
   }
 

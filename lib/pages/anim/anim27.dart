@@ -90,20 +90,14 @@ class _Anim27PageState extends State<Anim27Page>
     ball1.y += ball1.vy;
   }
 
-  bool _isPoint(Ball ball, Offset point) {
-    return ball.r >=
-        math.sqrt(
-            math.pow(point.dx - ball.x, 2) + math.pow(point.dy - ball.y, 2));
-  }
-
   void _pointerDownEvent(event) {
     var pointer = event.localPosition;
     ball1Draging = false;
     ball2Draging = false;
-    if (_isPoint(_ball1, pointer)) {
+    if (isPoint(_ball1, pointer)) {
       ball1Draging = true;
     }
-    if (_isPoint(_ball2, pointer)) {
+    if (isPoint(_ball2, pointer)) {
       ball2Draging = true;
     }
   }

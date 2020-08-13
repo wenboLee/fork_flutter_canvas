@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_canvas/widget/ball.dart';
 
 Color randomColor({alpha = 255}) {
   var red = 55 + Random().nextInt(201);
@@ -26,6 +27,16 @@ double toRad(angle) {
 // 弧度转角度
 double toAngle(rad) {
   return rad * 180 / pi;
+}
+
+// 点是否在圆内
+bool isPoint(Ball ball, Offset point) {
+  return ball.r >= sqrt(pow(point.dx - ball.x, 2) + pow(point.dy - ball.y, 2));
+}
+
+// 两点间间距
+double getDist(Offset p1, Offset p2) {
+  return sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));
 }
 
 // 计算文本高度

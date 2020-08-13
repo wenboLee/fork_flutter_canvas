@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
-import 'dart:math' as math;
 
 class Anim25Page extends StatefulWidget {
   final String title;
@@ -85,16 +84,10 @@ class _Anim25PageState extends State<Anim25Page>
     super.initState();
   }
 
-  bool _isPoint(Ball ball, Offset point) {
-    return ball.r >=
-        math.sqrt(
-            math.pow(point.dx - ball.x, 2) + math.pow(point.dy - ball.y, 2));
-  }
-
   void _pointerDownEvent(event) {
     _pointer = event.localPosition;
     isMouseMove = false;
-    if (_isPoint(_ball, _pointer)) {
+    if (isPoint(_ball, _pointer)) {
       isMouseMove = true;
       dx = _pointer.dx - _ball.x;
       dy = _pointer.dy - _ball.y;

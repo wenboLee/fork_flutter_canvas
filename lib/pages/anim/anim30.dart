@@ -88,16 +88,10 @@ class _Anim30PageState extends State<Anim30Page>
     super.initState();
   }
 
-  bool _isPoint(Ball ball, Offset point) {
-    return ball.r >=
-        math.sqrt(
-            math.pow(point.dx - ball.x, 2) + math.pow(point.dy - ball.y, 2));
-  }
-
   void _pointerDownEvent(event) {
     Offset pointer = event.localPosition;
     _balls.forEach((ball) {
-      if (_isPoint(ball, pointer)) {
+      if (isPoint(ball, pointer)) {
         ball.dragged = true;
         dx = pointer.dx - ball.x;
         dy = pointer.dy - ball.y;

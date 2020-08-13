@@ -52,11 +52,7 @@ class _Anim37PageState extends State<Anim37Page>
         _checkHit();
         _moveBall();
         if (_bigBall) {
-          if (firstBallR > _size.width / 2) {
-            firstBallR = 50;
-          } else {
-            firstBallR += 2;
-          }
+          firstBallR += 2;
           _balls.first.r = firstBallR;
         }
       }

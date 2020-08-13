@@ -103,13 +103,15 @@ class _Anim35PageState extends State<Anim35Page>
   }
 
   void _pointerUpEvent(event) {
-    _pointer = event.localPosition;
-    _moving = true;
-    _ball.vx = (_pointer.dx - _ball.x) * easing;
-    _ball.vy = (_pointer.dy - _ball.y) * easing;
-    lastX = _ball.x;
-    lastY = _ball.y;
-    _pointer = Offset.zero;
+    if (!_moving) {
+      _pointer = event.localPosition;
+      _moving = true;
+      _ball.vx = (_pointer.dx - _ball.x) * easing;
+      _ball.vy = (_pointer.dy - _ball.y) * easing;
+      lastX = _ball.x;
+      lastY = _ball.y;
+      _pointer = Offset.zero;
+    }
   }
 
   @override

@@ -16,6 +16,7 @@ AppBar appBar(title) {
 double angle = 0;
 
 void drawAuthorText(Canvas canvas, Size size) {
+  canvas.save();
   angle += 0.04;
   angle %= math.pi * 2;
 
@@ -50,4 +51,5 @@ void drawAuthorText(Canvas canvas, Size size) {
       canvas.drawParagraph(paragraph, offset);
     }
   }
+  canvas.restore();
 }

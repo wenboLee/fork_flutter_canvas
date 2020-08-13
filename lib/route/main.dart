@@ -33,6 +33,7 @@ import 'package:flutter_canvas/pages/anim/anim31.dart';
 import 'package:flutter_canvas/pages/anim/anim32.dart';
 import 'package:flutter_canvas/pages/anim/anim33.dart';
 import 'package:flutter_canvas/pages/anim/anim34.dart';
+import 'package:flutter_canvas/pages/anim/anim35.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -73,6 +74,7 @@ class RouteConstant {
   static const String Anim32Page = '/anim32Page';
   static const String Anim33Page = '/anim33Page';
   static const String Anim34Page = '/anim34Page';
+  static const String Anim35Page = '/anim35Page';
 }
 
 String routeWidgetName(String routeName) {
@@ -114,6 +116,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim32Page: 'Anim32Page',
     RouteConstant.Anim33Page: 'Anim33Page',
     RouteConstant.Anim34Page: 'Anim34Page',
+    RouteConstant.Anim35Page: 'Anim35Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -129,7 +132,8 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim05Page: (context) => Anim05Page(title: '05小球的掉落'),
     RouteConstant.Anim06Page: (context) => Anim06Page(title: '06平滑运动'),
     RouteConstant.Anim07Page: (context) => Anim07Page(title: '07椭圆运动'),
-    RouteConstant.Anim08Page: (context) => Anim08Page(title: '08箭头旋转运动旋转canvas'),
+    RouteConstant.Anim08Page: (context) =>
+        Anim08Page(title: '08箭头旋转运动旋转canvas'),
     RouteConstant.Anim09Page: (context) => Anim09Page(title: '09箭头跟随手指运动'),
     RouteConstant.Anim10Page: (context) => Anim10Page(title: '10线性运动'),
     RouteConstant.Anim11Page: (context) => Anim11Page(title: '11脉冲运动'),
@@ -156,5 +160,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim32Page: (context) => Anim32Page(title: '32弹动基本原理'),
     RouteConstant.Anim33Page: (context) => Anim33Page(title: '33弹绳效果'),
     RouteConstant.Anim34Page: (context) => Anim34Page(title: '34缓动基本原理'),
+    RouteConstant.Anim35Page: (context) => Anim35Page(title: '35光线投影法'),
   };
 }

@@ -17,8 +17,9 @@ class _Anim39PageState extends State<Anim39Page>
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  Box _box1, _box2, _activeBox;
-  double dx = 0, dy = 0;
+  List<Box> _boxes = [];
+  Box _activeBox;
+  double g = 0.02;
 
   @override
   void initState() {
@@ -30,42 +31,43 @@ class _Anim39PageState extends State<Anim39Page>
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
         }
-        if (_box1 == null) {
-          _box1 = Box(x: 50, y: 50, w: 30, h: 30);
-        }
-        if (_box2 == null) {
-          _box2 = Box(x: _size.width / 2, y: _size.height / 2, w: 60, h: 60);
+        if (_activeBox == null) {
+          _activeBox = _createBox();
         }
 
-        if (rectHit(_box1, _box2)) {
-          Toast.show(context, '盒子发生碰撞');
+        _activeBox.vy += g;
+        _activeBox.y += _activeBox.vy;
+
+        // 直接落到地板上
+        if (_activeBox.y + _activeBox.h >= _size.height) {
+          _activeBox.y = _size.height - _activeBox.h;
+          _activeBox = _createBox();
+        }
+
+        for (var i = 0; i < _boxes.length; i++) {
+          Box box = _boxes[i];
+          if (box != _activeBox && rectHit(box, _activeBox)) {
+            //碰撞
+            _activeBox.y = box.y - _activeBox.h;
+            _activeBox = _createBox();
+          }
         }
       }
     });
     super.initState();
   }
 
-  void _pointerDownEvent(event) {
-    Offset point = event.localPosition;
-    if (isBoxPoint(_box1, point)) {
-      _activeBox = _box1;
-    }
-    if (isBoxPoint(_box2, point)) {
-      _activeBox = _box2;
-    }
-    dx = point.dx - _activeBox.x;
-    dy = point.dy - _activeBox.y;
+  Box _createBox() {
+    Box box = Box(
+      x: randomScope([0, _size.width]),
+      y: 0,
+      w: randomScope([20, 40]),
+      h: randomScope([20, 40]),
+      fillStyle: randomColor(),
+    );
+    _boxes.add(box);
+    return box;
   }
-
-  void _pointerMoveEvent(event) {
-    Offset point = event.localPosition;
-    if (_activeBox != null) {
-      _activeBox.x = point.dx - dx;
-      _activeBox.y = point.dy - dy;
-    }
-  }
-
-  void _pointerUpEvent(event) => _activeBox = null;
 
   @override
   void dispose() {
@@ -80,20 +82,15 @@ class _Anim39PageState extends State<Anim39Page>
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: Listener(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return CustomPaint(
-                key: _globalKey,
-                size: Size.infinite,
-                painter: MyCustomPainter(box1: _box1, box2: _box2),
-              );
-            },
-          ),
-          onPointerDown: _pointerDownEvent,
-          onPointerMove: _pointerMoveEvent,
-          onPointerUp: _pointerUpEvent,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return CustomPaint(
+              key: _globalKey,
+              size: Size.infinite,
+              painter: MyCustomPainter(boxes: _boxes, activeBox: _activeBox),
+            );
+          },
         ),
       ),
     );
@@ -101,9 +98,10 @@ class _Anim39PageState extends State<Anim39Page>
 }
 
 class MyCustomPainter extends CustomPainter {
-  final Box box1, box2;
+  final List<Box> boxes;
+  final Box activeBox;
 
-  MyCustomPainter({this.box1, this.box2});
+  MyCustomPainter({this.boxes, this.activeBox});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -117,11 +115,12 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     drawAuthorText(canvas, size);
 
-    _paint.color = Colors.green;
-    canvas.drawRect(Rect.fromLTWH(box1.x, box1.y, box1.w, box1.h), _paint);
+    for (var i = 0; i < boxes.length; i++) {
+      Box box = boxes[i];
+      _paint.color = box.fillStyle;
+      canvas.drawRect(Rect.fromLTWH(box.x, box.y, box.w, box.h), _paint);
+    }
 
-    _paint.color = Colors.red;
-    canvas.drawRect(Rect.fromLTWH(box2.x, box2.y, box2.w, box2.h), _paint);
     canvas.restore();
   }
 

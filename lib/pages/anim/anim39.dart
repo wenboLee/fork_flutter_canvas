@@ -19,7 +19,7 @@ class _Anim39PageState extends State<Anim39Page>
   Size _size = Size.zero;
   List<Box> _boxes = [];
   Box _activeBox;
-  double g = 0.02;
+  double g = 2;
 
   @override
   void initState() {
@@ -46,10 +46,15 @@ class _Anim39PageState extends State<Anim39Page>
 
         for (var i = 0; i < _boxes.length; i++) {
           Box box = _boxes[i];
+          //碰撞
           if (box != _activeBox && rectHit(box, _activeBox)) {
-            //碰撞
+            // 碰到天花板，清屏
+            if (box.y <= 0) {
+              _boxes.clear();
+            }
             _activeBox.y = box.y - _activeBox.h;
             _activeBox = _createBox();
+            break;
           }
         }
       }
@@ -89,7 +94,7 @@ class _Anim39PageState extends State<Anim39Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(boxes: _boxes, activeBox: _activeBox),
+              painter: MyCustomPainter(boxes: _boxes),
             );
           },
         ),
@@ -100,9 +105,8 @@ class _Anim39PageState extends State<Anim39Page>
 
 class MyCustomPainter extends CustomPainter {
   final List<Box> boxes;
-  final Box activeBox;
 
-  MyCustomPainter({this.boxes, this.activeBox});
+  MyCustomPainter({this.boxes});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

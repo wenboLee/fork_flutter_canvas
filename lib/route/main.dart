@@ -37,6 +37,7 @@ import 'package:flutter_canvas/pages/anim/anim35.dart';
 import 'package:flutter_canvas/pages/anim/anim36.dart';
 import 'package:flutter_canvas/pages/anim/anim37.dart';
 import 'package:flutter_canvas/pages/anim/anim38.dart';
+import 'package:flutter_canvas/pages/anim/anim39.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -81,6 +82,7 @@ class RouteConstant {
   static const String Anim36Page = '/anim36Page';
   static const String Anim37Page = '/anim37Page';
   static const String Anim38Page = '/anim38Page';
+  static const String Anim39Page = '/anim39Page';
 }
 
 String routeWidgetName(String routeName) {
@@ -126,6 +128,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim36Page: 'Anim36Page',
     RouteConstant.Anim37Page: 'Anim37Page',
     RouteConstant.Anim38Page: 'Anim38Page',
+    RouteConstant.Anim39Page: 'Anim39Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -173,5 +176,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim36Page: (context) => Anim36Page(title: '36图形碰撞检测'),
     RouteConstant.Anim37Page: (context) => Anim37Page(title: '37多物体碰撞'),
     RouteConstant.Anim38Page: (context) => Anim38Page(title: '38矩形碰撞检测原理'),
+    RouteConstant.Anim39Page: (context) => Anim39Page(title: '39俄罗斯方块'),
   };
 }

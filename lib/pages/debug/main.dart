@@ -66,7 +66,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
             ),
             child: Center(
               child: Text(
-                '${routeWidgetName(pagesKey[index])?.substring(0, 1)?.toUpperCase() ?? ''}${routeWidgetName(pagesKey[index])?.substring(1, 2)?.toLowerCase() ?? ''}',
+                '${titles[index]?.substring(0, 1)?.toUpperCase() ?? ''}${titles[index]?.substring(1, 2)?.toLowerCase() ?? ''}',
                 style: TextStyle(
                     shadows: [
                       BoxShadow(
@@ -81,7 +81,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
             ),
           ),
           title: Text(
-            '${routeWidgetName(pagesKey[index])}',
+            '${titles[index]}',
             style: TextStyle(
               shadows: [
                 BoxShadow(
@@ -92,7 +92,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
             ),
           ),
           subtitle: Text(
-            '[${titles[index]}]',
+            '${routeWidgetName(pagesKey[index])}',
             style: TextStyle(
               shadows: [
                 BoxShadow(

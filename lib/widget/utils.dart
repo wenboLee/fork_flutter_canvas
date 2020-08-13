@@ -48,6 +48,14 @@ double getDist(Offset p1, Offset p2) {
   return sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));
 }
 
+// 矩形之间碰撞检测
+bool rectHit(Box box1, Box box2) {
+  return (box1.x + box1.w >= box2.x &&
+      box1.x <= box2.x + box2.w &&
+      box1.y + box1.h >= box2.y &&
+      box1.y <= box2.y + box2.h);
+}
+
 // 对小球进行边界反弹处理
 void checkBallBounce(Ball ball, Size size, double bounce) {
   if (ball.x - ball.r <= 0) {

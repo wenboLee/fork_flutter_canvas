@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/box.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
@@ -38,7 +37,9 @@ class _Anim38PageState extends State<Anim38Page>
           _box2 = Box(x: _size.width / 2, y: _size.height / 2, w: 60, h: 60);
         }
 
-        // Toast.show(context, '小球发生碰撞');
+        if (rectHit(_box1, _box2)) {
+          Toast.show(context, '盒子发生碰撞');
+        }
       }
     });
     super.initState();
@@ -117,10 +118,10 @@ class MyCustomPainter extends CustomPainter {
     drawAuthorText(canvas, size);
 
     _paint.color = Colors.green;
-//    canvas.drawRect(Rect.fromLTWH(box1.x, box1.y, box1.w, box1.h));
+    canvas.drawRect(Rect.fromLTWH(box1.x, box1.y, box1.w, box1.h), _paint);
 
     _paint.color = Colors.red;
-//    canvas.drawCircle(Offset(ball2.x, ball2.y), ball2.r, _paint);
+    canvas.drawRect(Rect.fromLTWH(box2.x, box2.y, box2.w, box2.h), _paint);
     canvas.restore();
   }
 

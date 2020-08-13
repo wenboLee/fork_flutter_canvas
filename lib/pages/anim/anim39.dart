@@ -58,10 +58,11 @@ class _Anim39PageState extends State<Anim39Page>
   }
 
   Box _createBox() {
+    var w = randomScope([20, 40]);
     Box box = Box(
-      x: randomScope([0, _size.width]),
+      x: randomScope([0, _size.width - w]),
       y: 0,
-      w: randomScope([20, 40]),
+      w: w,
       h: randomScope([20, 40]),
       fillStyle: randomColor(),
     );

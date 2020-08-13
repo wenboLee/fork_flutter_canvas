@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/ball.dart';
+import 'package:flutter_canvas/widget/box.dart';
 
 Color randomColor({alpha = 255}) {
   var red = 55 + Random().nextInt(201);
@@ -32,6 +33,14 @@ double toAngle(rad) {
 // 点是否在圆内
 bool isPoint(Ball ball, Offset point) {
   return ball.r >= sqrt(pow(point.dx - ball.x, 2) + pow(point.dy - ball.y, 2));
+}
+
+// 点是否在盒子内
+bool isBoxPoint(Box box, Offset point) {
+  return point.dx >= box.x &&
+      point.dx <= box.x + box.w &&
+      point.dy >= box.y &&
+      point.dy <= box.y + box.h;
 }
 
 // 两点间间距

@@ -42,7 +42,7 @@ class _Anim42PageState extends State<Anim42Page>
           );
         }
         if (_line == null) {
-          var p1 = Offset(50, 200);
+          var p1 = Offset(10, 200);
           var p2 = Offset(_size.width * 3 / 4, 200);
           _line = Line(
             x: (p2.dx - p1.dx).abs() / 2 + p1.dx,
@@ -76,8 +76,8 @@ class _Anim42PageState extends State<Anim42Page>
 
   void _checkBallMove(Ball ball, Line line, double rotation) {
     // 获取小球相对线的中心点坐标, 类比圆心
-    var rx = line.x - ball.x;
-    var ry = line.y - ball.y;
+    var rx = ball.x - line.x;
+    var ry = ball.y - line.y;
 
     // 对小球坐标进行高级坐标旋转
     var x1 = rx * math.cos(rotation) + ry * math.sin(rotation);

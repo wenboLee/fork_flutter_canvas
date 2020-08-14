@@ -88,7 +88,8 @@ class _Anim42PageState extends State<Anim42Page>
     var vy1 = ball.vy * math.cos(rotation) - ball.vx * math.sin(rotation);
 
     // 检测小球和水平线的碰撞
-    if (x1 + ball.r > line.p1.dx && x1 - ball.r < line.p2.dx) {
+    // 坐标系(0,0)点在线的中点，左侧x1 - rx， 右侧x1 + rx
+    if (x1 - rx + ball.r > line.p1.dx && x1 + rx - ball.r < line.p2.dx) {
       if (y1 + ball.r > 0 && vy1 > y1) {
         y1 = -_ball.r;
         vy1 *= bounce;
@@ -106,7 +107,7 @@ class _Anim42PageState extends State<Anim42Page>
     ball.vx = vx1 * math.cos(rotation) - vy1 * math.sin(rotation);
     ball.vy = vy1 * math.cos(rotation) + vx1 * math.sin(rotation);
 
-    // 类别圆心
+    // line中心相当于圆心
     ball.x = line.x + rx;
     ball.y = line.y + ry;
   }

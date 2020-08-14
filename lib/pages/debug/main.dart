@@ -44,7 +44,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
           padding: EdgeInsets.only(left: 16, right: 16),
           child: Divider(
             height: 1,
-            color: Color(0xff3470e1),
+            color: randomColor(),
           ),
         ),
         itemBuilder: (BuildContext context, int index) => ListTile(
@@ -59,9 +59,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
               color: randomColor(),
               boxShadow: [
                 BoxShadow(
-                    color: Color(0xff3470e1),
-                    offset: Offset.zero,
-                    blurRadius: 10)
+                    color: randomColor(), offset: Offset.zero, blurRadius: 10)
               ],
             ),
             child: Center(
@@ -111,7 +109,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
       ),
       floatingActionButton: showToTopBtn
           ? FloatingActionButton(
-              backgroundColor: Color.fromARGB(100, 0, 0, 255),
+              backgroundColor: randomColor(alpha: 200),
               child: Icon(
                 Icons.arrow_upward,
                 size: 30,

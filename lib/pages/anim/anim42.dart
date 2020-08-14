@@ -36,13 +36,13 @@ class _Anim42PageState extends State<Anim42Page>
         if (_ball == null) {
           var r = _size.width / 4 * 1 / 4;
           _ball = Ball(
-            x: r,
-            y: r,
+            x: r + 10,
+            y: r + 10,
             r: r,
           );
         }
         if (_line == null) {
-          var p1 = Offset(100, 200);
+          var p1 = Offset(50, 200);
           var p2 = Offset(_size.width * 3 / 4, 200);
           _line = Line(
             x: (p2.dx - p1.dx).abs() / 2 + p1.dx,

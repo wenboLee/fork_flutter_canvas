@@ -40,6 +40,7 @@ import 'package:flutter_canvas/pages/anim/anim38.dart';
 import 'package:flutter_canvas/pages/anim/anim39.dart';
 import 'package:flutter_canvas/pages/anim/anim40.dart';
 import 'package:flutter_canvas/pages/anim/anim41.dart';
+import 'package:flutter_canvas/pages/anim/anim42.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -87,6 +88,7 @@ class RouteConstant {
   static const String Anim39Page = '/anim39Page';
   static const String Anim40Page = '/anim40Page';
   static const String Anim41Page = '/anim41Page';
+  static const String Anim42Page = '/anim42Page';
 }
 
 String routeWidgetName(String routeName) {
@@ -135,6 +137,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim39Page: 'Anim39Page',
     RouteConstant.Anim40Page: 'Anim40Page',
     RouteConstant.Anim41Page: 'Anim41Page',
+    RouteConstant.Anim42Page: 'Anim42Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -185,5 +188,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim39Page: (context) => Anim39Page(title: '39简易俄罗斯方块'),
     RouteConstant.Anim40Page: (context) => Anim40Page(title: '40基本坐标旋转'),
     RouteConstant.Anim41Page: (context) => Anim41Page(title: '41高级坐标旋转'),
+    RouteConstant.Anim42Page: (context) => Anim42Page(title: '42斜面反弹'),
   };
 }

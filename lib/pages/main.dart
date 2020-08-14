@@ -306,11 +306,12 @@ class MyCustomPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     drawAuthorText(canvas, size);
-    var transform = Matrix4.identity()
-      ..setEntry(3, 2, 0.001)
-      ..rotateX(toRad(10))
-      ..rotateY(toRad(10));
-    canvas.transform(transform.storage);
+    //地球仪效果， 性能低
+//    var transform = Matrix4.identity()
+//      ..setEntry(3, 2, 0.001)
+//      ..rotateX(toRad(10))
+//      ..rotateY(toRad(10));
+//    canvas.transform(transform.storage);
     // 优先渲染远离屏幕面的点
     balls.sort((a, b) => a.scale.compareTo(b.scale));
     balls.forEach((ball) {

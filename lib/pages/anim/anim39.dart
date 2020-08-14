@@ -19,7 +19,7 @@ class _Anim39PageState extends State<Anim39Page>
   Size _size = Size.zero;
   List<Box> _boxes = [];
   Box _activeBox;
-  double g = 0.1;
+  double g = 0.05;
 
   @override
   void initState() {
@@ -80,6 +80,14 @@ class _Anim39PageState extends State<Anim39Page>
     super.dispose();
   }
 
+  void _pointerDownEvent(event) {
+    g = 0.5;
+  }
+
+  void _pointerUpEvent(event) {
+    g = 0.05;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,15 +95,20 @@ class _Anim39PageState extends State<Anim39Page>
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              key: _globalKey,
-              size: Size.infinite,
-              painter: MyCustomPainter(boxes: _boxes),
-            );
-          },
+        child: Listener(
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return CustomPaint(
+                key: _globalKey,
+                size: Size.infinite,
+                painter: MyCustomPainter(boxes: _boxes),
+              );
+            },
+          ),
+          onPointerDown: _pointerDownEvent,
+          onPointerMove: _pointerDownEvent,
+          onPointerUp: _pointerUpEvent,
         ),
       ),
     );

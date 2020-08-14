@@ -192,6 +192,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim40Page: (context) => Anim40Page(title: '40基本坐标旋转'),
     RouteConstant.Anim41Page: (context) => Anim41Page(title: '41高级坐标旋转'),
     RouteConstant.Anim42Page: (context) => Anim42Page(title: '42斜面反弹'),
-    RouteConstant.Anim43Page: (context) => Anim43Page(title: '43单轴碰撞'),
+    RouteConstant.Anim43Page: (context) => Anim43Page(title: '43单轴碰撞动能守恒'),
   };
 }

@@ -19,7 +19,7 @@ class _Anim39PageState extends State<Anim39Page>
   Size _size = Size.zero;
   List<Box> _boxes = [];
   Box _activeBox;
-  double g = 2;
+  double g = 0.1;
 
   @override
   void initState() {
@@ -54,7 +54,6 @@ class _Anim39PageState extends State<Anim39Page>
             }
             _activeBox.y = box.y - _activeBox.h;
             _activeBox = _createBox();
-            break;
           }
         }
       }

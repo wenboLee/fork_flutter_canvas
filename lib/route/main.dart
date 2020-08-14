@@ -176,6 +176,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim36Page: (context) => Anim36Page(title: '36图形碰撞检测'),
     RouteConstant.Anim37Page: (context) => Anim37Page(title: '37多物体碰撞'),
     RouteConstant.Anim38Page: (context) => Anim38Page(title: '38矩形碰撞检测原理'),
-    RouteConstant.Anim39Page: (context) => Anim39Page(title: '39俄罗斯方块'),
+    RouteConstant.Anim39Page: (context) => Anim39Page(title: '39简易俄罗斯方块'),
   };
 }

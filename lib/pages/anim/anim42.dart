@@ -36,8 +36,8 @@ class _Anim42PageState extends State<Anim42Page>
         if (_ball == null) {
           var r = _size.width / 4 * 1 / 4;
           _ball = Ball(
-            x: r + 10,
-            y: r + 10,
+            x: r + 50,
+            y: r + 50,
             r: r,
           );
         }
@@ -109,8 +109,6 @@ class _Anim42PageState extends State<Anim42Page>
     // 类别圆心
     ball.x = line.x + rx;
     ball.y = line.y + ry;
-
-    print('[${_ball.x}, ${_ball.y}] [${ball.x}, ${ball.y}]');
   }
 
   @override

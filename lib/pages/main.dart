@@ -43,11 +43,7 @@ class _MainPageState extends State<MainPage>
         // 1/3-2/3-1
         var alpha = 255 / 3 * (2 + math.sin(xRad));
         var key = '${xIndex}_$yIndex';
-        bool inside = false; // 小球所在球的远离屏幕面
-        if (xRad > math.pi && xRad < 2 * math.pi) {
-          // 优先渲染远离屏幕面
-          inside = true;
-        }
+        bool inside = scale < 1; // 小球所在球的远离屏幕面
         if (!_ballsMap.containsKey(key)) {
           _ballsMap[key] = Ball(
             x: center.dx + latitudeR,

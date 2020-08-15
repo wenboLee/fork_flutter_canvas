@@ -25,17 +25,18 @@ class _MainPageState extends State<MainPage>
   bool isMouseDown = false;
   double startX = 0, startY = 0, vx = 0, vy = 0, friction = 0.98; // 摩擦力
   Offset _pointer = Offset.zero;
+  double maxY = 0;
 
   void _draw3DBall(Offset center) {
     // 经纬线条数
-    double xNum = rad3d / ax, yNum = rad3d / ay;
+    double xNum = rad3d / ax, yNum = rad3d / ay / 2;
     List.generate(xNum.toInt(), (xIndex) {
       List.generate(yNum.toInt(), (yIndex) {
         // 纬度弧度
-        var yRad = toRad((yIndex + 1) * ay - 90) + ayRad;
+        var yRad = toRad(yIndex * ay - 90) + ayRad;
         var y = center.dy + r3d * math.sin(yRad);
         // 经度弧度
-        var xRad = toRad((xIndex + 1) * ax) + axRad;
+        var xRad = toRad(xIndex * ax) + axRad;
         // 纬度半径
         var latitudeR = r3d * math.cos(yRad) * math.cos(xRad);
         // 2-3-4 里-中-外

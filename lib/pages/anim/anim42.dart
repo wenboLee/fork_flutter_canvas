@@ -19,9 +19,9 @@ class _Anim42PageState extends State<Anim42Page>
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  Line _line;
+  Line _line1, _line2;
   Ball _ball;
-  double g = 0.1, bounce = -0.8, _rotation = toRad(10);
+  double g = 0.1, bounce = -0.8;
 
   @override
   void initState() {
@@ -41,24 +41,16 @@ class _Anim42PageState extends State<Anim42Page>
             r: r,
           );
         }
-        if (_line == null) {
+        if (_line1 == null) {
           var p1 = Offset(10, 200);
           var p2 = Offset(_size.width * 3 / 4, 200);
-          _line = Line(
-            x: (p2.dx - p1.dx).abs() / 2 + p1.dx,
-            y: (p2.dy - p1.dy).abs() / 2 + p1.dy,
-            p1: p1,
-            p2: p2,
-            rotation: _rotation,
-          );
-          // 旋转直线进行高级坐标旋转p1为圆心
-          var dxp2 = (p2.dx - p1.dx).abs();
-          var dyp2 = (p2.dy - p1.dy).abs();
-          var dx = dxp2 * math.cos(_rotation) - dyp2 * math.sin(_rotation);
-          var dy = dyp2 * math.cos(_rotation) + dxp2 * math.sin(_rotation);
-          _line.p2 = Offset(dx + p1.dx, dy + p1.dy);
-          _line.x = (_line.p2.dx - p1.dx).abs() / 2 + p1.dx;
-          _line.y = (_line.p2.dy - p1.dy).abs() / 2 + p1.dy;
+          _line1 = _initLine(p1, p2, toRad(10));
+        }
+
+        if (_line2 == null) {
+          var p1 = Offset(_size.width * 1 / 4, 400);
+          var p2 = Offset(_size.width - 10, 400);
+          _line2 = _initLine(p1, p2, toRad(-10));
         }
 
         _ball.vy += g;
@@ -66,7 +58,8 @@ class _Anim42PageState extends State<Anim42Page>
         _ball.y += _ball.vy;
 
         //处理斜面反弹
-        _checkBallMove(_ball, _line, _rotation);
+        _checkBallMove(_ball, _line1, _line1.rotation, 'tag1');
+        _checkBallMove(_ball, _line2, _line2.rotation, 'tag2');
         // 处理和边界反弹
         checkBallBounce(_ball, _size, bounce);
       }
@@ -74,7 +67,26 @@ class _Anim42PageState extends State<Anim42Page>
     super.initState();
   }
 
-  void _checkBallMove(Ball ball, Line line, double rotation) {
+  Line _initLine(Offset p1, Offset p2, double rotation) {
+    var line = Line(
+      x: (p2.dx - p1.dx).abs() / 2 + p1.dx,
+      y: (p2.dy - p1.dy).abs() / 2 + p1.dy,
+      p1: p1,
+      p2: p2,
+      rotation: rotation,
+    );
+    // 旋转直线进行高级坐标旋转p1为圆心
+    var dxp2 = (p2.dx - p1.dx).abs();
+    var dyp2 = (p2.dy - p1.dy).abs();
+    var dx = dxp2 * math.cos(rotation) - dyp2 * math.sin(rotation);
+    var dy = dyp2 * math.cos(rotation) + dxp2 * math.sin(rotation);
+    line.p2 = Offset(dx + p1.dx, dy + p1.dy);
+    line.x = (line.p2.dx - p1.dx) / 2 + p1.dx;
+    line.y = (line.p2.dy - p1.dy) / 2 + p1.dy;
+    return line;
+  }
+
+  void _checkBallMove(Ball ball, Line line, double rotation, String tag) {
     // 获取小球相对线的中心点坐标, 类比圆心
     var rx = ball.x - line.x;
     var ry = ball.y - line.y;
@@ -88,8 +100,9 @@ class _Anim42PageState extends State<Anim42Page>
     var vy1 = ball.vy * math.cos(rotation) - ball.vx * math.sin(rotation);
 
     // 检测小球和水平线的碰撞
-    // 坐标系(0,0)点在线的中点，左侧x1 - rx， 右侧x1 + rx
-    if (x1 - rx + ball.r > line.p1.dx && x1 + rx - ball.r < line.p2.dx) {
+    // 坐标系(0,0)点在线的中点line(x, y)
+    if (x1 + line.x + ball.r > line.p1.dx &&
+        x1 + line.x - ball.r < line.p2.dx) {
       if (y1 + ball.r > 0 && vy1 > y1) {
         y1 = -_ball.r;
         vy1 *= bounce;
@@ -131,7 +144,8 @@ class _Anim42PageState extends State<Anim42Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball, line: _line),
+              painter:
+                  MyCustomPainter(ball: _ball, line1: _line1, line2: _line2),
             );
           },
         ),
@@ -142,9 +156,9 @@ class _Anim42PageState extends State<Anim42Page>
 
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
-  final Line line;
+  final Line line1, line2;
 
-  MyCustomPainter({this.ball, this.line});
+  MyCustomPainter({this.ball, this.line1, this.line2});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -159,9 +173,14 @@ class MyCustomPainter extends CustomPainter {
     drawAuthorText(canvas, size);
 
     _paint.color = Colors.red;
-    canvas.drawLine(line.p1, line.p2, _paint);
+    canvas.drawLine(line1.p1, line1.p2, _paint);
     _paint.color = ball.fillStyle;
-    canvas.drawCircle(Offset(line.x, line.y), 2, _paint);
+    canvas.drawCircle(Offset(line1.x, line1.y), 2, _paint);
+
+    _paint.color = Colors.red;
+    canvas.drawLine(line2.p1, line2.p2, _paint);
+    _paint.color = ball.fillStyle;
+    canvas.drawCircle(Offset(line2.x, line2.y), 2, _paint);
 
     _paint.color = ball.fillStyle;
     canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);

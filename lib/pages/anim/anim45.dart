@@ -2,22 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
+import 'dart:math' as math;
 
-class Anim44Page extends StatefulWidget {
+class Anim45Page extends StatefulWidget {
   final String title;
 
-  Anim44Page({this.title});
+  Anim45Page({this.title});
 
   @override
-  _Anim44PageState createState() => _Anim44PageState();
+  _Anim45PageState createState() => _Anim45PageState();
 }
 
-class _Anim44PageState extends State<Anim44Page>
+class _Anim45PageState extends State<Anim45Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball1, _ball2;
+  List<Ball> _balls;
   double _bounce = -1;
 
   @override
@@ -30,44 +31,47 @@ class _Anim44PageState extends State<Anim44Page>
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
         }
-        if (_ball1 == null) {
-          double r = 40;
-          _ball1 = Ball(
-            x: randomScope([0, _size.width - r]),
-            y: randomScope([0, _size.height - r]),
-            r: r,
-            fillStyle: Colors.red,
-            m: 4,
-            vx: randomScope([-5, 5]),
-            vy: randomScope([-5, 5]),
-          );
-        }
-        if (_ball2 == null) {
-          double r = 60;
-          _ball2 = Ball(
-            x: randomScope([0, _size.width - r]),
-            y: randomScope([0, _size.height - r]),
-            r: r,
-            fillStyle: Colors.blue,
-            m: 6,
-            vx: randomScope([-5, 5]),
-            vy: randomScope([-5, 5]),
-          );
+        if (_balls == null) {
+          _balls = _initBalls(num: 50);
         }
 
-        _ball1.x += _ball1.vx;
-        _ball1.y += _ball1.vy;
-        _ball2.x += _ball2.vx;
-        _ball2.y += _ball2.vy;
-
-        checkBallHit(_ball1, _ball2);
-
-        // 边界检测
-        checkBallBounce(_ball1, _size, _bounce);
-        checkBallBounce(_ball2, _size, _bounce);
+        _drawBallMove();
       }
     });
     super.initState();
+  }
+
+  void _drawBallMove() {
+    for (var i = 0; i < _balls.length; i++) {
+      var ball = _balls[i];
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+
+      for (var j = i + 1; j < _balls.length; j++) {
+        checkBallHit(ball, _balls[j]);
+      }
+
+      checkBallBounce(ball, _size, _bounce);
+    }
+  }
+
+  List<Ball> _initBalls({int num}) {
+    return List.generate(
+      num,
+      (index) {
+        var r = randomScope([10, 20]);
+        return Ball(
+          id: index,
+          x: randomScope([0, _size.width]),
+          y: randomScope([0, _size.height]),
+          r: r,
+          fillStyle: randomColor(),
+          vx: randomScope([-2, 2]),
+          vy: randomScope([-2, 2]),
+          m: r,
+        );
+      },
+    );
   }
 
   @override
@@ -89,7 +93,7 @@ class _Anim44PageState extends State<Anim44Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball1: _ball1, ball2: _ball2),
+              painter: MyCustomPainter(balls: _balls),
             );
           },
         ),
@@ -99,10 +103,9 @@ class _Anim44PageState extends State<Anim44Page>
 }
 
 class MyCustomPainter extends CustomPainter {
-  final Ball ball1;
-  final Ball ball2;
+  final List<Ball> balls;
 
-  MyCustomPainter({this.ball1, this.ball2});
+  MyCustomPainter({this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -116,11 +119,10 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     drawAuthorText(canvas, size);
 
-    _paint.color = ball1.fillStyle;
-    canvas.drawCircle(Offset(ball1.x, ball1.y), ball1.r, _paint);
-
-    _paint.color = ball2.fillStyle;
-    canvas.drawCircle(Offset(ball2.x, ball2.y), ball2.r, _paint);
+    balls.forEach((ball) {
+      _paint.color = ball.fillStyle;
+      canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+    });
 
     canvas.restore();
   }

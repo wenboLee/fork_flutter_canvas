@@ -74,6 +74,50 @@ void checkBallBounce(Ball ball, Size size, double bounce) {
   }
 }
 
+// 根据动能守恒对2小球进行弹动处理
+void checkBallHit(Ball b1, Ball b2) {
+  var dx = b2.x - b1.x;
+  var dy = b2.y - b1.y;
+  var dist = sqrt(pow(dx, 2) + pow(dy, 2));
+  if (dist < b1.r + b2.r) {
+    var angle = atan2(dy, dx);
+    var sinAngle = sin(angle);
+    var cosAngle = cos(angle);
+
+    // 以b1为参照物，设定b1中心点为旋转基点
+    double x1 = 0, y1 = 0;
+    var x2 = dx * cosAngle + dy * sinAngle;
+    var y2 = dy * cosAngle - dx * sinAngle;
+
+    // 旋转b1和b2的速度
+    var vx1 = b1.vx * cosAngle + b1.vy * sinAngle;
+    var vy1 = b1.vy * cosAngle - b1.vx * sinAngle;
+    var vx2 = b2.vx * cosAngle + b2.vy * sinAngle;
+    var vy2 = b2.vy * cosAngle - b2.vx * sinAngle;
+
+    // 求出b1和b2碰撞后的速度,动能守恒
+    var vx1Final = ((b1.m - b2.m) * vx1 + 2 * b2.m * vx2) / (b1.m + b2.m);
+    var vx2Final = ((b2.m - b1.m) * vx2 + 2 * b1.m * vx1) / (b1.m + b2.m);
+
+    // 处理两个小球碰撞后，将他们归位
+    var lep = (b1.r + b2.r) - (x2 - x1).abs();
+    x1 = x1 + (vx1Final < 0 ? -lep / 2 : lep / 2);
+    x2 = x2 + (vx2Final < 0 ? -lep / 2 : lep / 2);
+
+    // 由于相对b1旋转，旋转回去+b1
+    b2.x = b1.x + (x2 * cosAngle - y2 * sinAngle);
+    b2.y = b1.y + (y2 * cosAngle + x2 * sinAngle);
+    b1.x = b1.x + (x1 * cosAngle - y1 * sinAngle);
+    b1.y = b1.y + (y1 * cosAngle + x1 * sinAngle);
+
+    // 旋转回b1和b2速度
+    b1.vx = vx1Final * cosAngle - vy1 * sinAngle;
+    b1.vy = vy1 * cosAngle + vx1Final * sinAngle;
+    b2.vx = vx2Final * cosAngle - vy2 * sinAngle;
+    b2.vy = vy2 * cosAngle + vx2Final * sinAngle;
+  }
+}
+
 // 计算文本高度
 double calculateTextHeight({
   BuildContext context,

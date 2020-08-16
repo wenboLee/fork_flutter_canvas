@@ -100,11 +100,13 @@ class _Anim44PageState extends State<Anim44Page>
       x1 = x1 + (vx1Final < 0 ? -lep / 2 : lep / 2);
       x2 = x2 + (vx2Final < 0 ? -lep / 2 : lep / 2);
 
+      // 由于相对b1旋转，旋转回去+b1
       b2.x = b1.x + (x2 * cos - y2 * sin);
       b2.y = b1.y + (y2 * cos + x2 * sin);
       b1.x = b1.x + (x1 * cos - y1 * sin);
       b1.y = b1.y + (y1 * cos + x1 * sin);
 
+      // 旋转回b1和b2速度
       b1.vx = vx1Final * cos - vy1 * sin;
       b1.vy = vy1 * cos + vx1Final * sin;
       b2.vx = vx2Final * cos - vy2 * sin;

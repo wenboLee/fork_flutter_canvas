@@ -132,18 +132,11 @@ class _Anim50PageState extends State<Anim50Page>
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: randomColor(alpha: 200),
-        child: Icon(
-          Icons.refresh,
-          size: 30,
-        ),
-        onPressed: () {
-          setState(() {
-            _balls = _initBalls(num: 100);
-          });
-        },
-      ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _balls = _initBalls(num: 100);
+        });
+      }),
     );
   }
 }

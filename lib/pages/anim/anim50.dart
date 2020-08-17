@@ -121,6 +121,7 @@ class _Anim50PageState extends State<Anim50Page>
       body: Container(
         width: double.infinity,
         height: double.infinity,
+        color: Colors.black87,
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {

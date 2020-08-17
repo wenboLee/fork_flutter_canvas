@@ -169,7 +169,6 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     drawAuthorText(canvas, size);
 
-    print(lines.length);
     canvas.save();
     lines.forEach((line) {
       _paint.color = line.fillStyle;

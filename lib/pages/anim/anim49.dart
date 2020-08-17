@@ -20,7 +20,7 @@ class _Anim49PageState extends State<Anim49Page>
   AnimationController _controller;
   Size _size = Size.zero;
   Ball _ball;
-  double x = 0, y = 0, z = 0, f1 = 200;
+  double z = 0, f1 = 200, hx=0, hy=0;
 
   @override
   void initState() {
@@ -36,10 +36,31 @@ class _Anim49PageState extends State<Anim49Page>
           _ball = Ball(r: 80);
         }
 
+        var hx = _size.width/2;
+        var hy = _size.height/2;
+
         var scale = f1 / (f1 + z);
+        _ball.scaleX = scale;
+        _ball.scaleY = scale;
       }
     });
     super.initState();
+  }
+
+  void _pointerDownEvent(event) {
+    var pointer = event.localPosition;
+//    dx = pointer.dx - hx;
+//    dy = pointer.dy - hy;
+  }
+
+  void _pointerMoveEvent(event) {
+    var pointer = event.localPosition;
+    _ball.x = pointer.dx - hx;
+    _ball.y = pointer.dy - hy;
+  }
+
+  void _pointerUpEvent(event) {
+
   }
 
   @override
@@ -55,15 +76,21 @@ class _Anim49PageState extends State<Anim49Page>
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              key: _globalKey,
-              size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
-            );
-          },
+        child: Listener(
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return CustomPaint(
+                key: _globalKey,
+                size: Size.infinite,
+                painter: MyCustomPainter(ball: _ball),
+              );
+            },
+          ),
+          behavior: HitTestBehavior.opaque,
+          onPointerDown: _pointerDownEvent,
+          onPointerMove: _pointerMoveEvent,
+          onPointerUp: _pointerUpEvent,
         ),
       ),
     );

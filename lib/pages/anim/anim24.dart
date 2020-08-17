@@ -52,16 +52,15 @@ class _Anim24PageState extends State<Anim24Page>
   @override
   void initState() {
     _controller =
-    AnimationController(duration: Duration(seconds: 1), vsync: this)
-      ..repeat();
+        AnimationController(duration: Duration(seconds: 1), vsync: this)
+          ..repeat();
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
           _size = _globalKey.currentContext.size;
         }
         if (_ball == null) {
-          _ball = Ball(
-              x: _size.width / 2, y: _size.height / 2, r: 30);
+          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
         }
 
         if (!isMouseMove) {
@@ -125,6 +124,14 @@ class _Anim24PageState extends State<Anim24Page>
           onPointerUp: _pointerUpEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+          isMouseMove = false;
+          vx = randomScope([-10, 10]);
+          vy = -10;
+        });
+      }),
     );
   }
 }

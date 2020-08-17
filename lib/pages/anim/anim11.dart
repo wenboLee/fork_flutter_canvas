@@ -64,6 +64,12 @@ class _Anim11PageState extends State<Anim11Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+          angle = 0;
+        });
+      }),
     );
   }
 }

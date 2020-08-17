@@ -64,6 +64,12 @@ class _Anim17PageState extends State<Anim17Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _arrow =
+              Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
+        });
+      }),
     );
   }
 }

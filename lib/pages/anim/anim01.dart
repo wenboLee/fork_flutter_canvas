@@ -16,7 +16,7 @@ class _Anim01PageState extends State<Anim01Page>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Ball _ball = Ball(x: 50, y: 50, r: 30);
-  double angle = 65 * math.pi / 180, a = 0.1, vx = 0, vy = 0;
+  double angle = 65 * math.pi / 180, a = 0.1;
 
   @override
   void initState() {
@@ -26,10 +26,10 @@ class _Anim01PageState extends State<Anim01Page>
     _controller.addListener(() {
       double ax = math.cos(angle) * a;
       double ay = math.sin(angle) * a;
-      _ball.x += vx;
-      _ball.y += vy;
-      vx += ax;
-      vy += ay;
+      _ball.x += _ball.vx;
+      _ball.y += _ball.vy;
+      _ball.vx += ax;
+      _ball.vy += ay;
     });
     super.initState();
   }
@@ -55,6 +55,11 @@ class _Anim01PageState extends State<Anim01Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: 50, y: 50, r: 30);
+        });
+      }),
     );
   }
 }

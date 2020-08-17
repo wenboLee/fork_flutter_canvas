@@ -91,6 +91,12 @@ class _Anim26PageState extends State<Anim26Page>
           onPointerUp: _pointerUpEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+          isMouseDown = false;
+        });
+      }),
     );
   }
 }

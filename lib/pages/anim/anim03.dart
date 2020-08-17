@@ -15,7 +15,7 @@ class _Anim03PageState extends State<Anim03Page>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Ball _ball = Ball(x: 50, y: 50, r: 30);
-  double vy = 0.5;
+  double vy = 1;
 
   @override
   void initState() {
@@ -49,6 +49,11 @@ class _Anim03PageState extends State<Anim03Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: 50, y: 50, r: 30);
+        });
+      }),
     );
   }
 }

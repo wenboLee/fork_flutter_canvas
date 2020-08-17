@@ -13,6 +13,18 @@ AppBar appBar(title) {
   );
 }
 
+FloatingActionButton actionButton(Function() onPressed,
+    {IconData iconData = Icons.refresh}) {
+  return FloatingActionButton(
+    backgroundColor: randomColor(alpha: 200),
+    child: Icon(
+      iconData,
+      size: 30,
+    ),
+    onPressed: onPressed,
+  );
+}
+
 double angle = 0;
 
 void drawAuthorText(Canvas canvas, Size size) {

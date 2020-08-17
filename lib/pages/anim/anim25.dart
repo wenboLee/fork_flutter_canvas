@@ -139,6 +139,15 @@ class _Anim25PageState extends State<Anim25Page>
           onPointerUp: _pointerUpEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+          vx = randomScope([-10, 10]);
+          vy = -10;
+          startX = 0;
+          startY = 0;
+        });
+      }),
     );
   }
 }

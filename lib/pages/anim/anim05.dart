@@ -105,6 +105,11 @@ class _Anim05PageState extends State<Anim05Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _initBalls();
+        });
+      }),
     );
   }
 }

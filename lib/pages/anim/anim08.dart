@@ -64,6 +64,12 @@ class _Anim08PageState extends State<Anim08Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _arrow =
+              Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
+        });
+      }),
     );
   }
 }
@@ -108,7 +114,7 @@ class MyCustomPainter extends CustomPainter {
     var r =
         math.sqrt(math.pow(size.width / 2, 2) + math.pow(size.height / 2, 2));
     // 计算画布中心点初始弧度
-    double startAngle = math.atan2(center.dy,  center.dx);
+    double startAngle = math.atan2(center.dy, center.dx);
     // 计算旋转后的画布中心点
     final newX = r * math.cos(arrow.rotation + startAngle);
     final newY = r * math.sin(arrow.rotation + startAngle);

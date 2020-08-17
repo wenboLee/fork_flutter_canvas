@@ -76,6 +76,12 @@ class _Anim16PageState extends State<Anim16Page>
           onPointerMove: _pointerEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _arrow =
+              Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
+        });
+      }),
     );
   }
 }

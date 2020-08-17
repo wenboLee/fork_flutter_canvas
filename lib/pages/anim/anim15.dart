@@ -77,6 +77,12 @@ class _Anim15PageState extends State<Anim15Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(
+              x: _size.width / 2, y: 50, r: 30, friction: 0.05, g: 0.2, vy: 0);
+        });
+      }),
     );
   }
 }

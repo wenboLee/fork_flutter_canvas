@@ -32,7 +32,8 @@ class _Anim09PageState extends State<Anim09Page>
           _size = _globalKey.currentContext.size;
         }
         if (_arrow == null) {
-          _arrow = Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
+          _arrow =
+              Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
         }
         if (_pointer != Offset.zero) {
           dx = _pointer.dx - _arrow.x;
@@ -90,6 +91,12 @@ class _Anim09PageState extends State<Anim09Page>
           onPointerMove: _pointerEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _arrow =
+              Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
+        });
+      }),
     );
   }
 }

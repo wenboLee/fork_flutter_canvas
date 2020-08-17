@@ -32,7 +32,7 @@ class _Anim23PageState extends State<Anim23Page>
           _size = _globalKey.currentContext.size;
         }
         if (_ball == null) {
-          _ball = Ball(x: 50, y: 50, r: 30, firstMove: true);
+          _ball = Ball(x: 50, y: 50, r: 30);
         }
 
         if (speed.abs() > 0.001) {
@@ -42,17 +42,6 @@ class _Anim23PageState extends State<Anim23Page>
 
           _ball.x += vx;
           _ball.y += vy;
-        }
-
-        if (speed < 0.001 && _ball.firstMove) {
-          _ball.firstMove = false;
-          Future.delayed(Duration(milliseconds: 500)).whenComplete(() {
-            //复原
-            _ball.x = 50;
-            _ball.y = 50;
-            speed = randomScope([30, 50]);
-            _ball.firstMove = true;
-          });
         }
       }
     });
@@ -83,6 +72,12 @@ class _Anim23PageState extends State<Anim23Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: 50, y: 50, r: 30);
+          speed = randomScope([30, 50]);
+        });
+      }),
     );
   }
 }

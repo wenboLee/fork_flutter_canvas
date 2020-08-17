@@ -15,7 +15,7 @@ class _Anim02PageState extends State<Anim02Page>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Ball _ball = Ball(x: 50, y: 50, r: 30);
-  double vy = 0, ay = 0.1;
+  double ay = 0.1;
 
   @override
   void initState() {
@@ -23,8 +23,8 @@ class _Anim02PageState extends State<Anim02Page>
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
     _controller.addListener(() {
-      _ball.y += vy;
-      vy += ay;
+      _ball.y += _ball.vy;
+      _ball.vy += ay;
     });
     super.initState();
   }
@@ -50,6 +50,11 @@ class _Anim02PageState extends State<Anim02Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: 50, y: 50, r: 30);
+        });
+      }),
     );
   }
 }

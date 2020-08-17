@@ -139,12 +139,13 @@ class _Anim20PageState extends State<Anim20Page>
                         _buildGestureDetector(
                           onPanDown: (e) => a = 0.5,
                           onPanEnd: (e) => a = 0,
-                          margin: EdgeInsets.only(bottom: 20),
+                          margin: EdgeInsets.only(bottom: 20, right: 40),
                           child: Icon(Icons.keyboard_arrow_up),
                         ),
                         _buildGestureDetector(
                           onPanDown: (e) => a = -0.5,
                           onPanEnd: (e) => a = 0,
+                          margin: EdgeInsets.only(right: 40),
                           child: Icon(Icons.keyboard_arrow_down),
                         ),
                       ],
@@ -156,6 +157,14 @@ class _Anim20PageState extends State<Anim20Page>
           ],
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _arrow =
+              Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
+          vx = 0;
+          vy = 0;
+        });
+      }),
     );
   }
 }

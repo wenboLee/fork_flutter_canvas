@@ -108,16 +108,13 @@ class _DebugMainPageState extends State<DebugMainPage> {
         ),
       ),
       floatingActionButton: showToTopBtn
-          ? FloatingActionButton(
-              backgroundColor: randomColor(alpha: 200),
-              child: Icon(
-                Icons.arrow_upward,
-                size: 30,
-              ),
-              onPressed: () {
+          ? actionButton(
+              () {
                 _controller.animateTo(0.0,
                     duration: Duration(milliseconds: 300), curve: Curves.ease);
-              })
+              },
+              iconData: Icons.arrow_upward,
+            )
           : Container(),
     );
   }

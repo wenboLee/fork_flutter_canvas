@@ -18,13 +18,10 @@ class _Anim27PageState extends State<Anim27Page>
   final GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball1, _ball2;
+  Ball _ball1, _ball2, _activeBall; // 被拖拽对象
 
   // 弹动系数, 弹簧长度, 摩擦力
   double spring = 0.03, springLength = 200, friction = 0.9;
-
-  // 被拖拽对象
-  bool ball1Draging = false, ball2Draging = false;
 
   @override
   void initState() {
@@ -51,13 +48,19 @@ class _Anim27PageState extends State<Anim27Page>
           );
         }
         // 取反为了初次没有选择的时候弹动
-        if (!ball1Draging) {
+        if (_activeBall == null) {
           // ball1向ball2弹动
           _springTo(_ball1, _ball2);
-        }
-        if (!ball2Draging) {
           // ball2向ball1弹动
           _springTo(_ball2, _ball1);
+        } else {
+          if (_activeBall == _ball1) {
+            // ball2向ball1弹动
+            _springTo(_ball2, _ball1);
+          } else {
+            // ball1向ball2弹动
+            _springTo(_ball1, _ball2);
+          }
         }
       }
     });
@@ -92,25 +95,19 @@ class _Anim27PageState extends State<Anim27Page>
 
   void _pointerDownEvent(event) {
     var pointer = event.localPosition;
-    ball1Draging = false;
-    ball2Draging = false;
     if (isPoint(_ball1, pointer)) {
-      ball1Draging = true;
+      _activeBall = _ball1;
     }
     if (isPoint(_ball2, pointer)) {
-      ball2Draging = true;
+      _activeBall = _ball2;
     }
   }
 
   void _pointerMoveEvent(event) {
     var pointer = event.localPosition;
-    if (ball1Draging) {
-      _ball1.x = pointer.dx;
-      _ball1.y = pointer.dy;
-    }
-    if (ball2Draging) {
-      _ball2.x = pointer.dx;
-      _ball2.y = pointer.dy;
+    if (_activeBall != null) {
+      _activeBall.x = pointer.dx;
+      _activeBall.y = pointer.dy;
     }
   }
 
@@ -143,6 +140,21 @@ class _Anim27PageState extends State<Anim27Page>
           onPointerMove: _pointerMoveEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball1 = Ball(
+            x: randomScope([50, _size.width - 50]),
+            y: randomScope([50, _size.height - 50]),
+            r: 20,
+          );
+          _ball2 = Ball(
+            x: randomScope([50, _size.width - 50]),
+            y: randomScope([50, _size.height - 50]),
+            r: 20,
+          );
+          _activeBall = null;
+        });
+      }),
     );
   }
 }

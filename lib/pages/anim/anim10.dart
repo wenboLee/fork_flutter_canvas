@@ -76,6 +76,14 @@ class _Anim10PageState extends State<Anim10Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+          angle = 0;
+          directionRight = true;
+          _pointerList.clear();
+        });
+      }),
     );
   }
 }

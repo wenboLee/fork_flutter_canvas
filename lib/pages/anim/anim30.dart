@@ -19,7 +19,11 @@ class _Anim30PageState extends State<Anim30Page>
   AnimationController _controller;
   Size _size = Size.zero;
   List<Ball> _balls;
-  double dx = 0, dy = 0, springLength = 200, friction = 0.9, spring = 0.03; //弹动系数
+  double dx = 0,
+      dy = 0,
+      springLength = 200,
+      friction = 0.9,
+      spring = 0.03; //弹动系数
   Ball draggedBall;
 
   List<Ball> _initBalls({int num}) {
@@ -143,6 +147,12 @@ class _Anim30PageState extends State<Anim30Page>
           onPointerUp: _pointerUpEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _balls = _initBalls(num: 8);
+          draggedBall = null;
+        });
+      }),
     );
   }
 }

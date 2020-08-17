@@ -25,7 +25,6 @@ class _MainPageState extends State<MainPage>
   bool isMouseDown = false;
   double startX = 0, startY = 0, vx = 0, vy = 0, friction = 0.98; // 摩擦力
   Offset _pointer = Offset.zero;
-  double maxY = 0;
 
   void _draw3DBall(Offset center) {
     // 经纬线条数
@@ -286,6 +285,23 @@ class _MainPageState extends State<MainPage>
           ],
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ballsMap.clear();
+          axRad = 0;
+          ayRad = 0;
+          ax = 10;
+          ay = 10;
+          rad3d = 180;
+          pointR = 5;
+          r3d = (_size.height > _size.width ? _size.width : _size.height) *
+              0.8 /
+              2;
+          isMouseDown = false;
+          startX = 0;
+          startY = 0;
+        });
+      }),
     );
   }
 }

@@ -34,7 +34,7 @@ class _Anim48PageState extends State<Anim48Page>
           _size = _globalKey.currentContext.size;
         }
         if (_balls == null) {
-          _balls = _initBalls(num: 50);
+          _balls = _initBalls(num: 30);
         }
 
         _move();

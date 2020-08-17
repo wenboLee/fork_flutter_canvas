@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
-import 'package:flutter_canvas/widget/line.dart';
-import 'package:flutter_canvas/widget/utils.dart';
-import 'dart:math' as math;
 
 class Anim49Page extends StatefulWidget {
   final String title;
@@ -20,7 +17,7 @@ class _Anim49PageState extends State<Anim49Page>
   AnimationController _controller;
   Size _size = Size.zero;
   Ball _ball;
-  double z = 0, f1 = 200, hx=0, hy=0;
+  double z = 0, f1 = 200, hx = 0, hy = 0, dx = 0, dy = 0, r = 80;
 
   @override
   void initState() {
@@ -33,40 +30,59 @@ class _Anim49PageState extends State<Anim49Page>
           _size = _globalKey.currentContext.size;
         }
         if (_ball == null) {
-          _ball = Ball(r: 80);
+          _ball = Ball(r: r);
         }
 
-        var hx = _size.width/2;
-        var hy = _size.height/2;
+        hx = _size.width / 2;
+        hy = _size.height / 2;
 
-        var scale = f1 / (f1 + z);
-        _ball.scaleX = scale;
-        _ball.scaleY = scale;
+        if (f1 + z > 0) {
+          var scale = f1 / (f1 + z);
+          _ball.scaleX = scale;
+          _ball.scaleY = scale;
+          // 相对canvas左上点缩放，进行校正在中点缩放
+          _ball.x = hx + dx * scale;
+          _ball.y = hy + dy * scale;
+          _ball.r = r * scale;
+        }
       }
     });
     super.initState();
   }
 
-  void _pointerDownEvent(event) {
+  void _pointerEvent(event) {
     var pointer = event.localPosition;
-//    dx = pointer.dx - hx;
-//    dy = pointer.dy - hy;
-  }
-
-  void _pointerMoveEvent(event) {
-    var pointer = event.localPosition;
-    _ball.x = pointer.dx - hx;
-    _ball.y = pointer.dy - hy;
-  }
-
-  void _pointerUpEvent(event) {
-
+    dx = pointer.dx - hx;
+    dy = pointer.dy - hy;
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  GestureDetector _buildGestureDetector(
+      {Function(DragDownDetails) onPanDown,
+      Function(DragEndDetails) onPanEnd,
+      Widget child,
+      EdgeInsetsGeometry margin = EdgeInsets.zero}) {
+    return GestureDetector(
+      onPanDown: onPanDown,
+      onPanEnd: onPanEnd,
+      child: Container(
+        width: 50,
+        height: 50,
+        margin: margin,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+          color: Colors.green[200],
+        ),
+        child: Center(
+          child: child,
+        ),
+      ),
+    );
   }
 
   @override
@@ -76,21 +92,55 @@ class _Anim49PageState extends State<Anim49Page>
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: Listener(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return CustomPaint(
-                key: _globalKey,
-                size: Size.infinite,
-                painter: MyCustomPainter(ball: _ball),
-              );
-            },
-          ),
-          behavior: HitTestBehavior.opaque,
-          onPointerDown: _pointerDownEvent,
-          onPointerMove: _pointerMoveEvent,
-          onPointerUp: _pointerUpEvent,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Listener(
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return CustomPaint(
+                    key: _globalKey,
+                    size: Size.infinite,
+                    painter: MyCustomPainter(ball: _ball),
+                  );
+                },
+              ),
+              behavior: HitTestBehavior.opaque,
+              onPointerMove: _pointerEvent,
+            ),
+            Positioned(
+              bottom: 20,
+              left: 20,
+              child: _buildGestureDetector(
+                onPanDown: (e) {
+                  setState(() {
+                    z += 5;
+                  });
+                },
+                child: Text(
+                  '进',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: _buildGestureDetector(
+                  onPanDown: (e) {
+                    setState(() {
+                      z -= 5;
+                    });
+                  },
+                  child: Text(
+                    '出',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.red),
+                  )),
+            ),
+          ],
         ),
       ),
     );

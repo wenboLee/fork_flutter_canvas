@@ -37,6 +37,7 @@ class _Anim49PageState extends State<Anim49Page>
         hy = _size.height / 2;
 
         if (f1 + z > 0) {
+          _ball.show = true;
           var scale = f1 / (f1 + z);
           _ball.scaleX = scale;
           _ball.scaleY = scale;
@@ -44,6 +45,8 @@ class _Anim49PageState extends State<Anim49Page>
           _ball.x = hx + dx * scale;
           _ball.y = hy + dy * scale;
           _ball.r = r * scale;
+        } else {
+          _ball.show = false;
         }
       }
     });
@@ -164,8 +167,10 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     drawAuthorText(canvas, size);
 
-    _paint.color = ball.fillStyle;
-    canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+    if (ball.show) {
+      _paint.color = ball.fillStyle;
+      canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
+    }
 
     canvas.restore();
   }

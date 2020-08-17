@@ -15,6 +15,7 @@ class Ball {
   double scaleY;
   Color strokeStyle;
   Color fillStyle;
+  RadialGradient gradientColor;
   double alpha;
   double g; // 重力
   double m; // 质量
@@ -22,6 +23,7 @@ class Ball {
   bool firstMove;
   bool dragged;
   double scale;
+  bool show;
 
   Ball({
     this.id = 0,
@@ -38,6 +40,7 @@ class Ball {
     this.scaleY = 1,
     this.strokeStyle = Colors.black,
     this.fillStyle = Colors.blue,
+    this.gradientColor,
     this.alpha = 1,
     this.g = 0,
     this.m = 0,
@@ -45,5 +48,6 @@ class Ball {
     this.firstMove = true,
     this.dragged = false,
     this.scale = 0,
+    this.show = true,
   });
 }

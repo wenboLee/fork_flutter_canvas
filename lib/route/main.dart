@@ -44,6 +44,8 @@ import 'package:flutter_canvas/pages/anim/anim42.dart';
 import 'package:flutter_canvas/pages/anim/anim43.dart';
 import 'package:flutter_canvas/pages/anim/anim44.dart';
 import 'package:flutter_canvas/pages/anim/anim45.dart';
+import 'package:flutter_canvas/pages/anim/anim46.dart';
+import 'package:flutter_canvas/pages/anim/anim47.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -95,6 +97,8 @@ class RouteConstant {
   static const String Anim43Page = '/anim43Page';
   static const String Anim44Page = '/anim44Page';
   static const String Anim45Page = '/anim45Page';
+  static const String Anim46Page = '/anim46Page';
+  static const String Anim47Page = '/anim47Page';
 }
 
 String routeWidgetName(String routeName) {
@@ -147,6 +151,8 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim43Page: 'Anim43Page',
     RouteConstant.Anim44Page: 'Anim44Page',
     RouteConstant.Anim45Page: 'Anim45Page',
+    RouteConstant.Anim46Page: 'Anim46Page',
+    RouteConstant.Anim47Page: 'Anim47Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -201,5 +207,7 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim43Page: (context) => Anim43Page(title: '43单轴碰撞动能守恒'),
     RouteConstant.Anim44Page: (context) => Anim44Page(title: '44二维碰撞'),
     RouteConstant.Anim45Page: (context) => Anim45Page(title: '45多物体碰撞'),
+    RouteConstant.Anim46Page: (context) => Anim46Page(title: '46万有引力基本应用'),
+    RouteConstant.Anim47Page: (context) => Anim47Page(title: '47万有引力粒子碰撞反弹'),
   };
 }

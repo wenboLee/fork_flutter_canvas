@@ -94,6 +94,30 @@ class _Anim44PageState extends State<Anim44Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          double r1 = 40;
+          _ball1 = Ball(
+            x: randomScope([0, _size.width - r1]),
+            y: randomScope([0, _size.height - r1]),
+            r: r1,
+            fillStyle: Colors.red,
+            m: 4,
+            vx: randomScope([-5, 5]),
+            vy: randomScope([-5, 5]),
+          );
+          double r2 = 60;
+          _ball2 = Ball(
+            x: randomScope([0, _size.width - r2]),
+            y: randomScope([0, _size.height - r2]),
+            r: r2,
+            fillStyle: Colors.blue,
+            m: 6,
+            vx: randomScope([-5, 5]),
+            vy: randomScope([-5, 5]),
+          );
+        });
+      }),
     );
   }
 }

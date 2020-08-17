@@ -108,6 +108,26 @@ class _Anim43PageState extends State<Anim43Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball1 = Ball(
+            x: 30,
+            y: _size.height / 2,
+            r: 30,
+            fillStyle: Colors.red,
+            m: 1,
+            vx: 3,
+          );
+          _ball2 = Ball(
+            x: _size.width - 60,
+            y: _size.height / 2,
+            r: 60,
+            fillStyle: Colors.blue,
+            m: 2,
+            vx: -2,
+          );
+        });
+      }),
     );
   }
 }

@@ -144,6 +144,14 @@ class _Anim35PageState extends State<Anim35Page>
           onPointerUp: _pointerUpEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: 50, y: _size.height - 30, r: 30);
+          _moving = false;
+          lastX = 0;
+          lastY = 0;
+        });
+      }),
     );
   }
 }

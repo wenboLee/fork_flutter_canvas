@@ -42,14 +42,14 @@ class _Anim42PageState extends State<Anim42Page>
           );
         }
         if (_line1 == null) {
-          var p1 = Offset(10, 200);
-          var p2 = Offset(_size.width * 3 / 4, 200);
+          var p1 = Offset(10, 180);
+          var p2 = Offset(_size.width * 3 / 4, 180);
           _line1 = _initLine(p1, p2, toRad(10));
         }
 
         if (_line2 == null) {
-          var p1 = Offset(_size.width * 1 / 4, 400);
-          var p2 = Offset(_size.width - 10, 400);
+          var p1 = Offset(_size.width * 1 / 4, 450);
+          var p2 = Offset(_size.width - 10, 450);
           _line2 = _initLine(p1, p2, toRad(-10));
         }
 
@@ -150,6 +150,16 @@ class _Anim42PageState extends State<Anim42Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          var r = _size.width / 4 * 1 / 4;
+          _ball = Ball(
+            x: r + 50,
+            y: r + 50,
+            r: r,
+          );
+        });
+      }),
     );
   }
 }

@@ -69,6 +69,12 @@ class _Anim40PageState extends State<Anim40Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(r: 30);
+          angle = 0;
+        });
+      }),
     );
   }
 }

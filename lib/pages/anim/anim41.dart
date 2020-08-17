@@ -33,8 +33,8 @@ class _Anim41PageState extends State<Anim41Page>
         }
         if (_ball == null) {
           _ball = Ball(
-            x: randomScope([50, _size.width - 50]),
-            y: randomScope([50, _size.width - 50]),
+            x: randomScope([100, _size.width - 100]),
+            y: randomScope([100, _size.width - 100]),
             r: 30,
           );
         }
@@ -90,6 +90,15 @@ class _Anim41PageState extends State<Anim41Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(
+            x: randomScope([100, _size.width - 100]),
+            y: randomScope([100, _size.width - 100]),
+            r: 30,
+          );
+        });
+      }),
     );
   }
 }

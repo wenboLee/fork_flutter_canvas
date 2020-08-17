@@ -111,6 +111,12 @@ class _Anim39PageState extends State<Anim39Page>
           onPointerUp: _pointerUpEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _boxes.clear();
+          _activeBox = _createBox();
+        });
+      }),
     );
   }
 }

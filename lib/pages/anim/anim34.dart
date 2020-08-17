@@ -38,12 +38,6 @@ class _Anim34PageState extends State<Anim34Page>
 
         _ball.x += dx * easing;
         _ball.y += dy * easing;
-
-        if (dx.abs() < 0.1 && dy.abs() < 0.1) {
-          //复原
-          _ball.x = 50;
-          _ball.y = 50;
-        }
       }
     });
     super.initState();
@@ -73,6 +67,11 @@ class _Anim34PageState extends State<Anim34Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: 50, y: 50, r: 30);
+        });
+      }),
     );
   }
 }

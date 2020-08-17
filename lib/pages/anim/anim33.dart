@@ -86,6 +86,11 @@ class _Anim33PageState extends State<Anim33Page>
           onPointerMove: _pointerEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
+        });
+      }),
     );
   }
 }

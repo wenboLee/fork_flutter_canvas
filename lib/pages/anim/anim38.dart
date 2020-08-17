@@ -96,6 +96,13 @@ class _Anim38PageState extends State<Anim38Page>
           onPointerUp: _pointerUpEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _box1 = Box(x: 50, y: 50, w: 30, h: 30);
+          _box2 = Box(x: _size.width / 2, y: _size.height / 2, w: 60, h: 60);
+          _activeBox = null;
+        });
+      }),
     );
   }
 }

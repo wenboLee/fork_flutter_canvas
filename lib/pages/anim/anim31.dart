@@ -158,6 +158,12 @@ class _Anim31PageState extends State<Anim31Page>
           onPointerUp: _pointerUpEvent,
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _balls = _initBalls(num: 5);
+          draggedBall = null;
+        });
+      }),
     );
   }
 }

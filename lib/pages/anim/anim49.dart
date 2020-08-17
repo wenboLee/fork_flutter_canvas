@@ -116,6 +116,7 @@ class _Anim49PageState extends State<Anim49Page>
               bottom: 20,
               left: 20,
               child: _buildGestureDetector(
+                margin: EdgeInsets.only(left: 80),
                 onPanDown: (e) {
                   setState(() {
                     z += 5;
@@ -132,6 +133,7 @@ class _Anim49PageState extends State<Anim49Page>
               bottom: 20,
               right: 20,
               child: _buildGestureDetector(
+                  margin: EdgeInsets.only(right: 80),
                   onPanDown: (e) {
                     setState(() {
                       z -= 5;
@@ -146,6 +148,14 @@ class _Anim49PageState extends State<Anim49Page>
           ],
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          z = 0;
+          dx = 0;
+          dy = 0;
+          _ball = Ball(r: r);
+        });
+      }),
     );
   }
 }

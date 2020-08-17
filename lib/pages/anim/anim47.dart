@@ -116,6 +116,11 @@ class _Anim47PageState extends State<Anim47Page>
           },
         ),
       ),
+      floatingActionButton: actionButton(() {
+        setState(() {
+          _balls = _initBalls(num: 50);
+        });
+      }),
     );
   }
 }

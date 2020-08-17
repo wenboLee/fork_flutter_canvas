@@ -180,8 +180,7 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim05Page: (context) => Anim05Page(title: '05小球的掉落'),
     RouteConstant.Anim06Page: (context) => Anim06Page(title: '06平滑运动'),
     RouteConstant.Anim07Page: (context) => Anim07Page(title: '07椭圆运动'),
-    RouteConstant.Anim08Page: (context) =>
-        Anim08Page(title: '08箭头旋转运动旋转canvas'),
+    RouteConstant.Anim08Page: (context) => Anim08Page(title: '08箭头运动旋转canvas'),
     RouteConstant.Anim09Page: (context) => Anim09Page(title: '09箭头跟随手指运动'),
     RouteConstant.Anim10Page: (context) => Anim10Page(title: '10线性运动'),
     RouteConstant.Anim11Page: (context) => Anim11Page(title: '11脉冲运动'),

@@ -11,6 +11,7 @@ class Ball {
   double vx;
   double vy;
   double vz;
+  double az;
   double scaleX;
   double scaleY;
   Color strokeStyle;
@@ -36,6 +37,7 @@ class Ball {
     this.vx = 0,
     this.vy = 0,
     this.vz = 0,
+    this.az = 0,
     this.scaleX = 1,
     this.scaleY = 1,
     this.strokeStyle = Colors.black,

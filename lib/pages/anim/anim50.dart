@@ -82,8 +82,8 @@ class _Anim50PageState extends State<Anim50Page>
         Colors.white,
         Colors.blue[200],
         Colors.blue[500],
-        Colors.blue[800],
-        Colors.black45,
+        Colors.blue[800].withOpacity(0.8),
+        Colors.black.withOpacity(0.2),
       ],
       stops: [
         0,

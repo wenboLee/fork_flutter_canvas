@@ -34,7 +34,7 @@ class _Anim48PageState extends State<Anim48Page>
           _size = _globalKey.currentContext.size;
         }
         if (_balls == null) {
-          _balls = _initBalls(num: 30);
+          _balls = _initBalls(num: 50);
         }
 
         _move();
@@ -79,8 +79,7 @@ class _Anim48PageState extends State<Anim48Page>
     double minDist =
         _size.width > _size.height ? _size.width / 10 : _size.height / 5;
     if (dist < minDist) {
-      var line = _drawLine(ball, target, dist, minDist);
-      _lines.add(line);
+      _drawLine(ball, target, dist, minDist);
 
       var ax = dx * spring;
       var ay = dy * spring;
@@ -91,10 +90,10 @@ class _Anim48PageState extends State<Anim48Page>
     }
   }
 
-  Line _drawLine(Ball ball, Ball target, double dist, double minDist) {
+  void _drawLine(Ball ball, Ball target, double dist, double minDist) {
     var scale = math.max(0, (1 - dist / minDist));
     var color = Colors.green;
-    return Line(
+    var line = Line(
       lineWidth: 2 * scale,
       alpha: scale,
       fillStyle: Color.fromARGB(
@@ -102,6 +101,10 @@ class _Anim48PageState extends State<Anim48Page>
       p1: Offset(ball.x, ball.y),
       p2: Offset(target.x, target.y),
     );
+    if (scale > 0) {
+      _lines.add(line);
+    }
+    print(_lines.length);
   }
 
   List<Ball> _initBalls({int num}) {

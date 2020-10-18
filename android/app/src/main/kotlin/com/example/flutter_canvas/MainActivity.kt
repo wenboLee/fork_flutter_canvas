@@ -1,4 +1,4 @@
-package com.example.canvas.flutter_canvas
+package com.example.flutter_canvas
 
 import io.flutter.embedding.android.FlutterActivity
 

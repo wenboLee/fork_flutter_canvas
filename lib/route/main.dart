@@ -107,6 +107,7 @@ class RouteConstant {
   static const String Anim49Page = '/anim49Page';
   static const String Anim50Page = '/anim50Page';
   static const String Anim51Page = '/anim51Page';
+  static const String Anim52Page = '/anim52Page';
 }
 
 String routeWidgetName(String routeName) {
@@ -165,6 +166,7 @@ String routeWidgetName(String routeName) {
     RouteConstant.Anim49Page: 'Anim49Page',
     RouteConstant.Anim50Page: 'Anim50Page',
     RouteConstant.Anim51Page: 'Anim51Page',
+    RouteConstant.Anim52Page: 'Anim52Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }

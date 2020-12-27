@@ -88,6 +88,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.8.0-nullsafety.3"
+  path_parsing:
+    dependency: "direct main"
+    description:
+      name: path_parsing
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.4"
   sky_engine:
     dependency: transitive
     description: flutter

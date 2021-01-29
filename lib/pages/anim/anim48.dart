@@ -34,7 +34,7 @@ class _Anim48PageState extends State<Anim48Page>
           _size = _globalKey.currentContext.size;
         }
         if (_balls == null) {
-          _balls = _initBalls(num: 30);
+          _balls = _initBalls(num: 50);
         }
 
         _move();
@@ -77,7 +77,7 @@ class _Anim48PageState extends State<Anim48Page>
     double dist = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2));
     // 最小线长
     double minDist =
-        _size.width > _size.height ? _size.width / 10 : _size.height / 5;
+        _size.width > _size.height ? _size.width / 5 : _size.height / 5;
     if (dist < minDist) {
       _drawLine(ball, target, dist, minDist);
 
@@ -101,7 +101,8 @@ class _Anim48PageState extends State<Anim48Page>
       p1: Offset(ball.x, ball.y),
       p2: Offset(target.x, target.y),
     );
-    if (scale > 0) {
+    // 设置显示阈值
+    if (line.alpha > 0.3 && line.lineWidth > 0.3) {
       _lines.add(line);
     }
   }
@@ -151,7 +152,7 @@ class _Anim48PageState extends State<Anim48Page>
       ),
       floatingActionButton: actionButton(() {
         setState(() {
-          _balls = _initBalls(num: 30);
+          _balls = _initBalls(num: 50);
           _lines.clear();
         });
       }),
@@ -177,13 +178,11 @@ class MyCustomPainter extends CustomPainter {
     canvas.save();
     drawAuthorText(canvas, size);
 
-    canvas.save();
     lines.forEach((line) {
       _paint.color = line.fillStyle;
       _paint.strokeWidth = line.lineWidth;
       canvas.drawLine(line.p1, line.p2, _paint);
     });
-    canvas.restore();
 
     balls.forEach((ball) {
       _paint.color = ball.fillStyle;

@@ -127,7 +127,7 @@ double calculateTextHeight({
   int maxLines,
 }) {
   TextPainter painter = TextPainter(
-    locale: Localizations.localeOf(context, nullOk: true),
+    locale: Localizations.maybeLocaleOf(context),
     maxLines: maxLines,
     textDirection: TextDirection.ltr,
     text: TextSpan(

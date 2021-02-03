@@ -19,8 +19,15 @@ class _Anim52PageState extends State<Anim52Page>
   @override
   void initState() {
     _animationController =
-        AnimationController(duration: Duration(seconds: _seconds), vsync: this)
-          ..repeat();
+        AnimationController(duration: Duration(seconds: _seconds), vsync: this);
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Future.delayed(Duration(seconds: 2), () {
+          _animationController.forward(from: 0);
+        });
+      }
+    });
+    _animationController.forward();
     super.initState();
   }
 
@@ -76,7 +83,11 @@ class MyPainter extends CustomPainter {
       'M779.377778 352.711111m-45.511111 0a45.511111 45.511111 0 1 0 91.022222 0 45.511111 45.511111 0 1 0-91.022222 0Z',
     ];
 
-    _drawPath2(pathsData, canvas);
+    if (animationController.value > 0.9) {
+      _drawPath(pathsData, canvas);
+    } else {
+      _drawPath2(pathsData, canvas);
+    }
 
     canvas.restore();
   }

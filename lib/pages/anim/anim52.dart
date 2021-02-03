@@ -22,7 +22,7 @@ class _Anim52PageState extends State<Anim52Page>
         AnimationController(duration: Duration(seconds: _seconds), vsync: this);
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(Duration(seconds: 3), () {
           _animationController.forward(from: 0);
         });
       }

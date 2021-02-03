@@ -81,6 +81,17 @@ class MyPainter extends CustomPainter {
     canvas.restore();
   }
 
+  void _drawPath(List<String> pathsData, Canvas canvas) {
+    List.generate(pathsData.length, (index) {
+      String pathData = pathsData[index];
+      Path path = Path();
+      Paint paint = Paint();
+      paint.color = Colors.primaries[index];
+      writeSvgPathDataToPath(pathData, PathPrinter(path: path));
+      canvas.drawPath(path, paint);
+    });
+  }
+
   void _drawPath2(List<String> pathsData, Canvas canvas) {
     List<PathMetric> extractPathList = [];
     Function func = (Path path, Paint paint) {

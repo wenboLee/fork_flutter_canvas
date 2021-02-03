@@ -15,6 +15,7 @@ class _Anim52PageState extends State<Anim52Page>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   int _seconds = 10;
+  bool _isSort = true;
 
   @override
   void initState() {
@@ -23,6 +24,7 @@ class _Anim52PageState extends State<Anim52Page>
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Future.delayed(Duration(seconds: 3), () {
+          _isSort = !_isSort;
           _animationController.forward(from: 0);
         });
       }
@@ -52,8 +54,10 @@ class _Anim52PageState extends State<Anim52Page>
               return CustomPaint(
                 size: Size.infinite,
                 painter: MyPainter(
-                    animationController: _animationController,
-                    seconds: _seconds),
+                  animationController: _animationController,
+                  seconds: _seconds,
+                  isSort: _isSort,
+                ),
               );
             },
           ),
@@ -66,8 +70,9 @@ class _Anim52PageState extends State<Anim52Page>
 class MyPainter extends CustomPainter {
   final AnimationController animationController;
   final int seconds;
+  final bool isSort;
 
-  MyPainter({this.animationController, this.seconds});
+  MyPainter({this.animationController, this.seconds, this.isSort});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -83,7 +88,7 @@ class MyPainter extends CustomPainter {
       'M779.377778 352.711111m-45.511111 0a45.511111 45.511111 0 1 0 91.022222 0 45.511111 45.511111 0 1 0-91.022222 0Z',
     ];
 
-    if (animationController.value > 0.9) {
+    if (animationController.value == 1.0) {
       _drawPath(pathsData, canvas);
     } else {
       _drawPath2(pathsData, canvas);
@@ -117,14 +122,18 @@ class MyPainter extends CustomPainter {
       extractPathList.addAll(pathMetrics);
     });
     double unitTime = seconds / extractPathList.length;
-    extractPathList.sort((a, b) => a.length.compareTo(b.length));
+    if (isSort) {
+      extractPathList.sort((a, b) => a.length.compareTo(b.length));
+    } else {
+      extractPathList.sort((a, b) => b.length.compareTo(a.length));
+    }
     List.generate(extractPathList.length, (index) async {
       PathMetric item = extractPathList[index];
       Animation<double> animation =
           Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
               parent: animationController,
               curve: Interval(
-                ((index + 1) - 1) / extractPathList.length * unitTime,
+                index / extractPathList.length * unitTime,
                 (index + 1) / extractPathList.length * unitTime,
                 curve: Curves.ease,
               )));

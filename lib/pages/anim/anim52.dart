@@ -104,15 +104,15 @@ class MyPainter extends CustomPainter {
     canvas.scale(size.width / viewBoxList[2],
         size.width / viewBoxList[3] * pathDataScale);
     if (animationController.value == 1.0) {
-      _drawPath(pathData, canvas);
+      _drawPathFill(pathData, canvas);
     } else {
-      _drawPath2(pathData, canvas);
+      _drawPathStroke(pathData, canvas);
     }
 
     canvas.restore();
   }
 
-  void _drawPath(List<String> pathsData, Canvas canvas) {
+  void _drawPathFill(List<String> pathsData, Canvas canvas) {
     List.generate(pathsData.length, (index) {
       String pathData = pathsData[index];
       Path path = Path();
@@ -125,7 +125,7 @@ class MyPainter extends CustomPainter {
     });
   }
 
-  void _drawPath2(List<String> pathsData, Canvas canvas) {
+  void _drawPathStroke(List<String> pathsData, Canvas canvas) {
     List<PathMetric> extractPathList = [];
     List.generate(pathsData.length, (index) {
       String pathData = pathsData[index];

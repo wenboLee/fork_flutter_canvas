@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/utils.dart';
@@ -33,7 +34,7 @@ class _Anim52PageState extends State<Anim52Page>
       }
     });
     _animationController.forward();
-    IconFontUtil.read('//at.alicdn.com/t/font_1950593_6ak8py93msm.js')
+    IconFontUtil.read('//at.alicdn.com/t/font_1950593_43smg75p8jc.js')
         .then((values) {
       setState(() {
         _pathsData = values;
@@ -101,8 +102,9 @@ class MyPainter extends CustomPainter {
     final pathData = pathDataMap['pathData'];
     // 自身宽高比
     final pathDataScale = viewBoxList[3] / viewBoxList[2];
-    canvas.scale(size.width / viewBoxList[2],
-        size.width / viewBoxList[3] * pathDataScale);
+    final sizeWH = min(size.width, size.height);
+    canvas.scale(
+        sizeWH / viewBoxList[2], sizeWH / viewBoxList[3] * pathDataScale);
     if (animationController.value == 1.0) {
       _drawPathFill(pathData, canvas);
     } else {

@@ -127,10 +127,6 @@ class MyPainter extends CustomPainter {
 
   void _drawPath2(List<String> pathsData, Canvas canvas) {
     List<PathMetric> extractPathList = [];
-    Function func = (Path path, Paint paint) {
-      canvas.drawPath(path, paint);
-    };
-
     List.generate(pathsData.length, (index) {
       String pathData = pathsData[index];
       Path path = Path();
@@ -159,7 +155,7 @@ class MyPainter extends CustomPainter {
       if (animation.value > 0) {
         Path extractPath = item.extractPath(0, item.length * animation.value);
         paint.color = Colors.primaries[index % Colors.primaries.length];
-        func(extractPath, paint);
+        canvas.drawPath(extractPath, paint);
       }
     });
   }

@@ -73,6 +73,7 @@ class _Anim52PageState extends State<Anim52Page>
                   painter: MyPainter(
                     animationController: _animationController,
                     pathDataMap: pathDataMap,
+                    curve: Curves.ease,
                     isSort: _isSort,
                   ),
                 );
@@ -86,9 +87,11 @@ class _Anim52PageState extends State<Anim52Page>
 class MyPainter extends CustomPainter {
   final AnimationController animationController;
   final bool isSort;
+  final Curve curve;
   final Map<String, dynamic> pathDataMap;
 
-  MyPainter({this.animationController, this.isSort, this.pathDataMap});
+  MyPainter(
+      {this.animationController, this.isSort, this.curve, this.pathDataMap});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -148,7 +151,7 @@ class MyPainter extends CustomPainter {
       Animation<double> animation = Tween<double>(begin: 0, end: 1.0).animate(
           CurvedAnimation(
               parent: animationController,
-              curve: Interval(begin, end, curve: Curves.ease)));
+              curve: Interval(begin, end, curve: curve)));
       Paint paint = Paint();
       paint.strokeWidth = 10;
       paint.strokeCap = StrokeCap.round;

@@ -87,12 +87,12 @@ class _Anim52PageState extends State<Anim52Page>
         title: Text(widget.title),
       ),
       body: GridView.builder(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(20),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 1.0,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 20,
           ),
           itemCount: _pathsData.length,
           itemBuilder: (context, index) {

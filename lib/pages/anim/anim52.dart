@@ -25,8 +25,10 @@ class _Anim52PageState extends State<Anim52Page>
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Future.delayed(Duration(seconds: 2), () {
-          _isSort = !_isSort;
-          _animationController.forward(from: 0);
+          if (mounted) {
+            _isSort = !_isSort;
+            _animationController.forward(from: 0);
+          }
         });
       }
     });

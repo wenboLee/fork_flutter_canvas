@@ -25,7 +25,7 @@ class _Anim52PageState extends State<Anim52Page>
         AnimationController(duration: Duration(seconds: 5), vsync: this);
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(Duration(seconds: 1), () {
           if (mounted) {
             _isSort = !_isSort;
             _animationController.forward(from: 0);

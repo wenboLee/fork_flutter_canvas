@@ -207,7 +207,7 @@ class Toast {
 
 class IconFontUtil {
   static Future<List<Map<String, dynamic>>> read(String networkUrl,
-      {String prefix = 'icon'}) async {
+      {String prefix = 'icon', Color defFillColor = Colors.black}) async {
     List<Map<String, dynamic>> svgList = [];
     if (networkUrl != null && networkUrl.isNotEmpty) {
       String result = await _httpRead(networkUrl);
@@ -241,11 +241,11 @@ class IconFontUtil {
                     _netJSSvgParse(pathXml, RegExp(r'''(?<=fill=").*?(?=")'''));
                 String opacity = _netJSSvgParse(
                     pathXml, RegExp(r'''(?<=opacity=").*?(?=")'''));
-                Color fillColor;
+                Color fillColor = defFillColor;
                 if (fill.isNotEmpty) {
                   fillColor = HexColor.fromHex(fill);
                 }
-                if (opacity.isNotEmpty) {
+                if (fillColor != null && opacity.isNotEmpty) {
                   fillColor = fillColor.withOpacity(double.tryParse(opacity));
                 }
                 return {

@@ -127,7 +127,7 @@ class MyPainter extends CustomPainter {
   void _drawPathFill(List<Map<String, dynamic>> pathsData, Canvas canvas) {
     List.generate(pathsData.length, (index) {
       String pathData = pathsData[index]['path'];
-      Color fillColor = pathsData[index]['fillColor'] ?? Colors.black54;
+      Color fillColor = pathsData[index]['fillColor'];
       Path path = Path();
       Paint paint = Paint();
       paint.strokeCap = StrokeCap.round;
@@ -142,7 +142,7 @@ class MyPainter extends CustomPainter {
     List<Map<String, dynamic>> extractPathList = [];
     List.generate(pathsData.length, (index) {
       String pathData = pathsData[index]['path'];
-      Color fillColor = pathsData[index]['fillColor'] ?? Colors.black54;
+      Color fillColor = pathsData[index]['fillColor'];
       Path path = Path();
       writeSvgPathDataToPath(pathData, PathPrinter(path: path));
       extractPathList.addAll(path.computeMetrics().toList().map((e) {
@@ -160,7 +160,7 @@ class MyPainter extends CustomPainter {
     List.generate(extractPathLen, (index) async {
       Map<String, dynamic> item = extractPathList[index];
       PathMetric pathMetric = item['pathMetric'];
-      Color fillColor = item['fillColor'] ?? Colors.black54;
+      Color fillColor = item['fillColor'];
       var begin = index / extractPathLen;
       var end = (index + 1) / extractPathLen;
       Animation<double> animation = Tween<double>(begin: 0, end: 1.0).animate(

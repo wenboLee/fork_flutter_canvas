@@ -31,7 +31,7 @@ class _Anim52PageState extends State<Anim52Page>
       }
     });
     _animationController.forward();
-    IconFontUtil.read('//at.alicdn.com/t/font_1950593_ms015agudwm.js')
+    IconFontUtil.read('//at.alicdn.com/t/font_1950593_85zx3pc8ugp.js')
         .then((values) {
       setState(() {
         _pathsData = values;

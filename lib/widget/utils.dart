@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/ball.dart';
@@ -200,5 +202,99 @@ class Toast {
         });
       }
     }
+  }
+}
+
+class IconFontUtil {
+  static Future<List<Map<String, dynamic>>> read(String networkUrl,
+      {String prefix = 'icon'}) async {
+    List<Map<String, dynamic>> svgList = [];
+    if (networkUrl != null && networkUrl.isNotEmpty) {
+      String result = await _httpRead(networkUrl);
+      if (result.isNotEmpty) {
+        // 第一步取出<svg></svg> 标签对里内容
+        String parse1 =
+            _netJSSvgParse(result, RegExp(r'(?<=\<svg\>).*?(?=\</svg\>)'));
+        if (parse1.isNotEmpty) {
+          // 第二步取出<symbol></symbol> 标签对
+          List<String> parse2 =
+              _netJSSvgParseList(parse1, RegExp(r'\<symbol(.*?)\</symbol\>'));
+          // 第三步取出name, 取出path
+          parse2.forEach((element) {
+            String name =
+                _netJSSvgParse(element, RegExp('''(?<=id="$prefix).*?(?=")'''));
+            String viewBox =
+                _netJSSvgParse(element, RegExp(r'''(?<=viewBox=").*?(?=")'''));
+            List<double> viewBoxList =
+                _parseList(viewBox, RegExp(r'''\d+(\.\d+)?'''));
+            // 处理非法字符
+            name =
+                name.replaceAllMapped(RegExp(r'[^a-zA-Z0-9_]'), (match) => '_');
+            List<String> pathData =
+                _parsePathList(element, RegExp(r'(?<=\<path d=").*?(?=\>\</path\>)'));
+            svgList
+                .add({'name': name, 'pathData': pathData, 'viewBoxList': viewBoxList});
+          });
+        }
+      }
+    }
+    return svgList;
+  }
+
+  static Future<String> _httpRead(String url) async {
+    var newUrl = url;
+    if (!newUrl.startsWith('https')) {
+      newUrl = 'https:$url';
+    }
+    var httpClient = HttpClient();
+    String result = '';
+    try {
+      var request = await httpClient.getUrl(Uri.parse(newUrl));
+      var response = await request.close();
+      if (response.statusCode == HttpStatus.ok) {
+        result = await response.transform(utf8.decoder).join();
+      }
+    } catch (exception) {}
+    return result;
+  }
+
+  static String _netJSSvgParse(String input, RegExp exp) {
+    Iterable<Match> matches = exp.allMatches(input);
+    String output = '';
+    for (Match m in matches) {
+      String match = m.group(0);
+      output += match;
+    }
+    return output;
+  }
+
+  static List<String> _netJSSvgParseList(String input, RegExp exp) {
+    Iterable<Match> matches = exp.allMatches(input);
+    List<String> output = [];
+    for (Match m in matches) {
+      String match = m.group(0);
+      output.add(match);
+    }
+    return output;
+  }
+
+  static List<double> _parseList(String input, RegExp exp) {
+    Iterable<Match> matches = exp.allMatches(input);
+    List<double> output = [];
+    for (Match m in matches) {
+      double match = double.tryParse(m.group(0));
+      output.add(match);
+    }
+    return output;
+  }
+
+  static List<String> _parsePathList(String input, RegExp exp) {
+    Iterable<Match> matches = exp.allMatches(input);
+    List<String> output = [];
+    for (Match m in matches) {
+      String match = m.group(0).split(RegExp(r'''('|")''')).first;
+      output.add(match);
+    }
+    return output;
   }
 }

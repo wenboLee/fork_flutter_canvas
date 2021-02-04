@@ -102,7 +102,7 @@ class MyPainter extends CustomPainter {
     canvas.save();
 
     List<double> viewBoxList = pathDataMap['viewBoxList'];
-    List<String> pathData = pathDataMap['pathData'];
+    List<Map<String, dynamic>> pathData = pathDataMap['pathData'];
     // 自身宽高比
     final pathDataScale = viewBoxList[2] / viewBoxList[3];
     final canvasMin = size.width;
@@ -124,36 +124,43 @@ class MyPainter extends CustomPainter {
     canvas.restore();
   }
 
-  void _drawPathFill(List<String> pathsData, Canvas canvas) {
+  void _drawPathFill(List<Map<String, dynamic>> pathsData, Canvas canvas) {
     List.generate(pathsData.length, (index) {
-      String pathData = pathsData[index];
+      String pathData = pathsData[index]['path'];
+      Color fillColor = pathsData[index]['fillColor'] ?? Colors.black54;
       Path path = Path();
       Paint paint = Paint();
       paint.strokeCap = StrokeCap.round;
       paint.style = PaintingStyle.fill;
-      paint.color = Colors.primaries[index % Colors.primaries.length];
+      paint.color = fillColor;
       writeSvgPathDataToPath(pathData, PathPrinter(path: path));
       canvas.drawPath(path, paint);
     });
   }
 
-  void _drawPathStroke(List<String> pathsData, Canvas canvas) {
-    List<PathMetric> extractPathList = [];
+  void _drawPathStroke(List<Map<String, dynamic>> pathsData, Canvas canvas) {
+    List<Map<String, dynamic>> extractPathList = [];
     List.generate(pathsData.length, (index) {
-      String pathData = pathsData[index];
+      String pathData = pathsData[index]['path'];
+      Color fillColor = pathsData[index]['fillColor'] ?? Colors.black54;
       Path path = Path();
       writeSvgPathDataToPath(pathData, PathPrinter(path: path));
-      List<PathMetric> pathMetrics = path.computeMetrics().toList();
-      extractPathList.addAll(pathMetrics);
+      extractPathList.addAll(path.computeMetrics().toList().map((e) {
+        return {'fillColor': fillColor, 'pathMetric': e};
+      }));
     });
     if (isSort) {
-      extractPathList.sort((a, b) => a.length.compareTo(b.length));
+      extractPathList.sort(
+          (a, b) => a['pathMetric'].length.compareTo(b['pathMetric'].length));
     } else {
-      extractPathList.sort((a, b) => b.length.compareTo(a.length));
+      extractPathList.sort(
+          (a, b) => b['pathMetric'].length.compareTo(a['pathMetric'].length));
     }
     final extractPathLen = extractPathList.length;
     List.generate(extractPathLen, (index) async {
-      PathMetric item = extractPathList[index];
+      Map<String, dynamic> item = extractPathList[index];
+      PathMetric pathMetric = item['pathMetric'];
+      Color fillColor = item['fillColor'] ?? Colors.black54;
       var begin = index / extractPathLen;
       var end = (index + 1) / extractPathLen;
       Animation<double> animation = Tween<double>(begin: 0, end: 1.0).animate(
@@ -165,8 +172,9 @@ class MyPainter extends CustomPainter {
       paint.strokeCap = StrokeCap.round;
       paint.style = PaintingStyle.stroke;
       if (animation.value > 0) {
-        Path extractPath = item.extractPath(0, item.length * animation.value);
-        paint.color = Colors.primaries[index % Colors.primaries.length];
+        Path extractPath =
+            pathMetric.extractPath(0, pathMetric.length * animation.value);
+        paint.color = fillColor;
         canvas.drawPath(extractPath, paint);
       }
     });

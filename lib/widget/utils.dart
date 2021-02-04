@@ -221,19 +221,44 @@ class IconFontUtil {
               _netJSSvgParseList(parse1, RegExp(r'\<symbol(.*?)\</symbol\>'));
           // 第三步取出name, 取出path
           parse2.forEach((element) {
+            // 处理非法name字符
             String name =
-                _netJSSvgParse(element, RegExp('''(?<=id="$prefix).*?(?=")'''));
+                _netJSSvgParse(element, RegExp('''(?<=id="$prefix).*?(?=")'''))
+                    .replaceAllMapped(RegExp(r'[^a-zA-Z0-9_]'), (match) => '_');
             String viewBox =
                 _netJSSvgParse(element, RegExp(r'''(?<=viewBox=").*?(?=")'''));
             List<double> viewBoxList =
                 _parseList(viewBox, RegExp(r'''\d+(\.\d+)?'''));
-            // 处理非法字符
-            name =
-                name.replaceAllMapped(RegExp(r'[^a-zA-Z0-9_]'), (match) => '_');
-            List<String> pathData =
-                _parsePathList(element, RegExp(r'(?<=\<path d=").*?(?=\>\</path\>)'));
-            svgList
-                .add({'name': name, 'pathData': pathData, 'viewBoxList': viewBoxList});
+            List<String> pathList = _netJSSvgParseList(
+                element, RegExp(r'(\<path d=").*?(\</path\>)'));
+            // 每一条path 生成独立数据
+            List<Map<String, dynamic>> pathDataMap = [];
+            if (pathList.isNotEmpty) {
+              pathDataMap = pathList.map((pathXml) {
+                String path = _netJSSvgParse(
+                    pathXml, RegExp(r'''(?<=\<path d=").*?(?=")'''));
+                String fill =
+                    _netJSSvgParse(pathXml, RegExp(r'''(?<=fill=").*?(?=")'''));
+                String opacity = _netJSSvgParse(
+                    pathXml, RegExp(r'''(?<=opacity=").*?(?=")'''));
+                Color fillColor;
+                if (fill.isNotEmpty) {
+                  fillColor = HexColor.fromHex(fill);
+                }
+                if (opacity.isNotEmpty) {
+                  fillColor = fillColor.withOpacity(double.tryParse(opacity));
+                }
+                return {
+                  'path': path,
+                  'fillColor': fillColor,
+                };
+              }).toList();
+            }
+            svgList.add({
+              'name': name,
+              'pathData': pathDataMap,
+              'viewBoxList': viewBoxList,
+            });
           });
         }
       }
@@ -287,14 +312,21 @@ class IconFontUtil {
     }
     return output;
   }
+}
 
-  static List<String> _parsePathList(String input, RegExp exp) {
-    Iterable<Match> matches = exp.allMatches(input);
-    List<String> output = [];
-    for (Match m in matches) {
-      String match = m.group(0).split(RegExp(r'''('|")''')).first;
-      output.add(match);
-    }
-    return output;
+extension HexColor on Color {
+  /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
   }
+
+  /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
+  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+      '${alpha.toRadixString(16).padLeft(2, '0')}'
+      '${red.toRadixString(16).padLeft(2, '0')}'
+      '${green.toRadixString(16).padLeft(2, '0')}'
+      '${blue.toRadixString(16).padLeft(2, '0')}';
 }

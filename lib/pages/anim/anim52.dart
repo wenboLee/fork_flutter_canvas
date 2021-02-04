@@ -34,11 +34,13 @@ class _Anim52PageState extends State<Anim52Page>
       }
     });
     _animationController.forward();
-    IconFontUtil.read('//at.alicdn.com/t/font_1950593_43smg75p8jc.js')
+    IconFontUtil.read('//at.alicdn.com/t/font_1950593_owewcxm0mw.js')
         .then((values) {
-      setState(() {
-        _pathsData = values;
-      });
+      if (mounted) {
+        setState(() {
+          _pathsData = values;
+        });
+      }
     });
     super.initState();
   }
@@ -96,15 +98,23 @@ class MyPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    assert(size.width == size.height);
     canvas.save();
 
-    final viewBoxList = pathDataMap['viewBoxList'];
-    final pathData = pathDataMap['pathData'];
+    List<double> viewBoxList = pathDataMap['viewBoxList'];
+    List<String> pathData = pathDataMap['pathData'];
     // 自身宽高比
-    final pathDataScale = viewBoxList[3] / viewBoxList[2];
-    final sizeWH = min(size.width, size.height);
-    canvas.scale(
-        sizeWH / viewBoxList[2], sizeWH / viewBoxList[3] * pathDataScale);
+    final pathDataScale = viewBoxList[2] / viewBoxList[3];
+    final canvasMin = size.width;
+    final viewBoxMax = max(viewBoxList[2], viewBoxList[3]);
+    final scaleX = canvasMin / viewBoxList[2];
+    final scaleY = canvasMin / viewBoxList[3] / pathDataScale;
+    // 渲染宽高
+    final translateY =
+        (canvasMin - viewBoxList[3] * canvasMin / viewBoxMax) / 2;
+    // 先平移再缩放，不然translateY要除缩放比
+    canvas.translate(0, translateY);
+    canvas.scale(scaleX, scaleY);
     if (animationController.value == 1.0) {
       _drawPathFill(pathData, canvas);
     } else {

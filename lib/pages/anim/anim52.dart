@@ -96,7 +96,10 @@ class MyPainter extends CustomPainter {
 
     final viewBoxList = pathDataMap['viewBoxList'];
     final pathData = pathDataMap['pathData'];
-    canvas.scale(size.width / viewBoxList[2], size.width / viewBoxList[3]);
+    // 自身宽高比
+    final pathDataScale = viewBoxList[3] / viewBoxList[2];
+    canvas.scale(size.width / viewBoxList[2],
+        size.width / viewBoxList[3] * pathDataScale);
     if (animationController.value == 1.0) {
       _drawPath(pathData, canvas);
     } else {

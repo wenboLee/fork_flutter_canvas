@@ -68,12 +68,11 @@ class _Anim52PageState extends State<Anim52Page>
             if (snapshot.hasError) {
               return Center(child: Text("error: ${snapshot.error}"));
             } else {
-              List<ParsPathModel> pathsData = snapshot.data;
               return PageView.builder(
                 controller: _pageController,
-                itemCount: pathsData.length,
+                itemCount: snapshot?.data?.length ?? 0,
                 itemBuilder: (context, index) {
-                  final pathDataMap = pathsData[index];
+                  final pathDataMap = snapshot.data[index];
                   return Column(
                     children: [
                       Expanded(

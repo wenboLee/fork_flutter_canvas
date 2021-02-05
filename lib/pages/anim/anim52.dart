@@ -112,7 +112,7 @@ class _Anim52PageState extends State<Anim52Page>
               );
             }
           } else {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
         },
       ),

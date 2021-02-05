@@ -77,7 +77,7 @@ class _Anim52PageState extends State<Anim52Page>
                       Align(
                         alignment: Alignment.topCenter,
                         child: Text(
-                          '$index/${snapshot.data.length}',
+                          '${index + 1}/${snapshot.data.length}',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),

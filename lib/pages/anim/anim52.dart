@@ -167,6 +167,7 @@ class MyPainter extends CustomPainter {
         canvas.drawPath(extractPath, paint);
         if (animation.value == 1.0 && paintingStyle != PaintingStyle.stroke) {
           Paint paintPath = Paint();
+          paintPath.strokeWidth = 0;
           paintPath.strokeCap = StrokeCap.round;
           paintPath.style = PaintingStyle.fill;
           paintPath.color = fillColor;

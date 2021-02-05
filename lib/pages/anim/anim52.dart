@@ -137,18 +137,30 @@ class MyPainter extends CustomPainter {
       Color fillColor = pathsData[index].fillColor;
       Path path = Path();
       writeSvgPathDataToPath(pathData, PathPrinter(path: path));
-      extractPathList.addAll(path.computeMetrics().toList().map((e) {
+      List<PathMetric> listData = path.computeMetrics().toList();
+      extractPathList.addAll(listData.map((e) {
         return ExtractPathModel(
-            fillColor: fillColor, pathMetric: e, pathIndex: index);
+            fillColor: fillColor,
+            pathMetric: e,
+            pathIndex: index,
+            pathTotalNumber: listData.length);
       }));
       canvasPathMap.add(CanvasPathModel(path: path, fillColor: fillColor));
     });
     final extractPathLen = extractPathList.length;
+    // 记录每组完成进度
+    Map<int, int> progress = {};
     List.generate(extractPathLen, (index) {
       ExtractPathModel item = extractPathList[index];
       PathMetric pathMetric = item.pathMetric;
       Color fillColor = item.fillColor;
       int pathIndex = item.pathIndex;
+      int pathTotalNumber = item.pathTotalNumber;
+      if (progress.containsKey(pathIndex)) {
+        progress[pathIndex] += 1;
+      } else {
+        progress[pathIndex] = 1;
+      }
       var begin = index / extractPathLen;
       var end = (index + 1) / extractPathLen;
       Animation<double> animation = Tween<double>(begin: 0, end: 1.0).animate(
@@ -176,7 +188,9 @@ class MyPainter extends CustomPainter {
           paintPath.strokeCap = StrokeCap.round;
           paintPath.style = PaintingStyle.fill;
           paintPath.color = fillColor;
-          canvas.drawPath(canvasPathMap[pathIndex].path, paintPath);
+          if (progress[pathIndex] == pathTotalNumber) {
+            canvas.drawPath(canvasPathMap[pathIndex].path, paintPath);
+          }
         } else if (animationFill.value == 1.0 &&
             paintingStyle == PaintingStyle.stroke) {
           canvasPathMap.forEach((element) {
@@ -201,8 +215,10 @@ class ExtractPathModel {
   final Color fillColor;
   final PathMetric pathMetric;
   final int pathIndex;
+  final int pathTotalNumber;
 
-  const ExtractPathModel({this.fillColor, this.pathMetric, this.pathIndex});
+  const ExtractPathModel(
+      {this.fillColor, this.pathMetric, this.pathIndex, this.pathTotalNumber});
 }
 
 class CanvasPathModel {

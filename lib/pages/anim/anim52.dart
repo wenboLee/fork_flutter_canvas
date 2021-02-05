@@ -23,32 +23,14 @@ class _Anim52PageState extends State<Anim52Page>
   void initState() {
     _pageController = PageController();
     _animationController =
-        AnimationController(duration: Duration(seconds: 10), vsync: this);
-    _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        Future.delayed(Duration(seconds: 1), () {
-          if (mounted) {
-            _animationController.reverse();
-          }
-        });
-      } else if (status == AnimationStatus.dismissed) {
-        if (mounted) {
-          _animationController.forward();
-        }
-      }
-    });
-    _animationController.forward();
+        AnimationController(duration: Duration(seconds: 10), vsync: this)
+          ..repeat();
     _pageController.addListener(() {
       double page = _pageController.page;
-      // 滚动不绘制
       if (page != page.toInt()) {
         _animationController.stop();
       } else {
-        if (_animationController.status == AnimationStatus.forward) {
-          _animationController.forward(from: _animationController.value);
-        } else if (_animationController.status == AnimationStatus.reverse) {
-          _animationController.reverse(from: _animationController.value);
-        }
+        _animationController.repeat();
       }
     });
     super.initState();

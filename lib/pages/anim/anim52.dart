@@ -105,7 +105,7 @@ class MyPainter extends CustomPainter {
     canvas.save();
 
     List<double> viewBoxList = pathDataMap['viewBoxList'];
-    List<Map<String, dynamic>> pathData = pathDataMap['pathData'];
+    List<Map<String, dynamic>> pathData = pathDataMap['pathList'];
     // 自身宽高比
     final pathDataScale = viewBoxList[2] / viewBoxList[3];
     final canvasMin = size.width;

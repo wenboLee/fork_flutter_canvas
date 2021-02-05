@@ -256,7 +256,7 @@ class IconFontUtil {
             }
             svgList.add({
               'name': name,
-              'pathData': pathDataMap,
+              'pathList': pathDataMap,
               'viewBoxList': viewBoxList,
             });
           });

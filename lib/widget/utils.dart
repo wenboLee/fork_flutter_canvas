@@ -251,8 +251,13 @@ class IconFontUtil {
                 return PathInfoModel(path: path, fillColor: fillColor);
               }).toList();
             }
+            var viewBoxModel = ViewBoxModel(
+                minX: viewBoxList[0],
+                minY: viewBoxList[1],
+                width: viewBoxList[2],
+                height: viewBoxList[3]);
             svgList.add(ParsPathModel(
-                name: name, pathList: pathDataMap, viewBoxList: viewBoxList));
+                name: name, pathList: pathDataMap, viewBox: viewBoxModel));
           });
         }
       }
@@ -311,9 +316,18 @@ class IconFontUtil {
 class ParsPathModel {
   final String name;
   final List<PathInfoModel> pathList;
-  final List<double> viewBoxList;
+  final ViewBoxModel viewBox;
 
-  const ParsPathModel({this.name, this.pathList, this.viewBoxList});
+  const ParsPathModel({this.name, this.pathList, this.viewBox});
+}
+
+class ViewBoxModel {
+  final double minX;
+  final double minY;
+  final double width;
+  final double height;
+
+  const ViewBoxModel({this.minX, this.minY, this.width, this.height});
 }
 
 class PathInfoModel {

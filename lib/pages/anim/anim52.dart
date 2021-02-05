@@ -141,14 +141,14 @@ class MyPainter extends CustomPainter {
     assert(size.width == size.height);
     canvas.save();
 
-    List<double> viewBoxList = pathDataMap.viewBoxList;
+    ViewBoxModel viewBox = pathDataMap.viewBox;
     List<PathInfoModel> pathData = pathDataMap.pathList;
     final canvasMin = size.width;
-    final viewBoxMax = max(viewBoxList[2], viewBoxList[3]);
-    final scale = canvasMin / viewBoxList[2];
+    final viewBoxMax = max(viewBox.width, viewBox.height);
+    final scale = canvasMin / viewBox.width;
     // 渲染宽高
     final translateY =
-        (canvasMin - viewBoxList[3] * canvasMin / viewBoxMax) / 2;
+        (canvasMin - viewBox.height * canvasMin / viewBoxMax) / 2;
     // 先平移再缩放，不然translateY要除缩放比
     canvas.translate(0, translateY);
     canvas.scale(scale, scale);

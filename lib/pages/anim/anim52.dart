@@ -71,39 +71,38 @@ class _Anim52PageState extends State<Anim52Page>
                 itemBuilder: (context, index) {
                   final pathDataMap = snapshot.data[index];
                   return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        flex: 4,
-                        child: RepaintBoundary(
-                          child: AnimatedBuilder(
-                            animation: _animationController,
-                            builder: (context, child) {
-                              return Center(
-                                child: CustomPaint(
-                                  size: Size(
-                                    MediaQuery.of(context).size.width - 40,
-                                    MediaQuery.of(context).size.width - 40,
-                                  ),
-                                  painter: MyPainter(
-                                    animationController: _animationController,
-                                    pathDataMap: pathDataMap,
-                                    paintingStyle: PaintingStyle.fill,
-                                  ),
+                      Spacer(flex: 1),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          '$index/${snapshot.data.length}',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Spacer(flex: 1),
+                      RepaintBoundary(
+                        child: AnimatedBuilder(
+                          animation: _animationController,
+                          builder: (context, child) {
+                            return Center(
+                              child: CustomPaint(
+                                size: Size(
+                                  MediaQuery.of(context).size.width - 40,
+                                  MediaQuery.of(context).size.width - 40,
                                 ),
-                              );
-                            },
-                          ),
+                                painter: MyPainter(
+                                  animationController: _animationController,
+                                  pathDataMap: pathDataMap,
+                                  paintingStyle: PaintingStyle.fill,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Center(
-                          child: Text(
-                            '左右滑动查看上/下一个',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                      Spacer(flex: 3),
                     ],
                   );
                 },

@@ -182,15 +182,15 @@ class MyPainter extends CustomPainter {
             .animate(CurvedAnimation(
                 parent: animationController,
                 curve: Interval(0, 1.0, curve: curve)));
-        if (animation.value == 1.0 && paintingStyle == PaintingStyle.fill) {
+        if (animation.value == 1.0 &&
+            paintingStyle == PaintingStyle.fill &&
+            progress[pathIndex] == pathTotalNumber) {
           Paint paintPath = Paint();
           paintPath.strokeWidth = 0;
           paintPath.strokeCap = StrokeCap.round;
           paintPath.style = PaintingStyle.fill;
           paintPath.color = fillColor;
-          if (progress[pathIndex] == pathTotalNumber) {
-            canvas.drawPath(canvasPathMap[pathIndex].path, paintPath);
-          }
+          canvas.drawPath(canvasPathMap[pathIndex].path, paintPath);
         } else if (animationFill.value == 1.0 &&
             paintingStyle == PaintingStyle.stroke) {
           canvasPathMap.forEach((element) {

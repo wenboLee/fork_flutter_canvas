@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 import 'package:path_parsing/path_parsing.dart';
 
-enum SortType { asc, desc, def }
-
 class Anim52Page extends StatefulWidget {
   Anim52Page({Key key, this.title}) : super(key: key);
 
@@ -18,8 +16,6 @@ class Anim52Page extends StatefulWidget {
 class _Anim52PageState extends State<Anim52Page>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
-  SortType _sortType = SortType.def;
-  List<Map<String, dynamic>> _pathsData = [];
 
   @override
   void initState() {
@@ -29,23 +25,17 @@ class _Anim52PageState extends State<Anim52Page>
       if (status == AnimationStatus.completed) {
         Future.delayed(Duration(seconds: 1), () {
           if (mounted) {
-            int index = (_sortType.index + 1) % SortType.values.length;
-            _sortType = SortType.values[index];
             _animationController.forward(from: 0);
           }
         });
       }
     });
     _animationController.forward();
-    IconFontUtil.read('//at.alicdn.com/t/font_1950593_g48kd9v3h54.js')
-        .then((values) {
-      if (mounted) {
-        setState(() {
-          _pathsData = values;
-        });
-      }
-    });
     super.initState();
+  }
+
+  Future<List<Map<String, dynamic>>> _mockIconfontData() async {
+    return IconFontUtil.read('//at.alicdn.com/t/font_1950593_g48kd9v3h54.js');
   }
 
   @override
@@ -60,44 +50,63 @@ class _Anim52PageState extends State<Anim52Page>
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: GridView.builder(
-          padding: EdgeInsets.all(20),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.0,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
-          ),
-          itemCount: _pathsData.length,
-          itemBuilder: (context, index) {
-            final pathDataMap = _pathsData[index];
-            return AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return CustomPaint(
-                  size: Size.infinite,
-                  painter: MyPainter(
-                    animationController: _animationController,
-                    pathDataMap: pathDataMap,
-                    curve: Curves.ease,
-                    sortType: _sortType,
+      body: FutureBuilder(
+        future: _mockIconfontData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(child: Text("error: ${snapshot.error}"));
+            } else {
+              List<Map<String, dynamic>> pathsData = snapshot.data;
+              return GridView.builder(
+                  padding: EdgeInsets.all(20),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1.0,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
                   ),
-                );
-              },
-            );
-          }),
+                  itemCount: pathsData.length,
+                  itemBuilder: (context, index) {
+                    final pathDataMap = pathsData[index];
+                    return AnimatedBuilder(
+                      animation: _animationController,
+                      builder: (context, child) {
+                        return CustomPaint(
+                          size: Size.infinite,
+                          painter: MyPainter(
+                            animationController: _animationController,
+                            pathDataMap: pathDataMap,
+                            paintingStyle: PaintingStyle.fill,
+                          ),
+                        );
+                      },
+                    );
+                  });
+            }
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      ),
     );
   }
 }
 
 class MyPainter extends CustomPainter {
   final AnimationController animationController;
-  final SortType sortType;
   final Curve curve;
   final Map<String, dynamic> pathDataMap;
+  final PaintingStyle paintingStyle;
+  final double strokeWidth;
 
-  MyPainter(
-      {this.animationController, this.sortType, this.curve, this.pathDataMap});
+  MyPainter({
+    this.animationController,
+    this.curve = Curves.ease,
+    this.pathDataMap,
+    this.paintingStyle = PaintingStyle.fill,
+    this.strokeWidth = 1,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -118,57 +127,31 @@ class MyPainter extends CustomPainter {
     // 先平移再缩放，不然translateY要除缩放比
     canvas.translate(0, translateY);
     canvas.scale(scaleX, scaleY);
-    if (animationController.value == 1.0) {
-      _drawPathFill(pathData, canvas);
-    } else {
-      _drawPathStroke(pathData, canvas);
-    }
+    _drawPath(pathData, canvas, scaleY);
 
     canvas.restore();
   }
 
-  void _drawPathFill(List<Map<String, dynamic>> pathsData, Canvas canvas) {
-    List.generate(pathsData.length, (index) {
-      String pathData = pathsData[index]['path'];
-      Color fillColor = pathsData[index]['fillColor'];
-      Path path = Path();
-      Paint paint = Paint();
-      paint.strokeCap = StrokeCap.round;
-      paint.style = PaintingStyle.fill;
-      paint.color = fillColor;
-      writeSvgPathDataToPath(pathData, PathPrinter(path: path));
-      canvas.drawPath(path, paint);
-    });
-  }
-
-  void _drawPathStroke(List<Map<String, dynamic>> pathsData, Canvas canvas) {
+  void _drawPath(
+      List<Map<String, dynamic>> pathsData, Canvas canvas, double scaleY) {
     List<Map<String, dynamic>> extractPathList = [];
+    List<Path> canvasPaths = [];
     List.generate(pathsData.length, (index) {
       String pathData = pathsData[index]['path'];
       Color fillColor = pathsData[index]['fillColor'];
       Path path = Path();
       writeSvgPathDataToPath(pathData, PathPrinter(path: path));
       extractPathList.addAll(path.computeMetrics().toList().map((e) {
-        return {'fillColor': fillColor, 'pathMetric': e};
+        return {'fillColor': fillColor, 'pathMetric': e, 'pathIndex': index};
       }));
+      canvasPaths.add(path);
     });
-    switch (sortType) {
-      case SortType.asc:
-        extractPathList.sort(
-            (a, b) => a['pathMetric'].length.compareTo(b['pathMetric'].length));
-        break;
-      case SortType.desc:
-        extractPathList.sort(
-            (a, b) => b['pathMetric'].length.compareTo(a['pathMetric'].length));
-        break;
-      case SortType.def:
-        break;
-    }
     final extractPathLen = extractPathList.length;
     List.generate(extractPathLen, (index) async {
       Map<String, dynamic> item = extractPathList[index];
       PathMetric pathMetric = item['pathMetric'];
       Color fillColor = item['fillColor'];
+      int pathIndex = item['pathIndex'];
       var begin = index / extractPathLen;
       var end = (index + 1) / extractPathLen;
       Animation<double> animation = Tween<double>(begin: 0, end: 1.0).animate(
@@ -176,7 +159,8 @@ class MyPainter extends CustomPainter {
               parent: animationController,
               curve: Interval(begin, end, curve: curve)));
       Paint paint = Paint();
-      paint.strokeWidth = 10;
+      // 还原strokeWidth
+      paint.strokeWidth = strokeWidth / scaleY;
       paint.strokeCap = StrokeCap.round;
       paint.style = PaintingStyle.stroke;
       if (animation.value > 0) {
@@ -184,6 +168,13 @@ class MyPainter extends CustomPainter {
             pathMetric.extractPath(0, pathMetric.length * animation.value);
         paint.color = fillColor;
         canvas.drawPath(extractPath, paint);
+        if (animation.value == 1.0 && paintingStyle != PaintingStyle.stroke) {
+          Paint paintPath = Paint();
+          paintPath.strokeCap = StrokeCap.round;
+          paintPath.style = PaintingStyle.fill;
+          paintPath.color = fillColor;
+          canvas.drawPath(canvasPaths[pathIndex], paintPath);
+        }
       }
     });
   }

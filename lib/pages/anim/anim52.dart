@@ -28,9 +28,13 @@ class _Anim52PageState extends State<Anim52Page>
       if (status == AnimationStatus.completed) {
         Future.delayed(Duration(seconds: 1), () {
           if (mounted) {
-            _animationController.forward(from: 0);
+            _animationController.reverse();
           }
         });
+      } else if (status == AnimationStatus.dismissed) {
+        if (mounted) {
+          _animationController.forward();
+        }
       }
     });
     _animationController.forward();
@@ -40,7 +44,11 @@ class _Anim52PageState extends State<Anim52Page>
       if (page != page.toInt()) {
         _animationController.stop();
       } else {
-        _animationController.forward(from: _animationController.value);
+        if (_animationController.status == AnimationStatus.forward) {
+          _animationController.forward(from: _animationController.value);
+        } else if (_animationController.status == AnimationStatus.reverse) {
+          _animationController.reverse(from: _animationController.value);
+        }
       }
     });
     super.initState();

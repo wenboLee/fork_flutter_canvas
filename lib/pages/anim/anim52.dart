@@ -16,9 +16,11 @@ class Anim52Page extends StatefulWidget {
 class _Anim52PageState extends State<Anim52Page>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
+  PageController _pageController;
 
   @override
   void initState() {
+    _pageController = PageController();
     _animationController =
         AnimationController(duration: Duration(seconds: 10), vsync: this);
     _animationController.addStatusListener((status) {
@@ -31,6 +33,15 @@ class _Anim52PageState extends State<Anim52Page>
       }
     });
     _animationController.forward();
+    _pageController.addListener(() {
+      double page = _pageController.page;
+      // 滚动不绘制
+      if (page != page.toInt()) {
+        _animationController.stop();
+      } else {
+        _animationController.forward(from: _animationController.value);
+      }
+    });
     super.initState();
   }
 
@@ -58,31 +69,47 @@ class _Anim52PageState extends State<Anim52Page>
               return Center(child: Text("error: ${snapshot.error}"));
             } else {
               List<ParsPathModel> pathsData = snapshot.data;
-              return GridView.builder(
-                  padding: EdgeInsets.all(20),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.0,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                  ),
-                  itemCount: pathsData.length,
-                  itemBuilder: (context, index) {
-                    final pathDataMap = pathsData[index];
-                    return AnimatedBuilder(
-                      animation: _animationController,
-                      builder: (context, child) {
-                        return CustomPaint(
-                          size: Size.infinite,
-                          painter: MyPainter(
-                            animationController: _animationController,
-                            pathDataMap: pathDataMap,
-                            paintingStyle: PaintingStyle.fill,
+              return PageView.builder(
+                controller: _pageController,
+                itemCount: pathsData.length,
+                itemBuilder: (context, index) {
+                  final pathDataMap = pathsData[index];
+                  return Column(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: RepaintBoundary(
+                          child: AnimatedBuilder(
+                            animation: _animationController,
+                            builder: (context, child) {
+                              return Center(
+                                child: CustomPaint(
+                                  size: Size(MediaQuery.of(context).size.width,
+                                      MediaQuery.of(context).size.width),
+                                  painter: MyPainter(
+                                    animationController: _animationController,
+                                    pathDataMap: pathDataMap,
+                                    paintingStyle: PaintingStyle.fill,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    );
-                  });
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: Text(
+                            '左右滑动查看上/下一个',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
             }
           } else {
             return CircularProgressIndicator();

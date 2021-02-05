@@ -77,7 +77,7 @@ class _Anim52PageState extends State<Anim52Page>
                           painter: MyPainter(
                             animationController: _animationController,
                             pathDataMap: pathDataMap,
-                            paintingStyle: PaintingStyle.fill,
+                            paintingStyle: PaintingStyle.stroke,
                           ),
                         );
                       },
@@ -132,7 +132,7 @@ class MyPainter extends CustomPainter {
   void _drawPath(
       List<Map<String, dynamic>> pathsData, Canvas canvas, double scale) {
     List<Map<String, dynamic>> extractPathList = [];
-    List<Path> canvasPaths = [];
+    List<Map<String, dynamic>> canvasPathMap = [];
     List.generate(pathsData.length, (index) {
       String pathData = pathsData[index]['path'];
       Color fillColor = pathsData[index]['fillColor'];
@@ -141,10 +141,10 @@ class MyPainter extends CustomPainter {
       extractPathList.addAll(path.computeMetrics().toList().map((e) {
         return {'fillColor': fillColor, 'pathMetric': e, 'pathIndex': index};
       }));
-      canvasPaths.add(path);
+      canvasPathMap.add({'path': path, 'fillColor': fillColor});
     });
     final extractPathLen = extractPathList.length;
-    List.generate(extractPathLen, (index) async {
+    List.generate(extractPathLen, (index) {
       Map<String, dynamic> item = extractPathList[index];
       PathMetric pathMetric = item['pathMetric'];
       Color fillColor = item['fillColor'];
@@ -165,13 +165,27 @@ class MyPainter extends CustomPainter {
             pathMetric.extractPath(0, pathMetric.length * animation.value);
         paint.color = fillColor;
         canvas.drawPath(extractPath, paint);
+        // 不依赖animationController value
+        Animation<double> animationFill = Tween<double>(begin: 0, end: 1.0)
+            .animate(CurvedAnimation(
+                parent: animationController,
+                curve: Interval(0, 1.0, curve: curve)));
         if (animation.value == 1.0 && paintingStyle != PaintingStyle.stroke) {
           Paint paintPath = Paint();
           paintPath.strokeWidth = 0;
           paintPath.strokeCap = StrokeCap.round;
           paintPath.style = PaintingStyle.fill;
           paintPath.color = fillColor;
-          canvas.drawPath(canvasPaths[pathIndex], paintPath);
+          canvas.drawPath(canvasPathMap[pathIndex]['path'], paintPath);
+        } else if (animationFill.value == 1.0 &&
+            paintingStyle == PaintingStyle.stroke) {
+          canvasPathMap.forEach((element) {
+            Paint paintFill = Paint();
+            paintFill.strokeCap = StrokeCap.round;
+            paintFill.style = PaintingStyle.fill;
+            paintFill.color = element['fillColor'];
+            canvas.drawPath(element['path'], paintFill);
+          });
         }
       }
     });

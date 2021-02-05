@@ -206,9 +206,9 @@ class Toast {
 }
 
 class IconFontUtil {
-  static Future<List<Map<String, dynamic>>> read(String networkUrl,
+  static Future<List<ParsPathModel>> read(String networkUrl,
       {String prefix = 'icon', Color defFillColor = Colors.black}) async {
-    List<Map<String, dynamic>> svgList = [];
+    List<ParsPathModel> svgList = [];
     if (networkUrl != null && networkUrl.isNotEmpty) {
       String result = await _httpRead(networkUrl);
       if (result.isNotEmpty) {
@@ -232,7 +232,7 @@ class IconFontUtil {
             List<String> pathList = _netJSSvgParseList(
                 element, RegExp(r'(\<path d=").*?(\</path\>)'));
             // 每一条path 生成独立数据
-            List<Map<String, dynamic>> pathDataMap = [];
+            List<PathInfoModel> pathDataMap = [];
             if (pathList.isNotEmpty) {
               pathDataMap = pathList.map((pathXml) {
                 String path = _netJSSvgParse(
@@ -248,17 +248,11 @@ class IconFontUtil {
                 if (fillColor != null && opacity.isNotEmpty) {
                   fillColor = fillColor.withOpacity(double.tryParse(opacity));
                 }
-                return {
-                  'path': path,
-                  'fillColor': fillColor,
-                };
+                return PathInfoModel(path: path, fillColor: fillColor);
               }).toList();
             }
-            svgList.add({
-              'name': name,
-              'pathList': pathDataMap,
-              'viewBoxList': viewBoxList,
-            });
+            svgList.add(ParsPathModel(
+                name: name, pathList: pathDataMap, viewBoxList: viewBoxList));
           });
         }
       }
@@ -312,6 +306,21 @@ class IconFontUtil {
     }
     return output;
   }
+}
+
+class ParsPathModel {
+  final String name;
+  final List<PathInfoModel> pathList;
+  final List<double> viewBoxList;
+
+  const ParsPathModel({this.name, this.pathList, this.viewBoxList});
+}
+
+class PathInfoModel {
+  final String path;
+  final Color fillColor;
+
+  const PathInfoModel({this.path, this.fillColor});
 }
 
 extension HexColor on Color {

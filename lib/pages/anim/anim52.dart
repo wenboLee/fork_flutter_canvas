@@ -34,7 +34,7 @@ class _Anim52PageState extends State<Anim52Page>
     super.initState();
   }
 
-  Future<List<Map<String, dynamic>>> _mockIconfontData() async {
+  Future<List<ParsPathModel>> _mockIconfontData() async {
     return IconFontUtil.read('//at.alicdn.com/t/font_1950593_g48kd9v3h54.js');
   }
 
@@ -57,7 +57,7 @@ class _Anim52PageState extends State<Anim52Page>
             if (snapshot.hasError) {
               return Center(child: Text("error: ${snapshot.error}"));
             } else {
-              List<Map<String, dynamic>> pathsData = snapshot.data;
+              List<ParsPathModel> pathsData = snapshot.data;
               return GridView.builder(
                   padding: EdgeInsets.all(20),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -96,7 +96,7 @@ class _Anim52PageState extends State<Anim52Page>
 class MyPainter extends CustomPainter {
   final AnimationController animationController;
   final Curve curve;
-  final Map<String, dynamic> pathDataMap;
+  final ParsPathModel pathDataMap;
   final PaintingStyle paintingStyle;
   final double strokeWidth;
 
@@ -113,8 +113,8 @@ class MyPainter extends CustomPainter {
     assert(size.width == size.height);
     canvas.save();
 
-    List<double> viewBoxList = pathDataMap['viewBoxList'];
-    List<Map<String, dynamic>> pathData = pathDataMap['pathList'];
+    List<double> viewBoxList = pathDataMap.viewBoxList;
+    List<PathInfoModel> pathData = pathDataMap.pathList;
     final canvasMin = size.width;
     final viewBoxMax = max(viewBoxList[2], viewBoxList[3]);
     final scale = canvasMin / viewBoxList[2];
@@ -129,26 +129,26 @@ class MyPainter extends CustomPainter {
     canvas.restore();
   }
 
-  void _drawPath(
-      List<Map<String, dynamic>> pathsData, Canvas canvas, double scale) {
-    List<Map<String, dynamic>> extractPathList = [];
-    List<Map<String, dynamic>> canvasPathMap = [];
+  void _drawPath(List<PathInfoModel> pathsData, Canvas canvas, double scale) {
+    List<ExtractPathModel> extractPathList = [];
+    List<CanvasPathModel> canvasPathMap = [];
     List.generate(pathsData.length, (index) {
-      String pathData = pathsData[index]['path'];
-      Color fillColor = pathsData[index]['fillColor'];
+      String pathData = pathsData[index].path;
+      Color fillColor = pathsData[index].fillColor;
       Path path = Path();
       writeSvgPathDataToPath(pathData, PathPrinter(path: path));
       extractPathList.addAll(path.computeMetrics().toList().map((e) {
-        return {'fillColor': fillColor, 'pathMetric': e, 'pathIndex': index};
+        return ExtractPathModel(
+            fillColor: fillColor, pathMetric: e, pathIndex: index);
       }));
-      canvasPathMap.add({'path': path, 'fillColor': fillColor});
+      canvasPathMap.add(CanvasPathModel(path: path, fillColor: fillColor));
     });
     final extractPathLen = extractPathList.length;
     List.generate(extractPathLen, (index) {
-      Map<String, dynamic> item = extractPathList[index];
-      PathMetric pathMetric = item['pathMetric'];
-      Color fillColor = item['fillColor'];
-      int pathIndex = item['pathIndex'];
+      ExtractPathModel item = extractPathList[index];
+      PathMetric pathMetric = item.pathMetric;
+      Color fillColor = item.fillColor;
+      int pathIndex = item.pathIndex;
       var begin = index / extractPathLen;
       var end = (index + 1) / extractPathLen;
       Animation<double> animation = Tween<double>(begin: 0, end: 1.0).animate(
@@ -176,15 +176,15 @@ class MyPainter extends CustomPainter {
           paintPath.strokeCap = StrokeCap.round;
           paintPath.style = PaintingStyle.fill;
           paintPath.color = fillColor;
-          canvas.drawPath(canvasPathMap[pathIndex]['path'], paintPath);
+          canvas.drawPath(canvasPathMap[pathIndex].path, paintPath);
         } else if (animationFill.value == 1.0 &&
             paintingStyle == PaintingStyle.stroke) {
           canvasPathMap.forEach((element) {
             Paint paintFill = Paint();
             paintFill.strokeCap = StrokeCap.round;
             paintFill.style = PaintingStyle.fill;
-            paintFill.color = element['fillColor'];
-            canvas.drawPath(element['path'], paintFill);
+            paintFill.color = element.fillColor;
+            canvas.drawPath(element.path, paintFill);
           });
         }
       }
@@ -195,6 +195,21 @@ class MyPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return oldDelegate != this;
   }
+}
+
+class ExtractPathModel {
+  final Color fillColor;
+  final PathMetric pathMetric;
+  final int pathIndex;
+
+  const ExtractPathModel({this.fillColor, this.pathMetric, this.pathIndex});
+}
+
+class CanvasPathModel {
+  final Path path;
+  final Color fillColor;
+
+  const CanvasPathModel({this.path, this.fillColor});
 }
 
 class PathPrinter extends PathProxy {

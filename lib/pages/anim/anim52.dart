@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 import 'package:path_parsing/path_parsing.dart';
 
+enum SortType { asc, desc, def }
+
 class Anim52Page extends StatefulWidget {
   Anim52Page({Key key, this.title}) : super(key: key);
 
@@ -16,7 +18,7 @@ class Anim52Page extends StatefulWidget {
 class _Anim52PageState extends State<Anim52Page>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
-  bool _isSort = true;
+  SortType _sortType = SortType.def;
   List<Map<String, dynamic>> _pathsData = [];
 
   @override
@@ -27,7 +29,8 @@ class _Anim52PageState extends State<Anim52Page>
       if (status == AnimationStatus.completed) {
         Future.delayed(Duration(seconds: 1), () {
           if (mounted) {
-            _isSort = !_isSort;
+            int index = (_sortType.index + 1) % SortType.values.length;
+            _sortType = SortType.values[index];
             _animationController.forward(from: 0);
           }
         });
@@ -77,7 +80,7 @@ class _Anim52PageState extends State<Anim52Page>
                     animationController: _animationController,
                     pathDataMap: pathDataMap,
                     curve: Curves.ease,
-                    isSort: _isSort,
+                    sortType: _sortType,
                   ),
                 );
               },
@@ -89,12 +92,12 @@ class _Anim52PageState extends State<Anim52Page>
 
 class MyPainter extends CustomPainter {
   final AnimationController animationController;
-  final bool isSort;
+  final SortType sortType;
   final Curve curve;
   final Map<String, dynamic> pathDataMap;
 
   MyPainter(
-      {this.animationController, this.isSort, this.curve, this.pathDataMap});
+      {this.animationController, this.sortType, this.curve, this.pathDataMap});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -149,12 +152,17 @@ class MyPainter extends CustomPainter {
         return {'fillColor': fillColor, 'pathMetric': e};
       }));
     });
-    if (isSort) {
-      extractPathList.sort(
-          (a, b) => a['pathMetric'].length.compareTo(b['pathMetric'].length));
-    } else {
-      extractPathList.sort(
-          (a, b) => b['pathMetric'].length.compareTo(a['pathMetric'].length));
+    switch (sortType) {
+      case SortType.asc:
+        extractPathList.sort(
+            (a, b) => a['pathMetric'].length.compareTo(b['pathMetric'].length));
+        break;
+      case SortType.desc:
+        extractPathList.sort(
+            (a, b) => b['pathMetric'].length.compareTo(a['pathMetric'].length));
+        break;
+      case SortType.def:
+        break;
     }
     final extractPathLen = extractPathList.length;
     List.generate(extractPathLen, (index) async {

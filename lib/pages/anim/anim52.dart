@@ -115,25 +115,22 @@ class MyPainter extends CustomPainter {
 
     List<double> viewBoxList = pathDataMap['viewBoxList'];
     List<Map<String, dynamic>> pathData = pathDataMap['pathList'];
-    // 自身宽高比
-    final pathDataScale = viewBoxList[2] / viewBoxList[3];
     final canvasMin = size.width;
     final viewBoxMax = max(viewBoxList[2], viewBoxList[3]);
-    final scaleX = canvasMin / viewBoxList[2];
-    final scaleY = canvasMin / viewBoxList[3] / pathDataScale;
+    final scale = canvasMin / viewBoxList[2];
     // 渲染宽高
     final translateY =
         (canvasMin - viewBoxList[3] * canvasMin / viewBoxMax) / 2;
     // 先平移再缩放，不然translateY要除缩放比
     canvas.translate(0, translateY);
-    canvas.scale(scaleX, scaleY);
-    _drawPath(pathData, canvas, scaleY);
+    canvas.scale(scale, scale);
+    _drawPath(pathData, canvas, scale);
 
     canvas.restore();
   }
 
   void _drawPath(
-      List<Map<String, dynamic>> pathsData, Canvas canvas, double scaleY) {
+      List<Map<String, dynamic>> pathsData, Canvas canvas, double scale) {
     List<Map<String, dynamic>> extractPathList = [];
     List<Path> canvasPaths = [];
     List.generate(pathsData.length, (index) {
@@ -160,7 +157,7 @@ class MyPainter extends CustomPainter {
               curve: Interval(begin, end, curve: curve)));
       Paint paint = Paint();
       // 还原strokeWidth
-      paint.strokeWidth = strokeWidth / scaleY;
+      paint.strokeWidth = strokeWidth / scale;
       paint.strokeCap = StrokeCap.round;
       paint.style = PaintingStyle.stroke;
       if (animation.value > 0) {

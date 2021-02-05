@@ -83,8 +83,10 @@ class _Anim52PageState extends State<Anim52Page>
                             builder: (context, child) {
                               return Center(
                                 child: CustomPaint(
-                                  size: Size(MediaQuery.of(context).size.width,
-                                      MediaQuery.of(context).size.width),
+                                  size: Size(
+                                    MediaQuery.of(context).size.width - 40,
+                                    MediaQuery.of(context).size.width - 40,
+                                  ),
                                   painter: MyPainter(
                                     animationController: _animationController,
                                     pathDataMap: pathDataMap,

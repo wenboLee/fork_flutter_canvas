@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 import 'package:path_parsing/path_parsing.dart';
 
@@ -58,9 +59,7 @@ class _Anim52PageState extends State<Anim52Page>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: appBar(widget.title),
       body: FutureBuilder(
         future: _mockIconfontData(),
         builder: (context, snapshot) {

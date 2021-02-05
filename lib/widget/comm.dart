@@ -10,6 +10,7 @@ AppBar appBar(title) {
       style: TextStyle(color: Colors.white),
     ),
     iconTheme: IconThemeData(color: Colors.white),
+    brightness: Brightness.dark,
   );
 }
 

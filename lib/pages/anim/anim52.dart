@@ -77,7 +77,7 @@ class _Anim52PageState extends State<Anim52Page>
                           painter: MyPainter(
                             animationController: _animationController,
                             pathDataMap: pathDataMap,
-                            paintingStyle: PaintingStyle.stroke,
+                            paintingStyle: PaintingStyle.fill,
                           ),
                         );
                       },
@@ -170,7 +170,7 @@ class MyPainter extends CustomPainter {
             .animate(CurvedAnimation(
                 parent: animationController,
                 curve: Interval(0, 1.0, curve: curve)));
-        if (animation.value == 1.0 && paintingStyle != PaintingStyle.stroke) {
+        if (animation.value == 1.0 && paintingStyle == PaintingStyle.fill) {
           Paint paintPath = Paint();
           paintPath.strokeWidth = 0;
           paintPath.strokeCap = StrokeCap.round;

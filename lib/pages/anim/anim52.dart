@@ -51,6 +51,7 @@ class _Anim52PageState extends State<Anim52Page>
   @override
   void dispose() {
     _animationController?.dispose();
+    _pageController?.dispose();
     super.dispose();
   }
 

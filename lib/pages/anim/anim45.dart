@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim45Page extends StatefulWidget {
   final String title;
 
-  Anim45Page({this.title});
+  Anim45Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim45PageState createState() => _Anim45PageState();
@@ -15,9 +15,9 @@ class Anim45Page extends StatefulWidget {
 class _Anim45PageState extends State<Anim45Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
+  List<Ball>? _balls;
   double _bounce = -1;
 
   @override
@@ -28,7 +28,7 @@ class _Anim45PageState extends State<Anim45Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_balls == null) {
           _balls = _initBalls(num: 50);
@@ -41,20 +41,20 @@ class _Anim45PageState extends State<Anim45Page>
   }
 
   void _drawBallMove() {
-    for (var i = 0; i < _balls.length; i++) {
-      var ball = _balls[i];
+    for (var i = 0; i < _balls!.length; i++) {
+      var ball = _balls![i];
       ball.x += ball.vx;
       ball.y += ball.vy;
 
-      for (var j = i + 1; j < _balls.length; j++) {
-        checkBallHit(ball, _balls[j]);
+      for (var j = i + 1; j < _balls!.length; j++) {
+        checkBallHit(ball, _balls![j]);
       }
 
       checkBallBounce(ball, _size, _bounce);
     }
   }
 
-  List<Ball> _initBalls({int num}) {
+  List<Ball> _initBalls({required int num}) {
     return List.generate(
       num,
       (index) {
@@ -92,7 +92,7 @@ class _Anim45PageState extends State<Anim45Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(balls: _balls),
+              painter: MyCustomPainter(balls: _balls!),
             );
           },
         ),
@@ -109,7 +109,7 @@ class _Anim45PageState extends State<Anim45Page>
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({required this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

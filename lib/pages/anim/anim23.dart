@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class Anim23Page extends StatefulWidget {
   final String title;
 
-  Anim23Page({this.title});
+  Anim23Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim23PageState createState() => _Anim23PageState();
@@ -16,9 +16,9 @@ class Anim23Page extends StatefulWidget {
 class _Anim23PageState extends State<Anim23Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double angle = toRad(60), speed = randomScope([30, 50]), friction = 0.9;
 
   @override
@@ -29,7 +29,7 @@ class _Anim23PageState extends State<Anim23Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(x: 50, y: 50, r: 30);
@@ -40,8 +40,8 @@ class _Anim23PageState extends State<Anim23Page>
           var vx = speed * math.cos(angle);
           var vy = speed * math.sin(angle);
 
-          _ball.x += vx;
-          _ball.y += vy;
+          _ball!.x += vx;
+          _ball!.y += vy;
         }
       }
     });
@@ -67,7 +67,7 @@ class _Anim23PageState extends State<Anim23Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
+              painter: MyCustomPainter(ball: _ball!),
             );
           },
         ),
@@ -85,7 +85,7 @@ class _Anim23PageState extends State<Anim23Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

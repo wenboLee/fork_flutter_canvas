@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim44Page extends StatefulWidget {
   final String title;
 
-  Anim44Page({this.title});
+  Anim44Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim44PageState createState() => _Anim44PageState();
@@ -15,9 +15,9 @@ class Anim44Page extends StatefulWidget {
 class _Anim44PageState extends State<Anim44Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball1, _ball2;
+  Ball? _ball1, _ball2;
   double _bounce = -1;
 
   @override
@@ -28,7 +28,7 @@ class _Anim44PageState extends State<Anim44Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball1 == null) {
           double r = 40;
@@ -55,16 +55,16 @@ class _Anim44PageState extends State<Anim44Page>
           );
         }
 
-        _ball1.x += _ball1.vx;
-        _ball1.y += _ball1.vy;
-        _ball2.x += _ball2.vx;
-        _ball2.y += _ball2.vy;
+        _ball1!.x += _ball1!.vx;
+        _ball1!.y += _ball1!.vy;
+        _ball2!.x += _ball2!.vx;
+        _ball2!.y += _ball2!.vy;
 
-        checkBallHit(_ball1, _ball2);
+        checkBallHit(_ball1!, _ball2!);
 
         // 边界检测
-        checkBallBounce(_ball1, _size, _bounce);
-        checkBallBounce(_ball2, _size, _bounce);
+        checkBallBounce(_ball1!, _size, _bounce);
+        checkBallBounce(_ball2!, _size, _bounce);
       }
     });
     super.initState();
@@ -89,7 +89,7 @@ class _Anim44PageState extends State<Anim44Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball1: _ball1, ball2: _ball2),
+              painter: MyCustomPainter(ball1: _ball1!, ball2: _ball2!),
             );
           },
         ),
@@ -126,7 +126,7 @@ class MyCustomPainter extends CustomPainter {
   final Ball ball1;
   final Ball ball2;
 
-  MyCustomPainter({this.ball1, this.ball2});
+  MyCustomPainter({required this.ball1, required this.ball2});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

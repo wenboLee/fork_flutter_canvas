@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 import 'package:path_parsing/path_parsing.dart';
 
 class Anim52Page extends StatefulWidget {
-  Anim52Page({Key key, this.title}) : super(key: key);
+  Anim52Page({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -16,8 +16,8 @@ class Anim52Page extends StatefulWidget {
 
 class _Anim52PageState extends State<Anim52Page>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  PageController _pageController;
+  late AnimationController _animationController;
+  late PageController _pageController;
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _Anim52PageState extends State<Anim52Page>
       }
     });
     _pageController.addListener(() {
-      double page = _pageController.page;
+      double page = _pageController.page!;
       if (page != page.toInt()) {
         _animationController.stop();
       } else {
@@ -50,8 +50,8 @@ class _Anim52PageState extends State<Anim52Page>
 
   @override
   void dispose() {
-    _animationController?.dispose();
-    _pageController?.dispose();
+    _animationController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -59,7 +59,7 @@ class _Anim52PageState extends State<Anim52Page>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(widget.title),
-      body: FutureBuilder(
+      body: FutureBuilder<List<ParsPathModel>>(
         future: _mockIconfontData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -68,9 +68,9 @@ class _Anim52PageState extends State<Anim52Page>
             } else {
               return PageView.builder(
                 controller: _pageController,
-                itemCount: snapshot?.data?.length ?? 0,
+                itemCount: snapshot.data?.length ?? 0,
                 itemBuilder: (context, index) {
-                  final pathDataMap = snapshot.data[index];
+                  final pathDataMap = snapshot.data![index];
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -78,7 +78,7 @@ class _Anim52PageState extends State<Anim52Page>
                       Align(
                         alignment: Alignment.topCenter,
                         child: Text(
-                          '${index + 1}/${snapshot.data.length}',
+                          '${index + 1}/${snapshot.data!.length}',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -126,9 +126,9 @@ class MyPainter extends CustomPainter {
   final double strokeWidth;
 
   MyPainter({
-    this.animationController,
+    required this.animationController,
     this.curve = Curves.ease,
-    this.pathDataMap,
+    required this.pathDataMap,
     this.paintingStyle = PaintingStyle.fill,
     this.strokeWidth = 1,
   });
@@ -182,7 +182,9 @@ class MyPainter extends CustomPainter {
       int pathIndex = item.pathIndex;
       int pathTotalNumber = item.pathTotalNumber;
       if (progress.containsKey(pathIndex)) {
-        progress[pathIndex] += 1;
+        var tmp = progress[pathIndex] as int;
+        tmp += 1;
+        progress[pathIndex] = tmp;
       } else {
         progress[pathIndex] = 1;
       }
@@ -243,20 +245,23 @@ class ExtractPathModel {
   final int pathTotalNumber;
 
   const ExtractPathModel(
-      {this.fillColor, this.pathMetric, this.pathIndex, this.pathTotalNumber});
+      {required this.fillColor,
+      required this.pathMetric,
+      required this.pathIndex,
+      required this.pathTotalNumber});
 }
 
 class CanvasPathModel {
   final Path path;
   final Color fillColor;
 
-  const CanvasPathModel({this.path, this.fillColor});
+  const CanvasPathModel({required this.path, required this.fillColor});
 }
 
 class PathPrinter extends PathProxy {
   final Path path;
 
-  PathPrinter({this.path});
+  PathPrinter({required this.path});
 
   @override
   void close() {

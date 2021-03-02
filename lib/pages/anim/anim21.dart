@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/comm.dart';
 class Anim21Page extends StatefulWidget {
   final String title;
 
-  Anim21Page({this.title});
+  Anim21Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim21PageState createState() => _Anim21PageState();
@@ -15,11 +15,11 @@ class Anim21Page extends StatefulWidget {
 class _Anim21PageState extends State<Anim21Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
+  List<Ball>? _balls;
 
-  List<Ball> _initBalls({int num}) {
+  List<Ball> _initBalls({required int num}) {
     return List.generate(
       num,
       (index) => Ball(
@@ -68,12 +68,12 @@ class _Anim21PageState extends State<Anim21Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_balls == null) {
           _balls = _initBalls(num: 10);
         }
-        _balls.forEach(_updateBall);
+        _balls!.forEach(_updateBall);
       }
     });
     super.initState();
@@ -98,7 +98,7 @@ class _Anim21PageState extends State<Anim21Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(balls: _balls),
+              painter: MyCustomPainter(balls: _balls!),
             );
           },
         ),
@@ -115,7 +115,7 @@ class _Anim21PageState extends State<Anim21Page>
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({required this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

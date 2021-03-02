@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/comm.dart';
 class Anim24Page extends StatefulWidget {
   final String title;
 
-  Anim24Page({this.title});
+  Anim24Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim24PageState createState() => _Anim24PageState();
@@ -15,9 +15,9 @@ class Anim24Page extends StatefulWidget {
 class _Anim24PageState extends State<Anim24Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double dx = 0,
       dy = 0,
       vx = randomScope([-10, 10]),
@@ -29,22 +29,22 @@ class _Anim24PageState extends State<Anim24Page>
 
   void _bounceMove() {
     vy += g;
-    _ball.x += vx;
-    _ball.y += vy;
+    _ball!.x += vx;
+    _ball!.y += vy;
 
-    if (_ball.x + _ball.r >= _size.width) {
-      _ball.x = _size.width - _ball.r;
+    if (_ball!.x + _ball!.r >= _size.width) {
+      _ball!.x = _size.width - _ball!.r;
       vx *= bounce;
-    } else if (_ball.x - _ball.r <= 0) {
-      _ball.x = _ball.r;
+    } else if (_ball!.x - _ball!.r <= 0) {
+      _ball!.x = _ball!.r;
       vx *= bounce;
     }
 
-    if (_ball.y + _ball.r >= _size.height) {
-      _ball.y = _size.height - _ball.r;
+    if (_ball!.y + _ball!.r >= _size.height) {
+      _ball!.y = _size.height - _ball!.r;
       vy *= bounce;
-    } else if (_ball.y - _ball.r <= 0) {
-      _ball.y = _ball.r;
+    } else if (_ball!.y - _ball!.r <= 0) {
+      _ball!.y = _ball!.r;
       vy *= bounce;
     }
   }
@@ -57,7 +57,7 @@ class _Anim24PageState extends State<Anim24Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
@@ -74,18 +74,18 @@ class _Anim24PageState extends State<Anim24Page>
   void _pointerDownEvent(event) {
     _pointer = event.localPosition;
     isMouseMove = false;
-    if (isPoint(_ball, _pointer)) {
+    if (isPoint(_ball!, _pointer)) {
       isMouseMove = true;
-      dx = _pointer.dx - _ball.x;
-      dy = _pointer.dy - _ball.y;
+      dx = _pointer.dx - _ball!.x;
+      dy = _pointer.dy - _ball!.y;
     }
   }
 
   void _pointerMoveEvent(event) {
     if (isMouseMove) {
       _pointer = event.localPosition;
-      _ball.x = _pointer.dx - dx;
-      _ball.y = _pointer.dy - dy;
+      _ball!.x = _pointer.dx - dx;
+      _ball!.y = _pointer.dy - dy;
     }
   }
 
@@ -114,7 +114,7 @@ class _Anim24PageState extends State<Anim24Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(ball: _ball),
+                painter: MyCustomPainter(ball: _ball!),
               );
             },
           ),
@@ -139,7 +139,7 @@ class _Anim24PageState extends State<Anim24Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

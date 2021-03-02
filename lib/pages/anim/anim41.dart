@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class Anim41Page extends StatefulWidget {
   final String title;
 
-  Anim41Page({this.title});
+  Anim41Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim41PageState createState() => _Anim41PageState();
@@ -16,9 +16,9 @@ class Anim41Page extends StatefulWidget {
 class _Anim41PageState extends State<Anim41Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double vr = 0.02; //角速度
 
   @override
@@ -29,7 +29,7 @@ class _Anim41PageState extends State<Anim41Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(
@@ -41,8 +41,8 @@ class _Anim41PageState extends State<Anim41Page>
 
         Offset center = Offset(_size.width / 2, _size.height / 2);
 
-        var rx = _ball.x - center.dx;
-        var ry = _ball.y - center.dy;
+        var rx = _ball!.x - center.dx;
+        var ry = _ball!.y - center.dy;
 
 //      推导公式：
 //      设置中心点0，0
@@ -59,8 +59,8 @@ class _Anim41PageState extends State<Anim41Page>
         var x = rx * math.cos(vr) + ry * math.sin(vr);
         var y = ry * math.cos(vr) - rx * math.sin(vr);
 
-        _ball.x = center.dx + x;
-        _ball.y = center.dy + y;
+        _ball!.x = center.dx + x;
+        _ball!.y = center.dy + y;
       }
     });
     super.initState();
@@ -85,7 +85,7 @@ class _Anim41PageState extends State<Anim41Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
+              painter: MyCustomPainter(ball: _ball!),
             );
           },
         ),
@@ -106,7 +106,7 @@ class _Anim41PageState extends State<Anim41Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

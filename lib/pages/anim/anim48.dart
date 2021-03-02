@@ -8,7 +8,7 @@ import 'dart:math' as math;
 class Anim48Page extends StatefulWidget {
   final String title;
 
-  Anim48Page({this.title});
+  Anim48Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim48PageState createState() => _Anim48PageState();
@@ -17,9 +17,9 @@ class Anim48Page extends StatefulWidget {
 class _Anim48PageState extends State<Anim48Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
+  List<Ball>? _balls;
   List<Line> _lines = [];
   double spring = 0.0001;
 
@@ -31,7 +31,7 @@ class _Anim48PageState extends State<Anim48Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_balls == null) {
           _balls = _initBalls(num: 50);
@@ -46,13 +46,13 @@ class _Anim48PageState extends State<Anim48Page>
   void _move() {
     // 每次渲染清空之前连线
     _lines.clear();
-    for (var i = 0; i < _balls.length; i++) {
-      Ball ball = _balls[i];
+    for (var i = 0; i < _balls!.length; i++) {
+      Ball ball = _balls![i];
       ball.x += ball.vx;
       ball.y += ball.vy;
 
-      for (var j = i + 1; j < _balls.length; j++) {
-        Ball target = _balls[j];
+      for (var j = i + 1; j < _balls!.length; j++) {
+        Ball target = _balls![j];
         _checkSpring(ball, target);
         checkBallHit(ball, target);
       }
@@ -91,11 +91,11 @@ class _Anim48PageState extends State<Anim48Page>
   }
 
   void _drawLine(Ball ball, Ball target, double dist, double minDist) {
-    var scale = math.max(0, (1 - dist / minDist));
+    num scale = math.max(0, (1 - dist / minDist));
     var color = Colors.green;
     var line = Line(
-      lineWidth: 2 * scale,
-      alpha: scale,
+      lineWidth: 2 * scale.toDouble(),
+      alpha: scale.toDouble(),
       fillStyle: Color.fromARGB(
           (scale * 255).toInt(), color.red, color.green, color.blue),
       p1: Offset(ball.x, ball.y),
@@ -107,7 +107,7 @@ class _Anim48PageState extends State<Anim48Page>
     }
   }
 
-  List<Ball> _initBalls({int num}) {
+  List<Ball> _initBalls({required int num}) {
     return List.generate(
       num,
       (index) {
@@ -145,7 +145,7 @@ class _Anim48PageState extends State<Anim48Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(balls: _balls, lines: _lines),
+              painter: MyCustomPainter(balls: _balls!, lines: _lines),
             );
           },
         ),
@@ -164,7 +164,7 @@ class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
   final List<Line> lines;
 
-  MyCustomPainter({this.balls, this.lines});
+  MyCustomPainter({required this.balls, required this.lines});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

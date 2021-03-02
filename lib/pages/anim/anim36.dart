@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim36Page extends StatefulWidget {
   final String title;
 
-  Anim36Page({this.title});
+  Anim36Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim36PageState createState() => _Anim36PageState();
@@ -15,9 +15,9 @@ class Anim36Page extends StatefulWidget {
 class _Anim36PageState extends State<Anim36Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball1, _ball2, _activeBall;
+  Ball? _ball1, _ball2, _activeBall;
   double dx = 0, dy = 0;
 
   @override
@@ -28,7 +28,7 @@ class _Anim36PageState extends State<Anim36Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball1 == null) {
           _ball1 = Ball(x: 50, y: 50, r: 30);
@@ -37,8 +37,8 @@ class _Anim36PageState extends State<Anim36Page>
           _ball2 = Ball(x: _size.width / 2, y: _size.height / 2, r: 60);
         }
 
-        if (getDist(Offset(_ball1.x, _ball1.y), Offset(_ball2.x, _ball2.y)) <=
-            _ball1.r + _ball2.r) {
+        if (getDist(Offset(_ball1!.x, _ball1!.y), Offset(_ball2!.x, _ball2!.y)) <=
+            _ball1!.r + _ball2!.r) {
           Toast.show(context, '小球发生碰撞');
         }
       }
@@ -48,21 +48,21 @@ class _Anim36PageState extends State<Anim36Page>
 
   void _pointerDownEvent(event) {
     Offset point = event.localPosition;
-    if (isPoint(_ball1, point)) {
+    if (isPoint(_ball1!, point)) {
       _activeBall = _ball1;
     }
-    if (isPoint(_ball2, point)) {
+    if (isPoint(_ball2!, point)) {
       _activeBall = _ball2;
     }
-    dx = point.dx - _activeBall.x;
-    dy = point.dy - _activeBall.y;
+    dx = point.dx - _activeBall!.x;
+    dy = point.dy - _activeBall!.y;
   }
 
   void _pointerMoveEvent(event) {
     Offset point = event.localPosition;
     if (_activeBall != null) {
-      _activeBall.x = point.dx - dx;
-      _activeBall.y = point.dy - dy;
+      _activeBall!.x = point.dx - dx;
+      _activeBall!.y = point.dy - dy;
     }
   }
 
@@ -88,7 +88,7 @@ class _Anim36PageState extends State<Anim36Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(ball1: _ball1, ball2: _ball2),
+                painter: MyCustomPainter(ball1: _ball1!, ball2: _ball2!),
               );
             },
           ),
@@ -111,7 +111,7 @@ class _Anim36PageState extends State<Anim36Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball1, ball2;
 
-  MyCustomPainter({this.ball1, this.ball2});
+  MyCustomPainter({required this.ball1, required this.ball2});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

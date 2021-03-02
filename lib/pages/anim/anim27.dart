@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class Anim27Page extends StatefulWidget {
   final String title;
 
-  Anim27Page({this.title});
+  Anim27Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim27PageState createState() => _Anim27PageState();
@@ -16,9 +16,9 @@ class Anim27Page extends StatefulWidget {
 class _Anim27PageState extends State<Anim27Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball1, _ball2, _activeBall; // 被拖拽对象
+  Ball? _ball1, _ball2, _activeBall; // 被拖拽对象
 
   // 弹动系数, 弹簧长度, 摩擦力
   double spring = 0.03, springLength = 200, friction = 0.9;
@@ -31,7 +31,7 @@ class _Anim27PageState extends State<Anim27Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball1 == null) {
           _ball1 = Ball(
@@ -50,16 +50,16 @@ class _Anim27PageState extends State<Anim27Page>
         // 取反为了初次没有选择的时候弹动
         if (_activeBall == null) {
           // ball1向ball2弹动
-          _springTo(_ball1, _ball2);
+          _springTo(_ball1!, _ball2!);
           // ball2向ball1弹动
-          _springTo(_ball2, _ball1);
+          _springTo(_ball2!, _ball1!);
         } else {
           if (_activeBall == _ball1) {
             // ball2向ball1弹动
-            _springTo(_ball2, _ball1);
+            _springTo(_ball2!, _ball1!);
           } else {
             // ball1向ball2弹动
-            _springTo(_ball1, _ball2);
+            _springTo(_ball1!, _ball2!);
           }
         }
       }
@@ -95,10 +95,10 @@ class _Anim27PageState extends State<Anim27Page>
 
   void _pointerDownEvent(event) {
     var pointer = event.localPosition;
-    if (isPoint(_ball1, pointer)) {
+    if (isPoint(_ball1!, pointer)) {
       _activeBall = _ball1;
     }
-    if (isPoint(_ball2, pointer)) {
+    if (isPoint(_ball2!, pointer)) {
       _activeBall = _ball2;
     }
   }
@@ -106,8 +106,8 @@ class _Anim27PageState extends State<Anim27Page>
   void _pointerMoveEvent(event) {
     var pointer = event.localPosition;
     if (_activeBall != null) {
-      _activeBall.x = pointer.dx;
-      _activeBall.y = pointer.dy;
+      _activeBall!.x = pointer.dx;
+      _activeBall!.y = pointer.dy;
     }
   }
 
@@ -131,7 +131,7 @@ class _Anim27PageState extends State<Anim27Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(ball1: _ball1, ball2: _ball2),
+                painter: MyCustomPainter(ball1: _ball1!, ball2: _ball2!),
               );
             },
           ),
@@ -162,7 +162,7 @@ class _Anim27PageState extends State<Anim27Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball1, ball2;
 
-  MyCustomPainter({this.ball1, this.ball2});
+  MyCustomPainter({required this.ball1, required this.ball2});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

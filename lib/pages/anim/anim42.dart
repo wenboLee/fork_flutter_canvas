@@ -8,7 +8,7 @@ import 'dart:math' as math;
 class Anim42Page extends StatefulWidget {
   final String title;
 
-  Anim42Page({this.title});
+  Anim42Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim42PageState createState() => _Anim42PageState();
@@ -17,10 +17,10 @@ class Anim42Page extends StatefulWidget {
 class _Anim42PageState extends State<Anim42Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Line _line1, _line2;
-  Ball _ball;
+  Line? _line1, _line2;
+  Ball? _ball;
   double g = 0.1, bounce = -0.8;
 
   @override
@@ -31,7 +31,7 @@ class _Anim42PageState extends State<Anim42Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           var r = _size.width / 4 * 1 / 4;
@@ -53,15 +53,15 @@ class _Anim42PageState extends State<Anim42Page>
           _line2 = _initLine(p1, p2, toRad(-10));
         }
 
-        _ball.vy += g;
-        _ball.x += _ball.vx;
-        _ball.y += _ball.vy;
+        _ball!.vy += g;
+        _ball!.x += _ball!.vx;
+        _ball!.y += _ball!.vy;
 
         //处理斜面反弹
-        _checkBallMove(_ball, _line1, _line1.rotation, 'tag1');
-        _checkBallMove(_ball, _line2, _line2.rotation, 'tag2');
+        _checkBallMove(_ball!, _line1!, _line1!.rotation, 'tag1');
+        _checkBallMove(_ball!, _line2!, _line2!.rotation, 'tag2');
         // 处理和边界反弹
-        checkBallBounce(_ball, _size, bounce);
+        checkBallBounce(_ball!, _size, bounce);
       }
     });
     super.initState();
@@ -104,7 +104,7 @@ class _Anim42PageState extends State<Anim42Page>
     if (x1 + line.x + ball.r > line.p1.dx &&
         x1 + line.x - ball.r < line.p2.dx) {
       if (y1 + ball.r > 0 && vy1 > y1) {
-        y1 = -_ball.r;
+        y1 = -_ball!.r;
         vy1 *= bounce;
       }
       if (y1 - ball.r < 0 && vy1 < y1) {
@@ -145,7 +145,7 @@ class _Anim42PageState extends State<Anim42Page>
               key: _globalKey,
               size: Size.infinite,
               painter:
-                  MyCustomPainter(ball: _ball, line1: _line1, line2: _line2),
+                  MyCustomPainter(ball: _ball!, line1: _line1!, line2: _line2!),
             );
           },
         ),
@@ -168,7 +168,7 @@ class MyCustomPainter extends CustomPainter {
   final Ball ball;
   final Line line1, line2;
 
-  MyCustomPainter({this.ball, this.line1, this.line2});
+  MyCustomPainter({required this.ball, required this.line1, required this.line2});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

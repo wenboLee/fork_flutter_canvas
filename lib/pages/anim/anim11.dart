@@ -6,7 +6,7 @@ import 'dart:math' as math;
 class Anim11Page extends StatefulWidget {
   final String title;
 
-  Anim11Page({this.title});
+  Anim11Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim11PageState createState() => _Anim11PageState();
@@ -15,9 +15,9 @@ class Anim11Page extends StatefulWidget {
 class _Anim11PageState extends State<Anim11Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double angle = 0, initScale = 1, swing = 0.5;
 
   @override
@@ -27,14 +27,14 @@ class _Anim11PageState extends State<Anim11Page>
           ..repeat();
     _controller.addListener(() {
       if (mounted) {
-        _size = _globalKey.currentContext.size;
+        _size = _globalKey.currentContext!.size!;
         if (_ball == null) {
           // 原点开始
           _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
         }
         var scale = initScale + math.sin(angle) * swing;
-        _ball.scaleX = scale;
-        _ball.scaleY = scale;
+        _ball!.scaleX = scale;
+        _ball!.scaleY = scale;
         angle += 0.05;
         angle %= math.pi * 2;
       }
@@ -59,7 +59,7 @@ class _Anim11PageState extends State<Anim11Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
+              painter: MyCustomPainter(ball: _ball!),
             );
           },
         ),
@@ -77,7 +77,7 @@ class _Anim11PageState extends State<Anim11Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

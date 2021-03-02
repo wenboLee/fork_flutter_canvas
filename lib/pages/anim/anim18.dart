@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class Anim18Page extends StatefulWidget {
   final String title;
 
-  Anim18Page({this.title});
+  Anim18Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim18PageState createState() => _Anim18PageState();
@@ -16,9 +16,9 @@ class Anim18Page extends StatefulWidget {
 class _Anim18PageState extends State<Anim18Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
+  List<Ball>? _balls;
 
   void _ballMove(Ball ball) {
     ball.x += ball.vx;
@@ -27,9 +27,9 @@ class _Anim18PageState extends State<Anim18Page>
         ball.x + ball.r <= 0 ||
         ball.y - ball.r >= _size.height ||
         ball.y + ball.r <= 0) {
-      _balls.remove(ball);
+      _balls!.remove(ball);
       String str;
-      if (_balls.length > 0) {
+      if (_balls!.length > 0) {
         str = 'id:${ball.id} 小球被移除了!';
       } else {
         str = '所有的小球都被移除了!';
@@ -38,7 +38,7 @@ class _Anim18PageState extends State<Anim18Page>
     }
   }
 
-  List<Ball> _initBalls({int num}) {
+  List<Ball> _initBalls({required int num}) {
     return List.generate(
       num,
       (index) => Ball(
@@ -61,14 +61,14 @@ class _Anim18PageState extends State<Anim18Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_balls == null) {
           _balls = _initBalls(num: 10);
         }
-        var i = _balls.length;
+        var i = _balls!.length;
         while (i-- > 0) {
-          _ballMove(_balls[i]);
+          _ballMove(_balls![i]);
         }
       }
     });
@@ -94,7 +94,7 @@ class _Anim18PageState extends State<Anim18Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(balls: _balls),
+              painter: MyCustomPainter(balls: _balls!),
             );
           },
         ),
@@ -111,7 +111,7 @@ class _Anim18PageState extends State<Anim18Page>
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({required this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

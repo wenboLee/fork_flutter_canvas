@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class Anim51Page extends StatefulWidget {
   final String title;
 
-  Anim51Page({this.title});
+  Anim51Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim51PageState createState() => _Anim51PageState();
@@ -16,9 +16,9 @@ class Anim51Page extends StatefulWidget {
 class _Anim51PageState extends State<Anim51Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
+  List<Ball>? _balls;
   double maxZ = 1200, f = 0.8, f1 = 250, hx = 0, hy = 0, r = 10;
   bool out = false;
 
@@ -30,7 +30,7 @@ class _Anim51PageState extends State<Anim51Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
           hx = _size.width / 2;
           hy = _size.height / 2;
         }
@@ -39,15 +39,15 @@ class _Anim51PageState extends State<Anim51Page>
         }
 
         _move();
-        _balls.sort((a, b) => a.z3d.compareTo(b.z3d));
+        _balls!.sort((a, b) => a.z3d.compareTo(b.z3d));
       }
     });
     super.initState();
   }
 
   void _move() {
-    for (var i = 0; i < _balls.length; i++) {
-      Ball ball = _balls[i];
+    for (var i = 0; i < _balls!.length; i++) {
+      Ball ball = _balls![i];
       ball.vz += ball.az;
       ball.vz *= f;
       ball.z3d += ball.vz;
@@ -71,13 +71,13 @@ class _Anim51PageState extends State<Anim51Page>
     }
   }
 
-  List<Ball> _initBalls({int num}) {
+  List<Ball> _initBalls({required int num}) {
     RadialGradient gradientColor = RadialGradient(
       colors: [
         Colors.white,
-        Colors.blue[200],
-        Colors.blue[500],
-        Colors.blue[800].withOpacity(0.8),
+        Colors.blue[200]!,
+        Colors.blue[500]!,
+        Colors.blue[800]!.withOpacity(0.8),
         Colors.black.withOpacity(0.2),
       ],
       stops: [
@@ -105,9 +105,9 @@ class _Anim51PageState extends State<Anim51Page>
   }
 
   GestureDetector _buildGestureDetector(
-      {Function(DragDownDetails) onPanDown,
-      Function(DragEndDetails) onPanEnd,
-      Widget child,
+      {required Function(DragDownDetails) onPanDown,
+      Function(DragEndDetails)? onPanEnd,
+      required Widget child,
       EdgeInsetsGeometry margin = EdgeInsets.zero}) {
     return GestureDetector(
       onPanDown: onPanDown,
@@ -150,7 +150,7 @@ class _Anim51PageState extends State<Anim51Page>
                 return CustomPaint(
                   key: _globalKey,
                   size: Size.infinite,
-                  painter: MyCustomPainter(balls: _balls),
+                  painter: MyCustomPainter(balls: _balls!),
                 );
               },
             ),
@@ -188,7 +188,7 @@ class _Anim51PageState extends State<Anim51Page>
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({required this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -204,7 +204,7 @@ class MyCustomPainter extends CustomPainter {
 
     balls.forEach((ball) {
       _paint.color = ball.fillStyle.withAlpha(ball.alpha.toInt());
-      _paint.shader = ball.gradientColor.createShader(
+      _paint.shader = ball.gradientColor!.createShader(
         Rect.fromCircle(center: Offset(ball.x, ball.y), radius: ball.r),
       );
       canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);

@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class Anim05Page extends StatefulWidget {
   final String title;
 
-  Anim05Page({this.title});
+  Anim05Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim05PageState createState() => _Anim05PageState();
@@ -16,7 +16,7 @@ class Anim05Page extends StatefulWidget {
 class _Anim05PageState extends State<Anim05Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
   List<Ball> _balls = [];
 
@@ -68,7 +68,7 @@ class _Anim05PageState extends State<Anim05Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_balls.length <= 0) {
           _initBalls();
@@ -117,7 +117,7 @@ class _Anim05PageState extends State<Anim05Page>
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({required this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

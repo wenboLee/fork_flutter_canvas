@@ -5,7 +5,7 @@ import 'package:flutter_canvas/widget/comm.dart';
 class Anim32Page extends StatefulWidget {
   final String title;
 
-  Anim32Page({this.title});
+  Anim32Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim32PageState createState() => _Anim32PageState();
@@ -14,9 +14,9 @@ class Anim32Page extends StatefulWidget {
 class _Anim32PageState extends State<Anim32Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double friction = 0.9, spring = 0.05; //弹动系数
 
   @override
@@ -27,16 +27,16 @@ class _Anim32PageState extends State<Anim32Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(x: 50, y: 50, r: 30);
         }
-        var ay = (_size.height / 2 - _ball.y) * spring;
+        var ay = (_size.height / 2 - _ball!.y) * spring;
 
-        _ball.vy += ay;
-        _ball.vy *= friction;
-        _ball.y += _ball.vy;
+        _ball!.vy += ay;
+        _ball!.vy *= friction;
+        _ball!.y += _ball!.vy;
       }
     });
     super.initState();
@@ -61,7 +61,7 @@ class _Anim32PageState extends State<Anim32Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
+              painter: MyCustomPainter(ball: _ball!),
             );
           },
         ),
@@ -78,7 +78,7 @@ class _Anim32PageState extends State<Anim32Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

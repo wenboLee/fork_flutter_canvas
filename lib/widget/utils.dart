@@ -122,11 +122,11 @@ void checkBallHit(Ball b1, Ball b2) {
 
 // 计算文本高度
 double calculateTextHeight({
-  BuildContext context,
-  String value,
-  TextStyle style,
-  double maxWidth,
-  int maxLines,
+  required BuildContext context,
+  required String value,
+  required TextStyle style,
+  required double maxWidth,
+  required int maxLines,
 }) {
   TextPainter painter = TextPainter(
     locale: Localizations.maybeLocaleOf(context),
@@ -141,18 +141,17 @@ double calculateTextHeight({
 }
 
 class Toast {
-  static OverlayEntry _overlayEntry;
+  static OverlayEntry? _overlayEntry;
   static bool _showing = false;
-  static DateTime _startedTime;
+  static DateTime? _startedTime;
   static int _duration = 3000;
-  static String _msg;
+  static String? _msg;
 
   static void show(BuildContext context, String msg, {double top = 0.0}) async {
-    assert(msg != null);
     _msg = msg;
     _startedTime = DateTime.now();
 
-    OverlayState overlayState = Overlay.of(context);
+    OverlayState overlayState = Overlay.of(context)!;
     _showing = true;
     if (_overlayEntry == null) {
       _overlayEntry = OverlayEntry(
@@ -174,7 +173,7 @@ class Toast {
                             ? Duration(milliseconds: 100)
                             : Duration(milliseconds: 400),
                         child: Text(
-                          _msg,
+                          _msg!,
                           style: TextStyle(
                             fontSize: 12.0,
                             decoration: TextDecoration.none,
@@ -184,20 +183,20 @@ class Toast {
                       ),
                     )),
               ));
-      overlayState.insert(_overlayEntry);
+      overlayState.insert(_overlayEntry!);
     } else {
       if (_overlayEntry != null) {
-        _overlayEntry.markNeedsBuild();
+        _overlayEntry!.markNeedsBuild();
       }
     }
     await Future.delayed(Duration(milliseconds: _duration)); //等待3秒
 
-    if (DateTime.now().difference(_startedTime).inMilliseconds >= _duration) {
+    if (DateTime.now().difference(_startedTime!).inMilliseconds >= _duration) {
       _showing = false;
       if (_overlayEntry != null) {
         Future.delayed(Duration.zero, () {
-          _overlayEntry.markNeedsBuild();
-          _overlayEntry.remove();
+          _overlayEntry!.markNeedsBuild();
+          _overlayEntry!.remove();
           _overlayEntry = null;
         });
       }
@@ -206,11 +205,11 @@ class Toast {
 }
 
 class IconFontUtil {
-  static Future<List<ParsPathModel>> read(String networkUrl,
+  static Future<List<ParsPathModel>> read(String url,
       {String prefix = 'icon', Color defFillColor = Colors.black}) async {
     List<ParsPathModel> svgList = [];
-    if (networkUrl != null && networkUrl.isNotEmpty) {
-      String result = await _httpRead(networkUrl);
+    if (url.isNotEmpty) {
+      String result = await _httpRead(url);
       if (result.isNotEmpty) {
         // 第一步取出<svg></svg> 标签对里内容
         String parse1 =
@@ -245,8 +244,8 @@ class IconFontUtil {
                 if (fill.isNotEmpty) {
                   fillColor = HexColor.fromHex(fill);
                 }
-                if (fillColor != null && opacity.isNotEmpty) {
-                  fillColor = fillColor.withOpacity(double.tryParse(opacity));
+                if (opacity.isNotEmpty) {
+                  fillColor = fillColor.withOpacity(double.tryParse(opacity)!);
                 }
                 return PathInfoModel(path: path, fillColor: fillColor);
               }).toList();
@@ -286,7 +285,7 @@ class IconFontUtil {
     Iterable<Match> matches = exp.allMatches(input);
     String output = '';
     for (Match m in matches) {
-      String match = m.group(0);
+      String match = m.group(0)!;
       output += match;
     }
     return output;
@@ -296,7 +295,7 @@ class IconFontUtil {
     Iterable<Match> matches = exp.allMatches(input);
     List<String> output = [];
     for (Match m in matches) {
-      String match = m.group(0);
+      String match = m.group(0)!;
       output.add(match);
     }
     return output;
@@ -306,7 +305,7 @@ class IconFontUtil {
     Iterable<Match> matches = exp.allMatches(input);
     List<double> output = [];
     for (Match m in matches) {
-      double match = double.tryParse(m.group(0));
+      double match = double.tryParse(m.group(0)!)!;
       output.add(match);
     }
     return output;
@@ -318,7 +317,8 @@ class ParsPathModel {
   final List<PathInfoModel> pathList;
   final ViewBoxModel viewBox;
 
-  const ParsPathModel({this.name, this.pathList, this.viewBox});
+  const ParsPathModel(
+      {required this.name, required this.pathList, required this.viewBox});
 }
 
 class ViewBoxModel {
@@ -327,14 +327,18 @@ class ViewBoxModel {
   final double width;
   final double height;
 
-  const ViewBoxModel({this.minX, this.minY, this.width, this.height});
+  const ViewBoxModel(
+      {required this.minX,
+      required this.minY,
+      required this.width,
+      required this.height});
 }
 
 class PathInfoModel {
   final String path;
   final Color fillColor;
 
-  const PathInfoModel({this.path, this.fillColor});
+  const PathInfoModel({required this.path, required this.fillColor});
 }
 
 extension HexColor on Color {

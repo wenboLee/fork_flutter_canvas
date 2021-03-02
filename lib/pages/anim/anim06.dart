@@ -6,7 +6,7 @@ import 'dart:math' as math;
 class Anim06Page extends StatefulWidget {
   final String title;
 
-  Anim06Page({this.title});
+  Anim06Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim06PageState createState() => _Anim06PageState();
@@ -15,9 +15,9 @@ class Anim06Page extends StatefulWidget {
 class _Anim06PageState extends State<Anim06Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double angle = 0, swing = 0; // 振幅
 
   @override
@@ -28,20 +28,20 @@ class _Anim06PageState extends State<Anim06Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
-          swing = _size.width / 2 - _ball.r;
+          swing = _size.width / 2 - _ball!.r;
         }
-        _ball.x = _size.width / 2 + math.sin(angle) * swing;
+        _ball!.x = _size.width / 2 + math.sin(angle) * swing;
         // 扇形弧度半个
-        var ay = math.atan2(_size.width / 2 - _ball.x, _ball.y);
+        var ay = math.atan2(_size.width / 2 - _ball!.x, _ball!.y);
         // 扇形半径
         var r = math
             .sqrt(math.pow(_size.width / 2, 2) + math.pow(_size.height / 2, 2));
 
-        _ball.y = r * math.cos(ay);
+        _ball!.y = r * math.cos(ay);
         angle += 0.05;
         angle %= math.pi * 2;
       }
@@ -68,7 +68,7 @@ class _Anim06PageState extends State<Anim06Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
+              painter: MyCustomPainter(ball: _ball!),
             );
           },
         ),
@@ -84,7 +84,7 @@ class _Anim06PageState extends State<Anim06Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

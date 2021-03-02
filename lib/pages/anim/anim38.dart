@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim38Page extends StatefulWidget {
   final String title;
 
-  Anim38Page({this.title});
+  Anim38Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim38PageState createState() => _Anim38PageState();
@@ -15,9 +15,9 @@ class Anim38Page extends StatefulWidget {
 class _Anim38PageState extends State<Anim38Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Box _box1, _box2, _activeBox;
+  Box? _box1, _box2, _activeBox;
   double dx = 0, dy = 0;
 
   @override
@@ -28,7 +28,7 @@ class _Anim38PageState extends State<Anim38Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_box1 == null) {
           _box1 = Box(x: 50, y: 50, w: 30, h: 30);
@@ -37,7 +37,7 @@ class _Anim38PageState extends State<Anim38Page>
           _box2 = Box(x: _size.width / 2, y: _size.height / 2, w: 60, h: 60);
         }
 
-        if (rectHit(_box1, _box2)) {
+        if (rectHit(_box1!, _box2!)) {
           Toast.show(context, '盒子发生碰撞');
         }
       }
@@ -47,21 +47,21 @@ class _Anim38PageState extends State<Anim38Page>
 
   void _pointerDownEvent(event) {
     Offset point = event.localPosition;
-    if (isBoxPoint(_box1, point)) {
+    if (isBoxPoint(_box1!, point)) {
       _activeBox = _box1;
     }
-    if (isBoxPoint(_box2, point)) {
+    if (isBoxPoint(_box2!, point)) {
       _activeBox = _box2;
     }
-    dx = point.dx - _activeBox.x;
-    dy = point.dy - _activeBox.y;
+    dx = point.dx - _activeBox!.x;
+    dy = point.dy - _activeBox!.y;
   }
 
   void _pointerMoveEvent(event) {
     Offset point = event.localPosition;
     if (_activeBox != null) {
-      _activeBox.x = point.dx - dx;
-      _activeBox.y = point.dy - dy;
+      _activeBox!.x = point.dx - dx;
+      _activeBox!.y = point.dy - dy;
     }
   }
 
@@ -87,7 +87,7 @@ class _Anim38PageState extends State<Anim38Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(box1: _box1, box2: _box2),
+                painter: MyCustomPainter(box1: _box1!, box2: _box2!),
               );
             },
           ),
@@ -110,7 +110,7 @@ class _Anim38PageState extends State<Anim38Page>
 class MyCustomPainter extends CustomPainter {
   final Box box1, box2;
 
-  MyCustomPainter({this.box1, this.box2});
+  MyCustomPainter({required this.box1, required this.box2});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

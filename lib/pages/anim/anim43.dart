@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim43Page extends StatefulWidget {
   final String title;
 
-  Anim43Page({this.title});
+  Anim43Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim43PageState createState() => _Anim43PageState();
@@ -15,9 +15,9 @@ class Anim43Page extends StatefulWidget {
 class _Anim43PageState extends State<Anim43Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball1, _ball2;
+  Ball? _ball1, _ball2;
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _Anim43PageState extends State<Anim43Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball1 == null) {
           _ball1 = Ball(
@@ -50,15 +50,15 @@ class _Anim43PageState extends State<Anim43Page>
           );
         }
 
-        _ball1.x += _ball1.vx;
-        _ball2.x += _ball2.vx;
+        _ball1!.x += _ball1!.vx;
+        _ball2!.x += _ball2!.vx;
 
         var dist =
-            getDist(Offset(_ball1.x, _ball1.y), Offset(_ball2.x, _ball2.y));
-        if (dist < _ball1.r + _ball2.r) {
-          var lep = _ball1.r + _ball2.r - dist;
-          _ball1.x = _ball1.x - lep / 2;
-          _ball2.x = _ball2.x + lep / 2;
+            getDist(Offset(_ball1!.x, _ball1!.y), Offset(_ball2!.x, _ball2!.y));
+        if (dist < _ball1!.r + _ball2!.r) {
+          var lep = _ball1!.r + _ball2!.r - dist;
+          _ball1!.x = _ball1!.x - lep / 2;
+          _ball2!.x = _ball2!.x + lep / 2;
 
 //        如果一个系统不受外力或所受外力的矢量和为零
 //        那么这个系统的总动能保持不变
@@ -66,19 +66,19 @@ class _Anim43PageState extends State<Anim43Page>
 //        由于动能 e = 1/2 * m*v*v
 //        所以 1/2 * m1 * v1*v1 + 1/2 * m2 * v2*v2 = 1/2 * m1 * v1Final*v1Final + 1/2 * m2 * v2Final*v2Final
           var v1Final =
-              ((_ball1.m - _ball2.m) * _ball1.vx + 2 * _ball2.m * _ball2.vx) /
-                  (_ball1.m + _ball2.m);
+              ((_ball1!.m - _ball2!.m) * _ball1!.vx + 2 * _ball2!.m * _ball2!.vx) /
+                  (_ball1!.m + _ball2!.m);
           var v2Final =
-              ((_ball2.m - _ball1.m) * _ball2.vx + 2 * _ball1.m * _ball1.vx) /
-                  (_ball1.m + _ball2.m);
+              ((_ball2!.m - _ball1!.m) * _ball2!.vx + 2 * _ball1!.m * _ball1!.vx) /
+                  (_ball1!.m + _ball2!.m);
 
-          _ball1.vx = v1Final;
-          _ball2.vx = v2Final;
+          _ball1!.vx = v1Final;
+          _ball2!.vx = v2Final;
         }
 
         // 边界检测, 弹性系数-1只改变方向
-        checkBallBounce(_ball1, _size, -1);
-        checkBallBounce(_ball2, _size, -1);
+        checkBallBounce(_ball1!, _size, -1);
+        checkBallBounce(_ball2!, _size, -1);
       }
     });
     super.initState();
@@ -103,7 +103,7 @@ class _Anim43PageState extends State<Anim43Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball1: _ball1, ball2: _ball2),
+              painter: MyCustomPainter(ball1: _ball1!, ball2: _ball2!),
             );
           },
         ),
@@ -136,7 +136,7 @@ class MyCustomPainter extends CustomPainter {
   final Ball ball1;
   final Ball ball2;
 
-  MyCustomPainter({this.ball1, this.ball2});
+  MyCustomPainter({required this.ball1, required this.ball2});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

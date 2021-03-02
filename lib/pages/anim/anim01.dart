@@ -6,7 +6,7 @@ import 'dart:math' as math;
 class Anim01Page extends StatefulWidget {
   final String title;
 
-  Anim01Page({this.title});
+  Anim01Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim01PageState createState() => _Anim01PageState();
@@ -14,7 +14,7 @@ class Anim01Page extends StatefulWidget {
 
 class _Anim01PageState extends State<Anim01Page>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
   Ball _ball = Ball(x: 50, y: 50, r: 30);
   double angle = 65 * math.pi / 180, a = 0.1;
 
@@ -67,7 +67,7 @@ class _Anim01PageState extends State<Anim01Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

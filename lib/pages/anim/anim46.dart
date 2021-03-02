@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class Anim46Page extends StatefulWidget {
   final String title;
 
-  Anim46Page({this.title});
+  Anim46Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim46PageState createState() => _Anim46PageState();
@@ -16,9 +16,9 @@ class Anim46Page extends StatefulWidget {
 class _Anim46PageState extends State<Anim46Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
+  List<Ball>? _balls;
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _Anim46PageState extends State<Anim46Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_balls == null) {
           _balls = _initBalls(num: 50);
@@ -41,12 +41,12 @@ class _Anim46PageState extends State<Anim46Page>
   }
 
   void _move() {
-    for (var i = 0; i < _balls.length; i++) {
-      Ball ball = _balls[i];
+    for (var i = 0; i < _balls!.length; i++) {
+      Ball ball = _balls![i];
       ball.x += ball.vx;
       ball.y += ball.vy;
-      for (var j = i + 1; j < _balls.length; j++) {
-        var target = _balls[j];
+      for (var j = i + 1; j < _balls!.length; j++) {
+        var target = _balls![j];
         _gravitate(ball, target);
       }
     }
@@ -56,7 +56,7 @@ class _Anim46PageState extends State<Anim46Page>
   void _gravitate(Ball b1, Ball b2) {
     double dx = b2.x - b1.x;
     double dy = b2.y - b1.y;
-    double distSq = math.pow(dx, 2) + math.pow(dy, 2);
+    num distSq = math.pow(dx, 2) + math.pow(dy, 2);
     double dist = math.sqrt(distSq);
     // 万有引力与他们质量乘积成正比于他们距离平方成反比
     // force = G * m1 * m2 / dist^2
@@ -77,7 +77,7 @@ class _Anim46PageState extends State<Anim46Page>
     b2.vy -= forceY / b2.m;
   }
 
-  List<Ball> _initBalls({int num}) {
+  List<Ball> _initBalls({required int num}) {
     return List.generate(
       num,
       (index) => Ball(
@@ -110,7 +110,7 @@ class _Anim46PageState extends State<Anim46Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(balls: _balls),
+              painter: MyCustomPainter(balls: _balls!),
             );
           },
         ),
@@ -127,7 +127,7 @@ class _Anim46PageState extends State<Anim46Page>
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({required this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

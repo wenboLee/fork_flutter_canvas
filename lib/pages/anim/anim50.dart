@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim50Page extends StatefulWidget {
   final String title;
 
-  Anim50Page({this.title});
+  Anim50Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim50PageState createState() => _Anim50PageState();
@@ -15,9 +15,9 @@ class Anim50Page extends StatefulWidget {
 class _Anim50PageState extends State<Anim50Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
+  List<Ball>? _balls;
   double g = 0.2, bounce = -0.8, floor = 300, f1 = 250, hx = 0, hy = 0, r = 10;
 
   @override
@@ -28,7 +28,7 @@ class _Anim50PageState extends State<Anim50Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
           hx = _size.width / 2;
           hy = _size.height / 2;
         }
@@ -42,15 +42,15 @@ class _Anim50PageState extends State<Anim50Page>
 //          _balls = _initBalls(num: 100);
 //        }
         _move();
-        _balls.sort((a, b) => a.z3d.compareTo(b.z3d));
+        _balls!.sort((a, b) => a.z3d.compareTo(b.z3d));
       }
     });
     super.initState();
   }
 
   void _move() {
-    for (var i = 0; i < _balls.length; i++) {
-      Ball ball = _balls[i];
+    for (var i = 0; i < _balls!.length; i++) {
+      Ball ball = _balls![i];
       ball.vy += g;
       ball.x3d += ball.vx;
       ball.y3d += ball.vy;
@@ -76,13 +76,13 @@ class _Anim50PageState extends State<Anim50Page>
     }
   }
 
-  List<Ball> _initBalls({int num}) {
+  List<Ball> _initBalls({required int num}) {
     RadialGradient gradientColor = RadialGradient(
       colors: [
         Colors.white,
-        Colors.blue[200],
-        Colors.blue[500],
-        Colors.blue[800].withOpacity(0.8),
+        Colors.blue[200]!,
+        Colors.blue[500]!,
+        Colors.blue[800]!.withOpacity(0.8),
         Colors.black.withOpacity(0.2),
       ],
       stops: [
@@ -128,7 +128,7 @@ class _Anim50PageState extends State<Anim50Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(balls: _balls),
+              painter: MyCustomPainter(balls: _balls!),
             );
           },
         ),
@@ -145,7 +145,7 @@ class _Anim50PageState extends State<Anim50Page>
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({required this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -162,7 +162,7 @@ class MyCustomPainter extends CustomPainter {
     balls.forEach((ball) {
       if (ball.show) {
         _paint.color = ball.fillStyle;
-        _paint.shader = ball.gradientColor.createShader(
+        _paint.shader = ball.gradientColor!.createShader(
           Rect.fromCircle(center: Offset(ball.x, ball.y), radius: ball.r),
         );
         canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);

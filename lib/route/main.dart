@@ -111,7 +111,7 @@ class RouteConstant {
   static const String Anim52Page = '/anim52Page';
 }
 
-String routeWidgetName(String routeName) {
+String? routeWidgetName(String routeName) {
   var defaultRouteName = 'MainPage';
   var map = {
     RouteConstant.DebugMainPage: 'DebugMainPage',

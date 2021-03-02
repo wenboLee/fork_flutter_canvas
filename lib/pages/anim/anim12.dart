@@ -6,7 +6,7 @@ import 'dart:math' as math;
 class Anim12Page extends StatefulWidget {
   final String title;
 
-  Anim12Page({this.title});
+  Anim12Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim12PageState createState() => _Anim12PageState();
@@ -15,9 +15,9 @@ class Anim12Page extends StatefulWidget {
 class _Anim12PageState extends State<Anim12Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Arrow _arrow;
+  Arrow? _arrow;
   Offset _pointer = Offset.zero;
   double dx = 0, dy = 0;
 
@@ -29,15 +29,15 @@ class _Anim12PageState extends State<Anim12Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_arrow == null) {
           _arrow =
               Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
         }
-        dx = _pointer.dx - _arrow.x;
-        dy = _pointer.dy - _arrow.y;
-        _arrow.rotation = math.atan2(dy, dx);
+        dx = _pointer.dx - _arrow!.x;
+        dy = _pointer.dy - _arrow!.y;
+        _arrow!.rotation = math.atan2(dy, dx);
       }
     });
     super.initState();
@@ -65,7 +65,7 @@ class _Anim12PageState extends State<Anim12Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(arrow: _arrow),
+                painter: MyCustomPainter(arrow: _arrow!),
               );
             },
           ),
@@ -89,7 +89,7 @@ class _Anim12PageState extends State<Anim12Page>
 class MyCustomPainter extends CustomPainter {
   final Arrow arrow;
 
-  MyCustomPainter({this.arrow});
+  MyCustomPainter({required this.arrow});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -135,7 +135,7 @@ class MyCustomPainter extends CustomPainter {
     canvas.rotate(arrow.rotation);
 
     // 以画布宽 绘制背景正方形
-    _paint.color = Colors.red[100];
+    _paint.color = Colors.red[100]!;
     canvas.drawRect(
         Rect.fromCenter(center: center, width: size.width, height: size.width),
         _paint);

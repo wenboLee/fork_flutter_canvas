@@ -5,7 +5,7 @@ import 'package:flutter_canvas/widget/comm.dart';
 class Anim33Page extends StatefulWidget {
   final String title;
 
-  Anim33Page({this.title});
+  Anim33Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim33PageState createState() => _Anim33PageState();
@@ -14,9 +14,9 @@ class Anim33Page extends StatefulWidget {
 class _Anim33PageState extends State<Anim33Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double friction = 0.95, g = 3, spring = 0.03; //弹动系数
   Offset _pointer = Offset.zero;
 
@@ -28,26 +28,26 @@ class _Anim33PageState extends State<Anim33Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
         }
-        var dx = _pointer.dx - _ball.x;
-        var dy = _pointer.dy - _ball.y;
+        var dx = _pointer.dx - _ball!.x;
+        var dy = _pointer.dy - _ball!.y;
 
         var ax = dx * spring;
         var ay = dy * spring;
 
-        _ball.vx += ax;
-        _ball.vy += ay;
-        _ball.vy += g;
+        _ball!.vx += ax;
+        _ball!.vy += ay;
+        _ball!.vy += g;
 
-        _ball.vx *= friction;
-        _ball.vy *= friction;
+        _ball!.vx *= friction;
+        _ball!.vy *= friction;
 
-        _ball.x += _ball.vx;
-        _ball.y += _ball.vy;
+        _ball!.x += _ball!.vx;
+        _ball!.y += _ball!.vy;
       }
     });
     super.initState();
@@ -75,7 +75,7 @@ class _Anim33PageState extends State<Anim33Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(ball: _ball, pointer: _pointer),
+                painter: MyCustomPainter(ball: _ball!, pointer: _pointer),
               );
             },
           ),
@@ -99,7 +99,7 @@ class MyCustomPainter extends CustomPainter {
   final Ball ball;
   final Offset pointer;
 
-  MyCustomPainter({this.ball, this.pointer});
+  MyCustomPainter({required this.ball, required this.pointer});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

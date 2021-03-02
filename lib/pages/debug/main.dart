@@ -6,14 +6,14 @@ import 'package:flutter_canvas/widget/utils.dart';
 class DebugMainPage extends StatefulWidget {
   final String title;
 
-  DebugMainPage({Key key, this.title}) : super(key: key);
+  DebugMainPage({Key? key, required this.title}) : super(key: key);
 
   _DebugMainPageState createState() => _DebugMainPageState();
 }
 
 class _DebugMainPageState extends State<DebugMainPage> {
   List<String> pagesKey = [], titles = [];
-  ScrollController _controller;
+  late ScrollController _controller;
   bool showToTopBtn = true;
   double offset = 44.0 * 5;
 
@@ -21,9 +21,10 @@ class _DebugMainPageState extends State<DebugMainPage> {
   void initState() {
     super.initState();
     _controller = ScrollController();
-    pagesKey = routes(null).keys.toList()..remove(RouteConstant.DebugMainPage);
-    pagesKey.forEach(
-        (key) => {titles.add((routes(null)[key](null) as dynamic).title)});
+    pagesKey = routes(context).keys.toList()
+      ..remove(RouteConstant.DebugMainPage);
+    pagesKey.forEach((key) =>
+        {titles.add((routes(context)[key]!(context) as dynamic).title)});
   }
 
   @override
@@ -39,7 +40,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
       appBar: appBar(widget.title),
       body: ListView.separated(
         controller: _controller,
-        itemCount: pagesKey?.length ?? 0,
+        itemCount: pagesKey.length,
         separatorBuilder: (BuildContext context, int index) => Container(
           padding: EdgeInsets.only(left: 16, right: 16),
           child: Divider(
@@ -64,7 +65,7 @@ class _DebugMainPageState extends State<DebugMainPage> {
             ),
             child: Center(
               child: Text(
-                '${titles[index]?.substring(0, 1)?.toUpperCase() ?? ''}${titles[index]?.substring(1, 2)?.toLowerCase() ?? ''}',
+                '${titles[index].substring(0, 1).toUpperCase()}${titles[index].substring(1, 2).toLowerCase()}',
                 style: TextStyle(
                     shadows: [
                       BoxShadow(

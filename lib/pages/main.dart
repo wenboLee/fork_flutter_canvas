@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class MainPage extends StatefulWidget {
   final String title;
 
-  MainPage({this.title});
+  MainPage({Key? key, required this.title}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -16,7 +16,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
   double axRad = 0, ayRad = 0; // 经纬度旋转弧度
   double ax = 10, ay = 10, rad3d = 180; // 经纬度, 3d圆弧
@@ -54,7 +54,7 @@ class _MainPageState extends State<MainPage>
           );
         } else {
           var ball = _ballsMap[key];
-          ball.x = center.dx + latitudeR;
+          ball!.x = center.dx + latitudeR;
           ball.y = y;
           ball.r = pointR * scale;
           ball.alpha = math.sin(xRad);
@@ -79,7 +79,7 @@ class _MainPageState extends State<MainPage>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
           r3d = (_size.height > _size.width ? _size.width : _size.height) *
               0.8 /
               2;
@@ -310,7 +310,7 @@ class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
   final double r3d;
 
-  MyCustomPainter({this.balls, this.r3d});
+  MyCustomPainter({required this.balls, required this.r3d});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

@@ -16,7 +16,7 @@ class Ball {
   double scaleY;
   Color strokeStyle;
   Color fillStyle;
-  RadialGradient gradientColor;
+  RadialGradient? gradientColor;
   double alpha;
   double g; // 重力
   double m; // 质量

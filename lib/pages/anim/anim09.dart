@@ -6,7 +6,7 @@ import 'dart:math' as math;
 class Anim09Page extends StatefulWidget {
   final String title;
 
-  Anim09Page({this.title});
+  Anim09Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim09PageState createState() => _Anim09PageState();
@@ -15,9 +15,9 @@ class Anim09Page extends StatefulWidget {
 class _Anim09PageState extends State<Anim09Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Arrow _arrow;
+  Arrow? _arrow;
   double speed = 3, dx = 0, dy = 0, angle = 0, vx = 0, vy = 0;
   Offset _pointer = Offset.zero;
 
@@ -29,15 +29,15 @@ class _Anim09PageState extends State<Anim09Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_arrow == null) {
           _arrow =
               Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
         }
         if (_pointer != Offset.zero) {
-          dx = _pointer.dx - _arrow.x;
-          dy = _pointer.dy - _arrow.y;
+          dx = _pointer.dx - _arrow!.x;
+          dy = _pointer.dy - _arrow!.y;
 
           var dr = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2));
           if (dr < speed) {
@@ -49,9 +49,9 @@ class _Anim09PageState extends State<Anim09Page>
           vx = speed * math.cos(angle);
           vy = speed * math.sin(angle);
 
-          _arrow.x += vx;
-          _arrow.y += vy;
-          _arrow.rotation = angle;
+          _arrow!.x += vx;
+          _arrow!.y += vy;
+          _arrow!.rotation = angle;
         }
       }
     });
@@ -80,7 +80,7 @@ class _Anim09PageState extends State<Anim09Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(arrow: _arrow),
+                painter: MyCustomPainter(arrow: _arrow!),
               );
             },
           ),
@@ -104,7 +104,7 @@ class _Anim09PageState extends State<Anim09Page>
 class MyCustomPainter extends CustomPainter {
   final Arrow arrow;
 
-  MyCustomPainter({this.arrow});
+  MyCustomPainter({required this.arrow});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

@@ -6,7 +6,7 @@ import 'dart:math' as math;
 class Anim40Page extends StatefulWidget {
   final String title;
 
-  Anim40Page({this.title});
+  Anim40Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim40PageState createState() => _Anim40PageState();
@@ -15,9 +15,9 @@ class Anim40Page extends StatefulWidget {
 class _Anim40PageState extends State<Anim40Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double vr = 0.02, r = 100, angle = 0;
 
   @override
@@ -28,7 +28,7 @@ class _Anim40PageState extends State<Anim40Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(r: 30);
@@ -36,8 +36,8 @@ class _Anim40PageState extends State<Anim40Page>
 
         Offset center = Offset(_size.width / 2, _size.height / 2);
 
-        _ball.x = center.dx + r * math.cos(angle);
-        _ball.y = center.dy + r * math.sin(angle);
+        _ball!.x = center.dx + r * math.cos(angle);
+        _ball!.y = center.dy + r * math.sin(angle);
 
         angle += vr;
       }
@@ -64,7 +64,7 @@ class _Anim40PageState extends State<Anim40Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
+              painter: MyCustomPainter(ball: _ball!),
             );
           },
         ),
@@ -82,7 +82,7 @@ class _Anim40PageState extends State<Anim40Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

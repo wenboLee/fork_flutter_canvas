@@ -5,7 +5,7 @@ import 'package:flutter_canvas/widget/comm.dart';
 class Anim49Page extends StatefulWidget {
   final String title;
 
-  Anim49Page({this.title});
+  Anim49Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim49PageState createState() => _Anim49PageState();
@@ -14,9 +14,9 @@ class Anim49Page extends StatefulWidget {
 class _Anim49PageState extends State<Anim49Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double z = 0, f1 = 200, hx = 0, hy = 0, dx = 0, dy = 0, r = 80;
 
   @override
@@ -27,7 +27,7 @@ class _Anim49PageState extends State<Anim49Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(r: r);
@@ -37,16 +37,16 @@ class _Anim49PageState extends State<Anim49Page>
         hy = _size.height / 2;
 
         if (f1 + z > 0) {
-          _ball.show = true;
+          _ball!.show = true;
           var scale = f1 / (f1 + z);
-          _ball.scaleX = scale;
-          _ball.scaleY = scale;
+          _ball!.scaleX = scale;
+          _ball!.scaleY = scale;
           // 相对canvas左上点缩放，进行校正在中点缩放
-          _ball.x = hx + dx * scale;
-          _ball.y = hy + dy * scale;
-          _ball.r = r * scale;
+          _ball!.x = hx + dx * scale;
+          _ball!.y = hy + dy * scale;
+          _ball!.r = r * scale;
         } else {
-          _ball.show = false;
+          _ball!.show = false;
         }
       }
     });
@@ -66,9 +66,9 @@ class _Anim49PageState extends State<Anim49Page>
   }
 
   GestureDetector _buildGestureDetector(
-      {Function(DragDownDetails) onPanDown,
-      Function(DragEndDetails) onPanEnd,
-      Widget child,
+      {required Function(DragDownDetails) onPanDown,
+      Function(DragEndDetails)? onPanEnd,
+      required Widget child,
       EdgeInsetsGeometry margin = EdgeInsets.zero}) {
     return GestureDetector(
       onPanDown: onPanDown,
@@ -105,7 +105,7 @@ class _Anim49PageState extends State<Anim49Page>
                   return CustomPaint(
                     key: _globalKey,
                     size: Size.infinite,
-                    painter: MyCustomPainter(ball: _ball),
+                    painter: MyCustomPainter(ball: _ball!),
                   );
                 },
               ),
@@ -163,7 +163,7 @@ class _Anim49PageState extends State<Anim49Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

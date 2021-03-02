@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class Anim30Page extends StatefulWidget {
   final String title;
 
-  Anim30Page({this.title});
+  Anim30Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim30PageState createState() => _Anim30PageState();
@@ -16,17 +16,17 @@ class Anim30Page extends StatefulWidget {
 class _Anim30PageState extends State<Anim30Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
+  List<Ball>? _balls;
   double dx = 0,
       dy = 0,
       springLength = 200,
       friction = 0.9,
       spring = 0.03; //弹动系数
-  Ball draggedBall;
+  Ball? draggedBall;
 
-  List<Ball> _initBalls({int num}) {
+  List<Ball> _initBalls({required int num}) {
     return List.generate(
       num,
       (index) => Ball(
@@ -72,15 +72,15 @@ class _Anim30PageState extends State<Anim30Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_balls == null) {
           _balls = _initBalls(num: 8);
         }
 
-        _balls.forEach((ball) {
+        _balls!.forEach((ball) {
           if (!ball.dragged) {
-            var tmpBalls = _balls.where((element) => element.id != ball.id);
+            var tmpBalls = _balls!.where((element) => element.id != ball.id);
             tmpBalls.forEach((element) {
               // ball 向其它所有弹动
               _springTo(ball, element);
@@ -94,7 +94,7 @@ class _Anim30PageState extends State<Anim30Page>
 
   void _pointerDownEvent(event) {
     Offset pointer = event.localPosition;
-    _balls.forEach((ball) {
+    _balls!.forEach((ball) {
       if (isPoint(ball, pointer)) {
         ball.dragged = true;
         dx = pointer.dx - ball.x;
@@ -107,13 +107,13 @@ class _Anim30PageState extends State<Anim30Page>
   void _pointerMoveEvent(event) {
     Offset pointer = event.localPosition;
     if (draggedBall != null) {
-      draggedBall.x = pointer.dx - dx;
-      draggedBall.y = pointer.dy - dy;
+      draggedBall!.x = pointer.dx - dx;
+      draggedBall!.y = pointer.dy - dy;
     }
   }
 
   void _pointerUpEvent(event) {
-    draggedBall.dragged = false;
+    draggedBall!.dragged = false;
     draggedBall = null;
   }
 
@@ -137,7 +137,7 @@ class _Anim30PageState extends State<Anim30Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(balls: _balls),
+                painter: MyCustomPainter(balls: _balls!),
               );
             },
           ),
@@ -160,7 +160,7 @@ class _Anim30PageState extends State<Anim30Page>
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({required this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

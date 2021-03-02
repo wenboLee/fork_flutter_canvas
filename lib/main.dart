@@ -30,17 +30,17 @@ class MyApp extends StatelessWidget {
 
 class NavObserver extends NavigatorObserver {
   @override
-  void didPush(Route route, Route previousRoute) {
+  void didPush(Route route, Route? previousRoute) {
     print('push ${route.settings.name}');
   }
 
   @override
-  void didPop(Route route, Route previousRoute) {
+  void didPop(Route route, Route? previousRoute) {
     print('pop ${route.settings.name}');
   }
 
   @override
-  void didReplace({Route newRoute, Route oldRoute}) {
-    print('replace ${newRoute.settings.name}');
+  void didReplace({Route? newRoute, Route? oldRoute}) {
+    print('replace ${newRoute!.settings.name}');
   }
 }

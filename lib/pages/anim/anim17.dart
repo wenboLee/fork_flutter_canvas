@@ -6,7 +6,7 @@ import 'dart:math' as math;
 class Anim17Page extends StatefulWidget {
   final String title;
 
-  Anim17Page({this.title});
+  Anim17Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim17PageState createState() => _Anim17PageState();
@@ -15,9 +15,9 @@ class Anim17Page extends StatefulWidget {
 class _Anim17PageState extends State<Anim17Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Arrow _arrow;
+  Arrow? _arrow;
   double vr = 2 * math.pi / 180; //角速度
 
   @override
@@ -28,13 +28,13 @@ class _Anim17PageState extends State<Anim17Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_arrow == null) {
           _arrow =
               Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
         }
-        _arrow.rotation += vr;
+        _arrow!.rotation += vr;
       }
     });
     super.initState();
@@ -59,7 +59,7 @@ class _Anim17PageState extends State<Anim17Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(arrow: _arrow),
+              painter: MyCustomPainter(arrow: _arrow!),
             );
           },
         ),
@@ -77,7 +77,7 @@ class _Anim17PageState extends State<Anim17Page>
 class MyCustomPainter extends CustomPainter {
   final Arrow arrow;
 
-  MyCustomPainter({this.arrow});
+  MyCustomPainter({required this.arrow});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -123,7 +123,7 @@ class MyCustomPainter extends CustomPainter {
     var center = Offset(arrow.x, arrow.y);
 
     // 以画布宽 绘制背景正方形
-    _paint.color = Colors.red[100];
+    _paint.color = Colors.red[100]!;
     canvas.drawRect(
         Rect.fromCenter(center: center, width: size.width, height: size.width),
         _paint);

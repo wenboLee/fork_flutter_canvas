@@ -5,7 +5,7 @@ import 'package:flutter_canvas/widget/ball.dart';
 class Anim02Page extends StatefulWidget {
   final String title;
 
-  Anim02Page({this.title});
+  Anim02Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim02PageState createState() => _Anim02PageState();
@@ -13,7 +13,7 @@ class Anim02Page extends StatefulWidget {
 
 class _Anim02PageState extends State<Anim02Page>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
   Ball _ball = Ball(x: 50, y: 50, r: 30);
   double ay = 0.1;
 
@@ -62,7 +62,7 @@ class _Anim02PageState extends State<Anim02Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

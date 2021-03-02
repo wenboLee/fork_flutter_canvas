@@ -5,7 +5,7 @@ import 'package:flutter_canvas/widget/ball.dart';
 class Anim15Page extends StatefulWidget {
   final String title;
 
-  Anim15Page({this.title});
+  Anim15Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim15PageState createState() => _Anim15PageState();
@@ -14,9 +14,9 @@ class Anim15Page extends StatefulWidget {
 class _Anim15PageState extends State<Anim15Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
 
   @override
   void initState() {
@@ -26,27 +26,27 @@ class _Anim15PageState extends State<Anim15Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(
               x: _size.width / 2, y: 50, r: 30, friction: 0.05, g: 0.2, vy: 0);
         }
 
-        if (_ball.vy > 0 && _ball.vy - _ball.friction > 0) {
-          _ball.vy -= _ball.friction;
-        } else if (_ball.vy < 0 && _ball.vy + _ball.friction < 0) {
-          _ball.vy += _ball.friction;
+        if (_ball!.vy > 0 && _ball!.vy - _ball!.friction > 0) {
+          _ball!.vy -= _ball!.friction;
+        } else if (_ball!.vy < 0 && _ball!.vy + _ball!.friction < 0) {
+          _ball!.vy += _ball!.friction;
         } else {
-          _ball.vy = 0;
+          _ball!.vy = 0;
         }
 
-        _ball.vy += _ball.g;
-        _ball.y += _ball.vy;
+        _ball!.vy += _ball!.g;
+        _ball!.y += _ball!.vy;
 
-        if (_ball.y + _ball.r >= _size.height) {
-          _ball.y = _size.height - _ball.r;
-          _ball.vy *= -0.98;
+        if (_ball!.y + _ball!.r >= _size.height) {
+          _ball!.y = _size.height - _ball!.r;
+          _ball!.vy *= -0.98;
         }
       }
     });
@@ -72,7 +72,7 @@ class _Anim15PageState extends State<Anim15Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball),
+              painter: MyCustomPainter(ball: _ball!),
             );
           },
         ),
@@ -90,7 +90,7 @@ class _Anim15PageState extends State<Anim15Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

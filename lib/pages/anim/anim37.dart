@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim37Page extends StatefulWidget {
   final String title;
 
-  Anim37Page({this.title});
+  Anim37Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim37PageState createState() => _Anim37PageState();
@@ -15,13 +15,13 @@ class Anim37Page extends StatefulWidget {
 class _Anim37PageState extends State<Anim37Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  List<Ball> _balls;
+  List<Ball>? _balls;
   double bounce = -0.5, spring = 0.02, firstBallR = 50;
   bool _bigBall = false;
 
-  List<Ball> _initBalls({int num}) {
+  List<Ball> _initBalls({required int num}) {
     return List.generate(
       num,
       (index) => Ball(
@@ -44,7 +44,7 @@ class _Anim37PageState extends State<Anim37Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_balls == null) {
           _balls = _initBalls(num: 100);
@@ -53,7 +53,7 @@ class _Anim37PageState extends State<Anim37Page>
         _moveBall();
         if (_bigBall) {
           firstBallR += 2;
-          _balls.first.r = firstBallR;
+          _balls!.first.r = firstBallR;
         }
       }
     });
@@ -64,35 +64,35 @@ class _Anim37PageState extends State<Anim37Page>
     Offset point = event.localPosition;
     _bigBall = true;
     firstBallR = 50;
-    _balls.first.r = firstBallR;
-    _balls.first.x = point.dx;
-    _balls.first.y = point.dy;
+    _balls!.first.r = firstBallR;
+    _balls!.first.x = point.dx;
+    _balls!.first.y = point.dy;
   }
 
   void _pointerMoveEvent(event) {
     Offset point = event.localPosition;
     _bigBall = true;
-    _balls.first.x = point.dx;
-    _balls.first.y = point.dy;
+    _balls!.first.x = point.dx;
+    _balls!.first.y = point.dy;
   }
 
   void _pointerUpEvent(event) {
     _bigBall = false;
     firstBallR = 50;
-    _balls.first.r = firstBallR;
+    _balls!.first.r = firstBallR;
   }
 
   // 小球之间的碰撞
   void _checkHit() {
-    for (var i = 0; i < _balls.length; i++) {
-      Ball ball1 = _balls[i];
+    for (var i = 0; i < _balls!.length; i++) {
+      Ball ball1 = _balls![i];
       // 第一个小球在非点击时候，不和其他小球产生碰撞
       if (i == 0 && !_bigBall) {
         continue;
       }
       // 比较过的不再比较，排除自己
-      for (var j = i + 1; j < _balls.length; j++) {
-        Ball ball2 = _balls[j];
+      for (var j = i + 1; j < _balls!.length; j++) {
+        Ball ball2 = _balls![j];
         var dist = getDist(Offset(ball2.x, ball2.y), Offset(ball1.x, ball1.y));
         var minDist = ball1.r + ball2.r;
         if (dist < minDist) {
@@ -116,8 +116,8 @@ class _Anim37PageState extends State<Anim37Page>
   }
 
   void _moveBall() {
-    for (var i = 0; i < _balls.length; i++) {
-      Ball ball = _balls[i];
+    for (var i = 0; i < _balls!.length; i++) {
+      Ball ball = _balls![i];
       // 第一个小球, 不处理边界反弹问题
       if (i == 0) {
         continue;
@@ -149,7 +149,7 @@ class _Anim37PageState extends State<Anim37Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(balls: _balls),
+                painter: MyCustomPainter(balls: _balls!),
               );
             },
           ),
@@ -173,7 +173,7 @@ class _Anim37PageState extends State<Anim37Page>
 class MyCustomPainter extends CustomPainter {
   final List<Ball> balls;
 
-  MyCustomPainter({this.balls});
+  MyCustomPainter({required this.balls});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

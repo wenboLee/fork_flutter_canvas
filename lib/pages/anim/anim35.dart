@@ -7,7 +7,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim35Page extends StatefulWidget {
   final String title;
 
-  Anim35Page({this.title});
+  Anim35Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim35PageState createState() => _Anim35PageState();
@@ -16,10 +16,10 @@ class Anim35Page extends StatefulWidget {
 class _Anim35PageState extends State<Anim35Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
-  Box _box;
+  Ball? _ball;
+  Box? _box;
   bool _moving = false;
   double g = 0.2, friction = 0.98, easing = 0.03, lastX = 0, lastY = 0;
   Offset _pointer = Offset.zero;
@@ -32,7 +32,7 @@ class _Anim35PageState extends State<Anim35Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(x: 50, y: _size.height - 30, r: 30);
@@ -50,17 +50,17 @@ class _Anim35PageState extends State<Anim35Page>
 
   bool _checkHit(BuildContext context) {
     // 运动圆两点直线一次方程与水平物体平面交点
-    var k1 = (_ball.y - lastY) / (_ball.x - lastX);
+    var k1 = (_ball!.y - lastY) / (_ball!.x - lastX);
     var b1 = lastY - k1 * lastX;
     var k2 = 0;
-    var b2 = _ball.y;
+    var b2 = _ball!.y;
     // y 相等:  k1*x + b1 = k2*x + b2
     // 求交点坐标
     var cx = (b2 - b1) / (k1 - k2);
 //    var cy = k1 * cx + b1;
-    if (cx - _ball.r / 2 > _box.x &&
-        cx + _ball.r / 2 < _box.x + _box.w &&
-        _ball.y - _ball.r > _box.y) {
+    if (cx - _ball!.r / 2 > _box!.x &&
+        cx + _ball!.r / 2 < _box!.x + _box!.w &&
+        _ball!.y - _ball!.r > _box!.y) {
       Toast.show(context, '小球和盒子发生碰撞');
       return true;
     }
@@ -68,26 +68,26 @@ class _Anim35PageState extends State<Anim35Page>
   }
 
   void _ballMove(BuildContext context) {
-    _ball.vx *= friction;
-    _ball.vy *= friction;
-    _ball.vy += g;
+    _ball!.vx *= friction;
+    _ball!.vy *= friction;
+    _ball!.vy += g;
 
-    _ball.x += _ball.vx;
-    _ball.y += _ball.vy;
+    _ball!.x += _ball!.vx;
+    _ball!.y += _ball!.vy;
 
     // 边界处理+碰撞检测
     if (_checkHit(context) ||
-        _ball.x - _ball.r > _size.width ||
-        _ball.x + _ball.r < 0 ||
-        _ball.y - _ball.r > _size.height ||
-        _ball.y + _ball.r < 0) {
+        _ball!.x - _ball!.r > _size.width ||
+        _ball!.x + _ball!.r < 0 ||
+        _ball!.y - _ball!.r > _size.height ||
+        _ball!.y + _ball!.r < 0) {
       _moving = false;
       // 复位
-      _ball.x = 50;
-      _ball.y = _size.height - 30;
+      _ball!.x = 50;
+      _ball!.y = _size.height - 30;
     }
-    lastX = _ball.x;
-    lastY = _ball.y;
+    lastX = _ball!.x;
+    lastY = _ball!.y;
   }
 
   void _pointerDownEvent(event) {
@@ -106,10 +106,10 @@ class _Anim35PageState extends State<Anim35Page>
     if (!_moving) {
       _pointer = event.localPosition;
       _moving = true;
-      _ball.vx = (_pointer.dx - _ball.x) * easing;
-      _ball.vy = (_pointer.dy - _ball.y) * easing;
-      lastX = _ball.x;
-      lastY = _ball.y;
+      _ball!.vx = (_pointer.dx - _ball!.x) * easing;
+      _ball!.vy = (_pointer.dy - _ball!.y) * easing;
+      lastX = _ball!.x;
+      lastY = _ball!.y;
       _pointer = Offset.zero;
     }
   }
@@ -135,7 +135,10 @@ class _Anim35PageState extends State<Anim35Page>
                 key: _globalKey,
                 size: Size.infinite,
                 painter: MyCustomPainter(
-                    ball: _ball, box: _box, moving: _moving, pointer: _pointer),
+                    ball: _ball!,
+                    box: _box!,
+                    moving: _moving,
+                    pointer: _pointer),
               );
             },
           ),
@@ -162,7 +165,11 @@ class MyCustomPainter extends CustomPainter {
   final bool moving;
   final Offset pointer;
 
-  MyCustomPainter({this.ball, this.box, this.moving, this.pointer});
+  MyCustomPainter(
+      {required this.ball,
+      required this.box,
+      required this.moving,
+      required this.pointer});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

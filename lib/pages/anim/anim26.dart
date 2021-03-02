@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim26Page extends StatefulWidget {
   final String title;
 
-  Anim26Page({this.title});
+  Anim26Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim26PageState createState() => _Anim26PageState();
@@ -15,9 +15,9 @@ class Anim26Page extends StatefulWidget {
 class _Anim26PageState extends State<Anim26Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double dx = 0, dy = 0;
   bool isMouseDown = false;
 
@@ -29,7 +29,7 @@ class _Anim26PageState extends State<Anim26Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_ball == null) {
           _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
@@ -42,18 +42,18 @@ class _Anim26PageState extends State<Anim26Page>
   void _pointerDownEvent(event) {
     var pointer = event.localPosition;
     isMouseDown = false;
-    if (isPoint(_ball, pointer)) {
+    if (isPoint(_ball!, pointer)) {
       isMouseDown = true;
-      dx = pointer.dx - _ball.x;
-      dy = pointer.dy - _ball.y;
+      dx = pointer.dx - _ball!.x;
+      dy = pointer.dy - _ball!.y;
     }
   }
 
   void _pointerMoveEvent(event) {
     var pointer = event.localPosition;
     if (isMouseDown) {
-      _ball.x = pointer.dx - dx;
-      _ball.y = pointer.dy - dy;
+      _ball!.x = pointer.dx - dx;
+      _ball!.y = pointer.dy - dy;
     }
   }
 
@@ -81,7 +81,7 @@ class _Anim26PageState extends State<Anim26Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(ball: _ball),
+                painter: MyCustomPainter(ball: _ball!),
               );
             },
           ),
@@ -104,7 +104,7 @@ class _Anim26PageState extends State<Anim26Page>
 class MyCustomPainter extends CustomPainter {
   final Ball ball;
 
-  MyCustomPainter({this.ball});
+  MyCustomPainter({required this.ball});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

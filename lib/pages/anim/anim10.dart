@@ -6,7 +6,7 @@ import 'dart:math' as math;
 class Anim10Page extends StatefulWidget {
   final String title;
 
-  Anim10Page({this.title});
+  Anim10Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim10PageState createState() => _Anim10PageState();
@@ -15,9 +15,9 @@ class Anim10Page extends StatefulWidget {
 class _Anim10PageState extends State<Anim10Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Ball _ball;
+  Ball? _ball;
   double angle = 0, vx = 0.5, swing = 60; //增幅
   bool directionRight = true; //方向右
   List<Offset> _pointerList = [];
@@ -29,24 +29,24 @@ class _Anim10PageState extends State<Anim10Page>
           ..repeat();
     _controller.addListener(() {
       if (mounted) {
-        _size = _globalKey.currentContext.size;
+        _size = _globalKey.currentContext!.size!;
         if (_ball == null) {
           // 原点开始
           _ball = Ball(x: _size.width / 2, y: _size.height / 2, r: 30);
         }
-        if (_ball.x >= _size.width - _ball.r) {
+        if (_ball!.x >= _size.width - _ball!.r) {
           directionRight = false;
-        } else if (_ball.x - _ball.r <= 0) {
+        } else if (_ball!.x - _ball!.r <= 0) {
           directionRight = true;
         }
 
         if (directionRight) {
-          _ball.x += vx;
+          _ball!.x += vx;
         } else {
-          _ball.x -= vx;
+          _ball!.x -= vx;
         }
 
-        _ball.y = _size.height / 2 + math.sin(angle) * swing;
+        _ball!.y = _size.height / 2 + math.sin(angle) * swing;
         angle += 0.05;
         angle %= math.pi * 2;
       }
@@ -71,7 +71,7 @@ class _Anim10PageState extends State<Anim10Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball, pointerList: _pointerList),
+              painter: MyCustomPainter(ball: _ball!, pointerList: _pointerList),
             );
           },
         ),
@@ -92,7 +92,7 @@ class MyCustomPainter extends CustomPainter {
   final Ball ball;
   List<Offset> pointerList;
 
-  MyCustomPainter({this.ball, this.pointerList});
+  MyCustomPainter({required this.ball, required this.pointerList});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

@@ -6,7 +6,7 @@ import 'package:flutter_canvas/widget/utils.dart';
 class Anim39Page extends StatefulWidget {
   final String title;
 
-  Anim39Page({this.title});
+  Anim39Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim39PageState createState() => _Anim39PageState();
@@ -15,10 +15,10 @@ class Anim39Page extends StatefulWidget {
 class _Anim39PageState extends State<Anim39Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
   List<Box> _boxes = [];
-  Box _activeBox;
+  Box? _activeBox;
   double g = 0.05;
 
   @override
@@ -29,30 +29,30 @@ class _Anim39PageState extends State<Anim39Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_activeBox == null) {
           _activeBox = _createBox();
         }
 
-        _activeBox.vy += g;
-        _activeBox.y += _activeBox.vy;
+        _activeBox!.vy += g;
+        _activeBox!.y += _activeBox!.vy;
 
         // 直接落到地板上
-        if (_activeBox.y + _activeBox.h >= _size.height) {
-          _activeBox.y = _size.height - _activeBox.h;
+        if (_activeBox!.y + _activeBox!.h >= _size.height) {
+          _activeBox!.y = _size.height - _activeBox!.h;
           _activeBox = _createBox();
         }
 
         for (var i = 0; i < _boxes.length; i++) {
           Box box = _boxes[i];
           //碰撞
-          if (box != _activeBox && rectHit(box, _activeBox)) {
+          if (box != _activeBox && rectHit(box, _activeBox!)) {
             // 碰到天花板，清屏
             if (box.y <= 0) {
               _boxes.clear();
             }
-            _activeBox.y = box.y - _activeBox.h;
+            _activeBox!.y = box.y - _activeBox!.h;
             _activeBox = _createBox();
           }
         }
@@ -124,7 +124,7 @@ class _Anim39PageState extends State<Anim39Page>
 class MyCustomPainter extends CustomPainter {
   final List<Box> boxes;
 
-  MyCustomPainter({this.boxes});
+  MyCustomPainter({required this.boxes});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

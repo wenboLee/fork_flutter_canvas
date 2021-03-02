@@ -6,7 +6,7 @@ import 'dart:math' as math;
 class Anim28Page extends StatefulWidget {
   final String title;
 
-  Anim28Page({this.title});
+  Anim28Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim28PageState createState() => _Anim28PageState();
@@ -15,9 +15,9 @@ class Anim28Page extends StatefulWidget {
 class _Anim28PageState extends State<Anim28Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Arrow _arrow;
+  Arrow? _arrow;
   double easing = 0.05; //缓动系数
   Offset _pointer = Offset.zero;
 
@@ -29,7 +29,7 @@ class _Anim28PageState extends State<Anim28Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
         }
         if (_arrow == null) {
           _arrow = Arrow(
@@ -40,14 +40,14 @@ class _Anim28PageState extends State<Anim28Page>
           );
         }
         // 鼠标与上一帧形成的差值
-        var dx = _pointer.dx - _arrow.x;
-        var dy = _pointer.dy - _arrow.y;
+        var dx = _pointer.dx - _arrow!.x;
+        var dy = _pointer.dy - _arrow!.y;
 
         var angle = math.atan2(dy, dx);
 
-        _arrow.x += dx * easing;
-        _arrow.y += dy * easing;
-        _arrow.rotation = angle;
+        _arrow!.x += dx * easing;
+        _arrow!.y += dy * easing;
+        _arrow!.rotation = angle;
       }
     });
     super.initState();
@@ -75,7 +75,7 @@ class _Anim28PageState extends State<Anim28Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(arrow: _arrow),
+                painter: MyCustomPainter(arrow: _arrow!),
               );
             },
           ),
@@ -104,7 +104,7 @@ class _Anim28PageState extends State<Anim28Page>
 class MyCustomPainter extends CustomPainter {
   final Arrow arrow;
 
-  MyCustomPainter({this.arrow});
+  MyCustomPainter({required this.arrow});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

@@ -7,7 +7,7 @@ import 'dart:math' as math;
 class Anim20Page extends StatefulWidget {
   final String title;
 
-  Anim20Page({this.title});
+  Anim20Page({Key? key, required this.title}) : super(key: key);
 
   @override
   _Anim20PageState createState() => _Anim20PageState();
@@ -16,9 +16,9 @@ class Anim20Page extends StatefulWidget {
 class _Anim20PageState extends State<Anim20Page>
     with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
-  AnimationController _controller;
+  late AnimationController _controller;
   Size _size = Size.zero;
-  Arrow _arrow;
+  Arrow? _arrow;
   double vx = 0, vy = 0, vr = 0, a = 0, f = 0.95; //摩擦力
 
   @override
@@ -29,15 +29,15 @@ class _Anim20PageState extends State<Anim20Page>
     _controller.addListener(() {
       if (mounted) {
         if (_size == Size.zero) {
-          _size = _globalKey.currentContext.size;
+          _size = _globalKey.currentContext!.size!;
           setState(() {});
         }
         if (_arrow == null) {
           _arrow =
               Arrow(x: _size.width / 2, y: _size.height / 2, w: 100, h: 60);
         }
-        _arrow.rotation += toRad(vr);
-        var angle = _arrow.rotation;
+        _arrow!.rotation += toRad(vr);
+        var angle = _arrow!.rotation;
         var ax = math.cos(angle) * a;
         var ay = math.sin(angle) * a;
 
@@ -46,19 +46,19 @@ class _Anim20PageState extends State<Anim20Page>
         vx *= f;
         vy *= f;
 
-        _arrow.x += vx;
-        _arrow.y += vy;
+        _arrow!.x += vx;
+        _arrow!.y += vy;
 
         // 越界处理
-        if (_arrow.x - _arrow.w / 2 >= _size.width) {
-          _arrow.x = 0 - _arrow.w / 2;
-        } else if (_arrow.x + _arrow.w / 2 <= 0) {
-          _arrow.x = _size.width + _arrow.w / 2;
+        if (_arrow!.x - _arrow!.w / 2 >= _size.width) {
+          _arrow!.x = 0 - _arrow!.w / 2;
+        } else if (_arrow!.x + _arrow!.w / 2 <= 0) {
+          _arrow!.x = _size.width + _arrow!.w / 2;
         }
-        if (_arrow.y - _arrow.h / 2 >= _size.height) {
-          _arrow.y = 0 - _arrow.h / 2;
-        } else if (_arrow.y + _arrow.h / 2 <= 0) {
-          _arrow.y = _size.height + _arrow.h / 2;
+        if (_arrow!.y - _arrow!.h / 2 >= _size.height) {
+          _arrow!.y = 0 - _arrow!.h / 2;
+        } else if (_arrow!.y + _arrow!.h / 2 <= 0) {
+          _arrow!.y = _size.height + _arrow!.h / 2;
         }
       }
     });
@@ -72,9 +72,9 @@ class _Anim20PageState extends State<Anim20Page>
   }
 
   GestureDetector _buildGestureDetector(
-      {Function(DragDownDetails) onPanDown,
-      Function(DragEndDetails) onPanEnd,
-      Widget child,
+      {required Function(DragDownDetails) onPanDown,
+      required Function(DragEndDetails) onPanEnd,
+      required Widget child,
       EdgeInsetsGeometry margin = EdgeInsets.zero}) {
     return GestureDetector(
       onPanDown: onPanDown,
@@ -108,7 +108,7 @@ class _Anim20PageState extends State<Anim20Page>
                 return CustomPaint(
                   key: _globalKey,
                   size: Size.infinite,
-                  painter: MyCustomPainter(arrow: _arrow),
+                  painter: MyCustomPainter(arrow: _arrow!),
                 );
               },
             ),
@@ -117,7 +117,7 @@ class _Anim20PageState extends State<Anim20Page>
               right: 40,
               bottom: 40,
               child: SizedBox(
-                width: _size?.width ?? 0,
+                width: _size.width,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -172,7 +172,7 @@ class _Anim20PageState extends State<Anim20Page>
 class MyCustomPainter extends CustomPainter {
   final Arrow arrow;
 
-  MyCustomPainter({this.arrow});
+  MyCustomPainter({required this.arrow});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

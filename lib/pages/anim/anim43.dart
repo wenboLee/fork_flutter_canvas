@@ -65,12 +65,12 @@ class _Anim43PageState extends State<Anim43Page>
 //        m1 * v1 + m2 * v2 = m1 * v1Final + m2 * v2Final
 //        由于动能 e = 1/2 * m*v*v
 //        所以 1/2 * m1 * v1*v1 + 1/2 * m2 * v2*v2 = 1/2 * m1 * v1Final*v1Final + 1/2 * m2 * v2Final*v2Final
-          var v1Final =
-              ((_ball1!.m - _ball2!.m) * _ball1!.vx + 2 * _ball2!.m * _ball2!.vx) /
-                  (_ball1!.m + _ball2!.m);
-          var v2Final =
-              ((_ball2!.m - _ball1!.m) * _ball2!.vx + 2 * _ball1!.m * _ball1!.vx) /
-                  (_ball1!.m + _ball2!.m);
+          var v1Final = ((_ball1!.m - _ball2!.m) * _ball1!.vx +
+                  2 * _ball2!.m * _ball2!.vx) /
+              (_ball1!.m + _ball2!.m);
+          var v2Final = ((_ball2!.m - _ball1!.m) * _ball2!.vx +
+                  2 * _ball1!.m * _ball1!.vx) /
+              (_ball1!.m + _ball2!.m);
 
           _ball1!.vx = v1Final;
           _ball2!.vx = v2Final;
@@ -103,7 +103,9 @@ class _Anim43PageState extends State<Anim43Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball1: _ball1!, ball2: _ball2!),
+              painter: _ball1 == null || _ball2 == null
+                  ? null
+                  : MyCustomPainter(ball1: _ball1!, ball2: _ball2!),
             );
           },
         ),

@@ -37,7 +37,8 @@ class _Anim36PageState extends State<Anim36Page>
           _ball2 = Ball(x: _size.width / 2, y: _size.height / 2, r: 60);
         }
 
-        if (getDist(Offset(_ball1!.x, _ball1!.y), Offset(_ball2!.x, _ball2!.y)) <=
+        if (getDist(
+                Offset(_ball1!.x, _ball1!.y), Offset(_ball2!.x, _ball2!.y)) <=
             _ball1!.r + _ball2!.r) {
           Toast.show(context, '小球发生碰撞');
         }
@@ -54,8 +55,10 @@ class _Anim36PageState extends State<Anim36Page>
     if (isPoint(_ball2!, point)) {
       _activeBall = _ball2;
     }
-    dx = point.dx - _activeBall!.x;
-    dy = point.dy - _activeBall!.y;
+    if (_activeBall != null) {
+      dx = point.dx - _activeBall!.x;
+      dy = point.dy - _activeBall!.y;
+    }
   }
 
   void _pointerMoveEvent(event) {
@@ -88,7 +91,9 @@ class _Anim36PageState extends State<Anim36Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(ball1: _ball1!, ball2: _ball2!),
+                painter: _ball1 == null || _ball2 == null
+                    ? null
+                    : MyCustomPainter(ball1: _ball1!, ball2: _ball2!),
               );
             },
           ),

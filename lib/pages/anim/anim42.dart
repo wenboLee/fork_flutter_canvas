@@ -144,8 +144,10 @@ class _Anim42PageState extends State<Anim42Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter:
-                  MyCustomPainter(ball: _ball!, line1: _line1!, line2: _line2!),
+              painter: _ball == null || _line1 == null || _line2 == null
+                  ? null
+                  : MyCustomPainter(
+                      ball: _ball!, line1: _line1!, line2: _line2!),
             );
           },
         ),
@@ -168,7 +170,8 @@ class MyCustomPainter extends CustomPainter {
   final Ball ball;
   final Line line1, line2;
 
-  MyCustomPainter({required this.ball, required this.line1, required this.line2});
+  MyCustomPainter(
+      {required this.ball, required this.line1, required this.line2});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round

@@ -53,8 +53,10 @@ class _Anim38PageState extends State<Anim38Page>
     if (isBoxPoint(_box2!, point)) {
       _activeBox = _box2;
     }
-    dx = point.dx - _activeBox!.x;
-    dy = point.dy - _activeBox!.y;
+    if (_activeBox != null) {
+      dx = point.dx - _activeBox!.x;
+      dy = point.dy - _activeBox!.y;
+    }
   }
 
   void _pointerMoveEvent(event) {
@@ -87,7 +89,9 @@ class _Anim38PageState extends State<Anim38Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(box1: _box1!, box2: _box2!),
+                painter: _box1 == null || _box2 == null
+                    ? null
+                    : MyCustomPainter(box1: _box1!, box2: _box2!),
               );
             },
           ),

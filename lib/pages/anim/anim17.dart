@@ -59,7 +59,7 @@ class _Anim17PageState extends State<Anim17Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(arrow: _arrow!),
+              painter: _arrow == null ? null : MyCustomPainter(arrow: _arrow!),
             );
           },
         ),

@@ -145,7 +145,9 @@ class _Anim48PageState extends State<Anim48Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(balls: _balls!, lines: _lines),
+              painter: _balls == null
+                  ? null
+                  : MyCustomPainter(balls: _balls!, lines: _lines),
             );
           },
         ),

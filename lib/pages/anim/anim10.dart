@@ -71,7 +71,9 @@ class _Anim10PageState extends State<Anim10Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(ball: _ball!, pointerList: _pointerList),
+              painter: _ball == null
+                  ? null
+                  : MyCustomPainter(ball: _ball!, pointerList: _pointerList),
             );
           },
         ),

@@ -63,8 +63,9 @@ class _Anim07PageState extends State<Anim07Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter:
-                  MyCustomPainter(ball: _ball!, ovalW: ovalW, ovalH: ovalH),
+              painter: _ball == null
+                  ? null
+                  : MyCustomPainter(ball: _ball!, ovalW: ovalW, ovalH: ovalH),
             );
           },
         ),

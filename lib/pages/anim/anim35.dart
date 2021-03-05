@@ -134,11 +134,13 @@ class _Anim35PageState extends State<Anim35Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(
-                    ball: _ball!,
-                    box: _box!,
-                    moving: _moving,
-                    pointer: _pointer),
+                painter: _ball == null || _box == null
+                    ? null
+                    : MyCustomPainter(
+                        ball: _ball!,
+                        box: _box!,
+                        moving: _moving,
+                        pointer: _pointer),
               );
             },
           ),

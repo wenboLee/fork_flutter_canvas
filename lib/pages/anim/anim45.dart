@@ -92,7 +92,7 @@ class _Anim45PageState extends State<Anim45Page>
             return CustomPaint(
               key: _globalKey,
               size: Size.infinite,
-              painter: MyCustomPainter(balls: _balls!),
+              painter: _balls == null ? null : MyCustomPainter(balls: _balls!),
             );
           },
         ),

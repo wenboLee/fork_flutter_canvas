@@ -124,7 +124,7 @@ class _Anim31PageState extends State<Anim31Page>
   }
 
   void _pointerUpEvent(event) {
-    draggedBall!.dragged = false;
+    draggedBall?.dragged = false;
     draggedBall = null;
   }
 
@@ -148,7 +148,8 @@ class _Anim31PageState extends State<Anim31Page>
               return CustomPaint(
                 key: _globalKey,
                 size: Size.infinite,
-                painter: MyCustomPainter(balls: _balls!),
+                painter:
+                    _balls == null ? null : MyCustomPainter(balls: _balls!),
               );
             },
           ),

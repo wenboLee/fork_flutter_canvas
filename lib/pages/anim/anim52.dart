@@ -83,11 +83,11 @@ class _Anim52PageState extends State<Anim52Page>
                         ),
                       ),
                       Spacer(flex: 1),
-                      RepaintBoundary(
-                        child: AnimatedBuilder(
-                          animation: _animationController,
-                          builder: (context, child) {
-                            return Center(
+                      AnimatedBuilder(
+                        animation: _animationController,
+                        builder: (context, child) {
+                          return Center(
+                            child: RepaintBoundary(
                               child: CustomPaint(
                                 size: Size(
                                   MediaQuery.of(context).size.width - 40,
@@ -99,9 +99,9 @@ class _Anim52PageState extends State<Anim52Page>
                                   paintingStyle: PaintingStyle.fill,
                                 ),
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
                       ),
                       Spacer(flex: 3),
                     ],

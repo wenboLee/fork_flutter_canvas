@@ -146,8 +146,9 @@ class MyPainter extends CustomPainter {
     // 渲染宽高
     final translateY =
         (canvasMin - viewBox.height * canvasMin / viewBoxMax) / 2;
-    // 先平移再缩放，不然translateY要除缩放比
-    canvas.translate(0, translateY);
+    final translateX = (canvasMin - viewBox.width * canvasMin / viewBoxMax) / 2;
+    // 先平移再缩放，不然要除缩放比
+    canvas.translate(translateX, translateY);
     canvas.scale(scale, scale);
     _drawPath(pathData, canvas, scale);
 

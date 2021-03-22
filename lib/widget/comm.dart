@@ -67,13 +67,21 @@ void drawAuthorText(Canvas canvas, Size size) {
   canvas.restore();
 }
 
-//void _drawTextPaint(Canvas canvas) {
-//  var textPainter = TextPainter(
+//void _drawTextPaintShowSize(Canvas canvas) {
+//  TextPainter textPainter = TextPainter(
 //      text: TextSpan(
 //          text: 'Flutter Unit',
-//          style: TextStyle(fontSize: 40,color: Colors.black)),
+//          style: TextStyle(
+//              fontSize: 40,
+//              color: Colors.black)),
 //      textAlign: TextAlign.center,
 //      textDirection: TextDirection.ltr);
 //  textPainter.layout(); // 进行布局
-//  textPainter.paint(canvas, Offset.zero); // 进行绘制
+//  Size size = textPainter.size; // 尺寸必须在布局后获取
+//  textPainter.paint(canvas, Offset(-size.width / 2, -size.height / 2));
+//
+//  canvas.drawRect(
+//      Rect.fromLTRB(0, 0, size.width, size.height)
+//          .translate(-size.width / 2, -size.height / 2),
+//      _paint..color = Colors.blue.withAlpha(33));
 //}

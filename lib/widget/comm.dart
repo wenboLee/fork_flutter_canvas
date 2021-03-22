@@ -66,3 +66,14 @@ void drawAuthorText(Canvas canvas, Size size) {
   }
   canvas.restore();
 }
+
+//void _drawTextPaint(Canvas canvas) {
+//  var textPainter = TextPainter(
+//      text: TextSpan(
+//          text: 'Flutter Unit',
+//          style: TextStyle(fontSize: 40,color: Colors.black)),
+//      textAlign: TextAlign.center,
+//      textDirection: TextDirection.ltr);
+//  textPainter.layout(); // 进行布局
+//  textPainter.paint(canvas, Offset.zero); // 进行绘制
+//}

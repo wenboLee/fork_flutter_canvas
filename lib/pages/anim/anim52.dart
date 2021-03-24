@@ -86,12 +86,14 @@ class _Anim52PageState extends State<Anim52Page>
                       AnimatedBuilder(
                         animation: _animationController,
                         builder: (context, child) {
+                          final minSize = min(MediaQuery.of(context).size.width,
+                              MediaQuery.of(context).size.height);
                           return Center(
                             child: RepaintBoundary(
                               child: CustomPaint(
                                 size: Size(
-                                  MediaQuery.of(context).size.width - 40,
-                                  MediaQuery.of(context).size.width - 40,
+                                  minSize - 100,
+                                  minSize - 100,
                                 ),
                                 painter: MyPainter(
                                   animationController: _animationController,

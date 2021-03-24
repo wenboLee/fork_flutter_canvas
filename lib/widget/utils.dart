@@ -277,7 +277,9 @@ class IconFontUtil {
       if (response.statusCode == HttpStatus.ok) {
         result = await response.transform(utf8.decoder).join();
       }
-    } catch (exception) {}
+    } catch (exception) {
+      print(exception);
+    }
     return result;
   }
 

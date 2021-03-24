@@ -26,17 +26,18 @@ class _Anim52PageState extends State<Anim52Page>
         AnimationController(duration: Duration(seconds: 10), vsync: this);
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _animationController.stop();
+        if (_animationController.isAnimating) _animationController.stop();
         Future.delayed(Duration(seconds: 1), () {
-          if (mounted) _animationController.forward(from: 0);
+          if (mounted && !_animationController.isAnimating)
+            _animationController.forward(from: 0);
         });
       }
     });
     _pageController.addListener(() {
       double page = _pageController.page!;
-      if (page != page.toInt()) {
+      if (page != page.toInt() && _animationController.isAnimating) {
         _animationController.stop();
-      } else {
+      } else if (!_animationController.isAnimating) {
         _animationController.forward(from: _animationController.value);
       }
     });

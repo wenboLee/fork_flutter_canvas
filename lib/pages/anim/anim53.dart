@@ -1,5 +1,4 @@
 import 'dart:ui' as ui;
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 
@@ -15,14 +14,12 @@ class Anim53Page extends StatefulWidget {
 class _Anim53PageState extends State<Anim53Page>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  double angle = 65 * math.pi / 180, a = 0.1;
 
   @override
   void initState() {
     _controller =
-        AnimationController(duration: Duration(seconds: 1), vsync: this)
+        AnimationController(duration: Duration(seconds: 5), vsync: this)
           ..repeat();
-    _controller.addListener(() {});
     super.initState();
   }
 
@@ -42,7 +39,7 @@ class _Anim53PageState extends State<Anim53Page>
           builder: (context, child) {
             return CustomPaint(
               size: Size.infinite,
-              painter: CharLinePainter(),
+              painter: CharLinePainter(progress: _controller.value),
             );
           },
         ),
@@ -55,6 +52,10 @@ class _Anim53PageState extends State<Anim53Page>
 }
 
 class CharLinePainter extends CustomPainter {
+  final double progress;
+
+  CharLinePainter({required this.progress});
+
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
@@ -93,26 +94,32 @@ class CharLinePainter extends CustomPainter {
     // 绘制直线
     path.addPolygon(offsetList, true);
     canvas.drawPath(path, paint..color = Colors.blue.withOpacity(0.2));
-    canvas.drawPath(cubicPath, paint..color = Colors.green);
-    //绘制渐变阴影
-    Shader shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        tileMode: TileMode.repeated,
-        colors: [
-          Colors.deepPurple.withOpacity(0.5),
-          Colors.red.withOpacity(0.5),
-          Colors.cyan.withOpacity(0.5),
-          Colors.deepPurpleAccent.withOpacity(0.5),
-        ]).createShader(cubicPath.getBounds());
+    // 添加动画
+    ui.PathMetrics computeMetrics = cubicPath.computeMetrics(forceClosed: true);
+    computeMetrics.forEach((pathMetric) {
+      Path extractPath =
+          pathMetric.extractPath(0, pathMetric.length * progress);
+      canvas.drawPath(extractPath, paint..color = Colors.green);
+      //绘制渐变阴影
+      Shader shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          tileMode: TileMode.repeated,
+          colors: [
+            Colors.deepPurple.withOpacity(0.5),
+            Colors.red.withOpacity(0.5),
+            Colors.cyan.withOpacity(0.5),
+            Colors.deepPurpleAccent.withOpacity(0.5),
+          ]).createShader(extractPath.getBounds());
 
-    canvas.drawPath(
-      cubicPath,
-      paint
-        ..shader = shader
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill,
-    );
+      canvas.drawPath(
+        extractPath,
+        paint
+          ..shader = shader
+          ..isAntiAlias = true
+          ..style = PaintingStyle.fill,
+      );
+    });
 
     _drawText(canvas, size);
     canvas.restore();

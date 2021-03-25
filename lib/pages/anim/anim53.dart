@@ -14,12 +14,19 @@ class Anim53Page extends StatefulWidget {
 class _Anim53PageState extends State<Anim53Page>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     _controller =
         AnimationController(duration: Duration(seconds: 5), vsync: this)
           ..repeat();
+    _animation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0, 1, curve: Curves.ease),
+      ),
+    );
     super.initState();
   }
 
@@ -39,7 +46,7 @@ class _Anim53PageState extends State<Anim53Page>
           builder: (context, child) {
             return CustomPaint(
               size: Size.infinite,
-              painter: CharLinePainter(progress: _controller.value),
+              painter: CharLinePainter(progress: _animation.value),
             );
           },
         ),

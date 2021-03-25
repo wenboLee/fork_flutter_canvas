@@ -126,7 +126,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    drawAuthorText(canvas, size);
+    drawAuthorText(canvas);
 
     _paint.color = Colors.green;
     canvas.drawRect(Rect.fromLTWH(box1.x, box1.y, box1.w, box1.h), _paint);

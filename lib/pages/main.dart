@@ -322,7 +322,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    drawAuthorText(canvas, size);
+    drawAuthorText(canvas);
     //地球仪效果， 性能低
 //    var transform = Matrix4.identity()
 //      ..setEntry(3, 2, 0.001)

@@ -89,7 +89,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    drawAuthorText(canvas, size);
+    drawAuthorText(canvas);
     canvas.translate(-ball.x * ball.scaleX + size.width / 2,
         -ball.y * ball.scaleY + size.height / 2);
     canvas.scale(ball.scaleX, ball.scaleY);

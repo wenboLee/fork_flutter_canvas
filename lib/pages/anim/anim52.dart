@@ -26,19 +26,10 @@ class _Anim52PageState extends State<Anim52Page>
         AnimationController(duration: Duration(seconds: 10), vsync: this);
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        if (_animationController.isAnimating) _animationController.stop();
-        Future.delayed(Duration(seconds: 1), () {
-          if (mounted && !_animationController.isAnimating)
-            _animationController.forward(from: 0);
-        });
+        _animationController.reverse();
       }
-    });
-    _pageController.addListener(() {
-      double page = _pageController.page!;
-      if (page != page.toInt() && _animationController.isAnimating) {
-        _animationController.stop();
-      } else if (!_animationController.isAnimating) {
-        _animationController.forward(from: _animationController.value);
+      if (status == AnimationStatus.dismissed) {
+        _animationController.forward();
       }
     });
     _animationController.forward();
@@ -100,6 +91,7 @@ class _Anim52PageState extends State<Anim52Page>
                                   animationController: _animationController,
                                   pathDataMap: pathDataMap,
                                   paintingStyle: PaintingStyle.fill,
+                                  fullSize: MediaQuery.of(context).size,
                                 ),
                               ),
                             ),
@@ -127,6 +119,7 @@ class MyPainter extends CustomPainter {
   final ParsPathModel pathDataMap;
   final PaintingStyle paintingStyle;
   final double strokeWidth;
+  final Size? fullSize;
 
   MyPainter({
     required this.animationController,
@@ -134,12 +127,21 @@ class MyPainter extends CustomPainter {
     required this.pathDataMap,
     this.paintingStyle = PaintingStyle.fill,
     this.strokeWidth = 1,
+    this.fullSize,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     assert(size.width == size.height);
     canvas.save();
+    if (fullSize != null) {
+      final fullCenter = fullSize!.center(Offset.zero);
+      final canvasCenter = size.center(Offset.zero);
+      drawAuthorText(
+          canvas,
+          Offset(-(fullCenter.dx - canvasCenter.dx) / 2,
+              -(fullCenter.dy - canvasCenter.dy) / 2));
+    }
 
     ViewBoxModel viewBox = pathDataMap.viewBox;
     List<PathInfoModel> pathData = pathDataMap.pathList;

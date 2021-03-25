@@ -183,7 +183,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    drawAuthorText(canvas, size);
+    drawAuthorText(canvas);
 
     _paint.color = Colors.red;
     canvas.drawLine(line1.p1, line1.p2, _paint);

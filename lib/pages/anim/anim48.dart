@@ -178,7 +178,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    drawAuthorText(canvas, size);
+    drawAuthorText(canvas);
 
     lines.forEach((line) {
       _paint.color = line.fillStyle;

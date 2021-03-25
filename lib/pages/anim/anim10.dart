@@ -106,7 +106,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    drawAuthorText(canvas, size);
+    drawAuthorText(canvas);
     _paint.style = PaintingStyle.stroke;
     _paint.color = Colors.black;
     pointerList.add(Offset(ball.x, ball.y));

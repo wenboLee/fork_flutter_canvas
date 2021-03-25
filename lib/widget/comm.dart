@@ -28,7 +28,7 @@ FloatingActionButton actionButton(Function() onPressed,
 
 double angle = 0;
 
-void drawAuthorText(Canvas canvas, Size size) {
+void drawAuthorText(Canvas canvas, [Offset offset = Offset.zero]) {
   canvas.save();
   double x1, y1, x2, y2, r1 = 50, r2 = 30;
 
@@ -55,11 +55,11 @@ void drawAuthorText(Canvas canvas, Size size) {
       ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: 20);
       // 这里需要先layout,将宽度约束填入,否则无法绘制
       ui.Paragraph paragraph = pb.build()..layout(pc);
-      Offset offset;
+      Offset offsetText;
       if (j == 0) {
         x1 = r1 + r1 * math.cos(angle + toRad(i * 20));
         y1 = r1 + r1 * math.sin(angle + toRad(i * 20));
-        offset = Offset(x1, y1);
+        offsetText = Offset(x1, y1);
       } else {
         x2 = r2 +
             r2 * math.cos(toRad(360) - angle + toRad(i * 30)) +
@@ -67,9 +67,10 @@ void drawAuthorText(Canvas canvas, Size size) {
         y2 = r2 +
             r2 * math.sin(toRad(360) - angle + toRad(i * 30)) +
             (r1 - r2).abs();
-        offset = Offset(x2, y2);
+        offsetText = Offset(x2, y2);
       }
-      canvas.drawParagraph(paragraph, offset);
+      canvas.drawParagraph(
+          paragraph, offsetText.translate(offset.dx, offset.dy));
     }
   }
   canvas.restore();

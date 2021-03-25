@@ -183,7 +183,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    drawAuthorText(canvas, size);
+    drawAuthorText(canvas);
     if (!moving && pointer != Offset.zero) {
       _paint.color = Colors.red;
       _paint.strokeWidth = 2;

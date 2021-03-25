@@ -186,7 +186,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    drawAuthorText(canvas, size);
+    drawAuthorText(canvas);
 
     for (var i = 0; i < balls.length; i++) {
       // 第一个不绘制

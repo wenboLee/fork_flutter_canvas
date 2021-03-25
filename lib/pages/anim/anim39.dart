@@ -136,7 +136,7 @@ class MyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
-    drawAuthorText(canvas, size);
+    drawAuthorText(canvas);
 
     for (var i = 0; i < boxes.length; i++) {
       Box box = boxes[i];

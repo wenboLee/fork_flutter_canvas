@@ -68,15 +68,15 @@ class CharLinePainter extends CustomPainter {
     canvas.save();
     drawAuthorText(canvas);
     final pointMax = 7;
-    double radius = 4;
+    double radius = 3;
     final paint = Paint();
-    final linePath = Path();
     final cubicPath = Path();
     paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 3;
+    paint.strokeCap = StrokeCap.round;
+    paint.strokeWidth = 2;
     var steps = size.width / pointMax;
     //默认会少一段，所有点可以平移1/2 * steps
-    List<Offset> offsetList = List.generate(pointMax, (index) {
+    for (int index = 0; index < pointMax; index++) {
       var currPoint = Offset(steps / 2 + steps * index,
           index % 2 == 0 ? size.height / 2 : (size.height / 2 / 2));
       if (index == 0) {
@@ -96,25 +96,18 @@ class CharLinePainter extends CustomPainter {
         canvas.drawCircle(control2, radius, paint..color = Colors.deepPurple);
       }
       canvas.drawCircle(currPoint, radius, paint..color = Colors.red);
-      return currPoint;
-    });
-    linePath.addPolygon(offsetList, true);
+    }
 
     // 添加动画
-    ui.PathMetrics lineComputeMetrics =
-        linePath.computeMetrics(forceClosed: true);
-    lineComputeMetrics.forEach((pathMetric) {
-      // 绘制直线
-      Path extractPath =
-          pathMetric.extractPath(0, pathMetric.length * progress);
-      canvas.drawPath(extractPath, paint..color = Colors.blue.withOpacity(0.2));
-    });
     ui.PathMetrics computeMetrics = cubicPath.computeMetrics(forceClosed: true);
     computeMetrics.forEach((pathMetric) {
       // 绘制曲线
       Path extractPath =
           pathMetric.extractPath(0, pathMetric.length * progress);
-      canvas.drawPath(extractPath, paint..color = Colors.green);
+      // 处理连接到x轴上
+      Rect bounds = extractPath.getBounds();
+      extractPath.lineTo(bounds.right, bounds.bottom);
+      canvas.drawPath(extractPath, paint..color = Colors.red);
       //绘制渐变阴影
       Shader shader = LinearGradient(
           begin: Alignment.topCenter,
@@ -145,7 +138,7 @@ class CharLinePainter extends CustomPainter {
       textAlign: TextAlign.left,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.normal,
-      fontSize: 20,
+      fontSize: 18,
     ));
     pb.pushStyle(ui.TextStyle(color: Colors.green));
     pb.addText('1：红色点为数据点；\n2：紫色点为贝塞尔控制点，\n波谷和波峰之间有两个控制点；');

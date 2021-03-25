@@ -57,12 +57,16 @@ void drawAuthorText(Canvas canvas, Size size) {
       ui.Paragraph paragraph = pb.build()..layout(pc);
       Offset offset;
       if (j == 0) {
-        x1 = r1 + r1 * math.cos(toRad(360) - angle + toRad(i * 20));
-        y1 = r1 + r1 * math.sin(toRad(360) - angle + toRad(i * 20));
+        x1 = r1 + r1 * math.cos(angle + toRad(i * 20));
+        y1 = r1 + r1 * math.sin(angle + toRad(i * 20));
         offset = Offset(x1, y1);
       } else {
-        x2 = r2 + r2 * math.cos(angle + toRad(i * 30)) + (r1 - r2).abs();
-        y2 = r2 + r2 * math.sin(angle + toRad(i * 30)) + (r1 - r2).abs();
+        x2 = r2 +
+            r2 * math.cos(toRad(360) - angle + toRad(i * 30)) +
+            (r1 - r2).abs();
+        y2 = r2 +
+            r2 * math.sin(toRad(360) - angle + toRad(i * 30)) +
+            (r1 - r2).abs();
         offset = Offset(x2, y2);
       }
       canvas.drawParagraph(paragraph, offset);

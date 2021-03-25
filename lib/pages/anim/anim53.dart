@@ -62,8 +62,8 @@ class CharLinePainter extends CustomPainter {
     drawAuthorText(canvas);
     final pointMax = 7;
     double radius = 4;
-    final path = Path();
     final paint = Paint();
+    final linePath = Path();
     final cubicPath = Path();
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 3;
@@ -91,12 +91,20 @@ class CharLinePainter extends CustomPainter {
       canvas.drawCircle(currPoint, radius, paint..color = Colors.red);
       return currPoint;
     });
-    // 绘制直线
-    path.addPolygon(offsetList, true);
-    canvas.drawPath(path, paint..color = Colors.blue.withOpacity(0.2));
+    linePath.addPolygon(offsetList, true);
+
     // 添加动画
+    ui.PathMetrics lineComputeMetrics =
+        linePath.computeMetrics(forceClosed: true);
+    lineComputeMetrics.forEach((pathMetric) {
+      // 绘制直线
+      Path extractPath =
+          pathMetric.extractPath(0, pathMetric.length * progress);
+      canvas.drawPath(extractPath, paint..color = Colors.blue.withOpacity(0.2));
+    });
     ui.PathMetrics computeMetrics = cubicPath.computeMetrics(forceClosed: true);
     computeMetrics.forEach((pathMetric) {
+      // 绘制曲线
       Path extractPath =
           pathMetric.extractPath(0, pathMetric.length * progress);
       canvas.drawPath(extractPath, paint..color = Colors.green);

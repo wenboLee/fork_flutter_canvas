@@ -30,9 +30,10 @@ double angle = 0;
 
 void drawAuthorText(Canvas canvas, Size size) {
   canvas.save();
-  angle += 0.04;
-  angle %= math.pi * 2;
+  double x1, y1, x2, y2, r1 = 50, r2 = 30;
 
+  angle += 0.015;
+  angle %= math.pi * 2;
   var textArr = ['Flutter-Canvas', '请叫我code哥'];
   for (var j = 0; j < textArr.length; j++) {
     var text = textArr[j];
@@ -54,13 +55,16 @@ void drawAuthorText(Canvas canvas, Size size) {
       ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: 20);
       // 这里需要先layout,将宽度约束填入,否则无法绘制
       ui.Paragraph paragraph = pb.build()..layout(pc);
-      double spacing = 10, lineHeight = 30, swing = 15;
-      // 文字左上角起始点
-      Offset offset = Offset(
-          math.cos(angle + toRad(1 * i)) * spacing +
-              spacing * (i + 1).toDouble(),
-          lineHeight * (j + 1).toDouble() +
-              math.sin(angle + toRad(30 * i)) * swing);
+      Offset offset;
+      if (j == 0) {
+        x1 = r1 + r1 * math.cos(toRad(360) - angle + toRad(i * 20));
+        y1 = r1 + r1 * math.sin(toRad(360) - angle + toRad(i * 20));
+        offset = Offset(x1, y1);
+      } else {
+        x2 = r2 + r2 * math.cos(angle + toRad(i * 30)) + (r1 - r2).abs();
+        y2 = r2 + r2 * math.sin(angle + toRad(i * 30)) + (r1 - r2).abs();
+        offset = Offset(x2, y2);
+      }
       canvas.drawParagraph(paragraph, offset);
     }
   }

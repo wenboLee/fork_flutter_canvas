@@ -72,6 +72,7 @@ samples, guidance on mobile development, and a full API reference.
         RouteConstant.Anim50Page: (context) => Anim50Page(title: '50三维简单动画'),
         RouteConstant.Anim51Page: (context) => Anim51Page(title: '51三维动画星海'),
         RouteConstant.Anim52Page: (context) => Anim52Page(title: '52绘制iconfont动画'),
+        RouteConstant.Anim53Page: (context) => Anim53Page(title: '53绘制贝塞尔曲线'),
       };
     }
 ```

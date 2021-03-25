@@ -63,8 +63,8 @@ class CharLinePainter extends CustomPainter {
     final pointMax = 7;
     double radius = 4;
     final path = Path();
-    var paint = Paint();
-    var cubicPath = Path();
+    final paint = Paint();
+    final cubicPath = Path();
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 3;
     var steps = size.width / pointMax;

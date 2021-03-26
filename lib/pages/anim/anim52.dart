@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
@@ -63,43 +63,24 @@ class _Anim52PageState extends State<Anim52Page>
                 itemCount: snapshot.data?.length ?? 0,
                 itemBuilder: (context, index) {
                   final pathDataMap = snapshot.data![index];
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Spacer(flex: 1),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Text(
-                          '${index + 1}/${snapshot.data!.length}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Spacer(flex: 1),
-                      AnimatedBuilder(
-                        animation: _animationController,
-                        builder: (context, child) {
-                          final minSize = min(MediaQuery.of(context).size.width,
-                              MediaQuery.of(context).size.height);
-                          return Center(
-                            child: RepaintBoundary(
-                              child: CustomPaint(
-                                size: Size(
-                                  minSize - 100,
-                                  minSize - 100,
-                                ),
-                                painter: MyPainter(
-                                  animationController: _animationController,
-                                  pathDataMap: pathDataMap,
-                                  paintingStyle: PaintingStyle.fill,
-                                  fullSize: MediaQuery.of(context).size,
-                                ),
-                              ),
+                  return AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (context, child) {
+                      return Center(
+                        child: RepaintBoundary(
+                          child: CustomPaint(
+                            size: Size.infinite,
+                            painter: MyPainter(
+                              animationController: _animationController,
+                              pathDataMap: pathDataMap,
+                              paintingStyle: PaintingStyle.fill,
+                              maxNum: snapshot.data?.length ?? 0,
+                              index: index,
                             ),
-                          );
-                        },
-                      ),
-                      Spacer(flex: 3),
-                    ],
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               );
@@ -119,7 +100,8 @@ class MyPainter extends CustomPainter {
   final ParsPathModel pathDataMap;
   final PaintingStyle paintingStyle;
   final double strokeWidth;
-  final Size? fullSize;
+  final int maxNum;
+  final int index;
 
   MyPainter({
     required this.animationController,
@@ -127,25 +109,23 @@ class MyPainter extends CustomPainter {
     required this.pathDataMap,
     this.paintingStyle = PaintingStyle.fill,
     this.strokeWidth = 1,
-    this.fullSize,
+    required this.maxNum,
+    required this.index,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    assert(size.width == size.height);
     canvas.save();
-    if (fullSize != null) {
-      final fullCenter = fullSize!.center(Offset.zero);
-      final canvasCenter = size.center(Offset.zero);
-      drawAuthorText(
-          canvas,
-          Offset(-(fullCenter.dx - canvasCenter.dx) / 2,
-              -(fullCenter.dy - canvasCenter.dy) / 2));
-    }
+    drawAuthorText(canvas);
+    double padding = 100;
+    final minSize = min(size.width, size.height) - padding;
+    final maxSize = max(size.width, size.height);
+    _drawText(canvas, (maxSize - minSize) / 4, padding / 2,
+        '${index + 1}/$maxNum', minSize);
 
     ViewBoxModel viewBox = pathDataMap.viewBox;
     List<PathInfoModel> pathData = pathDataMap.pathList;
-    final canvasMin = size.width;
+    final canvasMin = minSize;
     final viewBoxMax = max(viewBox.width, viewBox.height);
     final scale = canvasMin / viewBox.width;
     // 渲染宽高
@@ -153,11 +133,28 @@ class MyPainter extends CustomPainter {
         (canvasMin - viewBox.height * canvasMin / viewBoxMax) / 2;
     final translateX = (canvasMin - viewBox.width * canvasMin / viewBoxMax) / 2;
     // 先平移再缩放，不然要除缩放比
+    canvas.translate(padding / 2, (maxSize - minSize) / 2);
     canvas.translate(translateX, translateY);
     canvas.scale(scale, scale);
     _drawPath(pathData, canvas, scale);
-
     canvas.restore();
+  }
+
+  void _drawText(Canvas canvas, double paddingY, double paddingX, String text,
+      double sizeW) {
+    ui.ParagraphBuilder pb = ui.ParagraphBuilder(ui.ParagraphStyle(
+      textAlign: TextAlign.center,
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.normal,
+      fontSize: 24,
+    ));
+    pb.pushStyle(ui.TextStyle(color: Colors.black54));
+    pb.addText(text);
+
+    ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: sizeW);
+    ui.Paragraph paragraph = pb.build()..layout(pc);
+    Offset offset = Offset(paddingX, paddingY);
+    canvas.drawParagraph(paragraph, offset);
   }
 
   void _drawPath(List<PathInfoModel> pathsData, Canvas canvas, double scale) {
@@ -168,7 +165,7 @@ class MyPainter extends CustomPainter {
       Color fillColor = pathsData[index].fillColor;
       Path path = Path();
       writeSvgPathDataToPath(pathData, PathPrinter(path: path));
-      List<PathMetric> listData = path.computeMetrics().toList();
+      List<ui.PathMetric> listData = path.computeMetrics().toList();
       extractPathList.addAll(listData.map((e) {
         return ExtractPathModel(
             fillColor: fillColor,
@@ -183,7 +180,7 @@ class MyPainter extends CustomPainter {
     Map<int, int> progress = {};
     List.generate(extractPathLen, (index) {
       ExtractPathModel item = extractPathList[index];
-      PathMetric pathMetric = item.pathMetric;
+      ui.PathMetric pathMetric = item.pathMetric;
       Color fillColor = item.fillColor;
       int pathIndex = item.pathIndex;
       int pathTotalNumber = item.pathTotalNumber;
@@ -246,7 +243,7 @@ class MyPainter extends CustomPainter {
 
 class ExtractPathModel {
   final Color fillColor;
-  final PathMetric pathMetric;
+  final ui.PathMetric pathMetric;
   final int pathIndex;
   final int pathTotalNumber;
 

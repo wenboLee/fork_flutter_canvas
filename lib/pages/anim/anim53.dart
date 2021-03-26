@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 
@@ -15,6 +16,7 @@ class _Anim53PageState extends State<Anim53Page>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  int _pointMax = Random.secure().nextInt(10).clamp(3, 10);
 
   @override
   void initState() {
@@ -46,13 +48,16 @@ class _Anim53PageState extends State<Anim53Page>
           builder: (context, child) {
             return CustomPaint(
               size: Size.infinite,
-              painter: CharLinePainter(progress: _animation.value),
+              painter: CharLinePainter(
+                  progress: _animation.value, pointMax: _pointMax),
             );
           },
         ),
       ),
       floatingActionButton: actionButton(() {
-        setState(() {});
+        setState(() {
+          _pointMax = Random.secure().nextInt(10).clamp(3, 10);
+        });
       }),
     );
   }
@@ -60,14 +65,14 @@ class _Anim53PageState extends State<Anim53Page>
 
 class CharLinePainter extends CustomPainter {
   final double progress;
+  final int pointMax;
 
-  CharLinePainter({required this.progress});
+  CharLinePainter({required this.progress, required this.pointMax});
 
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
     drawAuthorText(canvas);
-    final pointMax = 7;
     double radius = 3;
     final paint = Paint();
     final cubicPath = Path();
@@ -92,6 +97,11 @@ class CharLinePainter extends CustomPainter {
             prePoint.dx + (currPoint.dx - prePoint.dx) / 2, currPoint.dy);
         cubicPath.cubicTo(control1.dx, control1.dy, control2.dx, control2.dy,
             currPoint.dx, currPoint.dy);
+        if (index == pointMax - 1 && pointMax % 2 == 0) {
+          // 如果是偶数，处理连接到x轴上
+          Rect bounds = cubicPath.getBounds();
+          cubicPath.lineTo(bounds.right, bounds.bottom);
+        }
         canvas.drawCircle(control1, radius, paint..color = Colors.deepPurple);
         canvas.drawCircle(control2, radius, paint..color = Colors.deepPurple);
       }

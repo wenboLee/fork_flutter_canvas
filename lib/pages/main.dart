@@ -323,7 +323,7 @@ class MyCustomPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     drawAuthorText(canvas);
-    //地球仪效果， 性能低
+    //地球仪效果，性能低
 //    var transform = Matrix4.identity()
 //      ..setEntry(3, 2, 0.001)
 //      ..rotateX(toRad(10))
@@ -332,24 +332,25 @@ class MyCustomPainter extends CustomPainter {
     // 优先渲染远离屏幕面的点
     balls.sort((a, b) => a.scale.compareTo(b.scale));
     balls.forEach((ball) {
-      double elevation = ball.r;
-      if (elevation > 20) {
-        elevation = 20;
-      }
-      canvas.drawShadow(
-        Path()
-          ..addOval(
-            Rect.fromCenter(
-              center: Offset(ball.x, ball.y),
-              width: ball.r * 2,
-              height: ball.r * 2,
-            ),
-          )
-          ..close(),
-        ball.fillStyle,
-        elevation,
-        false,
-      );
+      //阴影效果，性能低
+//      double elevation = ball.r;
+//      if (elevation > 20) {
+//        elevation = 20;
+//      }
+//      canvas.drawShadow(
+//        Path()
+//          ..addOval(
+//            Rect.fromCenter(
+//              center: Offset(ball.x, ball.y),
+//              width: ball.r * 2,
+//              height: ball.r * 2,
+//            ),
+//          )
+//          ..close(),
+//        ball.fillStyle,
+//        elevation,
+//        false,
+//      );
       _paint.color = ball.fillStyle;
       canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
     });

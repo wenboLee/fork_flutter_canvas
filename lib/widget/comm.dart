@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
@@ -10,7 +11,7 @@ AppBar appBar(title) {
       style: TextStyle(color: Colors.white),
     ),
     iconTheme: IconThemeData(color: Colors.white),
-    brightness: Brightness.dark,
+    systemOverlayStyle: SystemUiOverlayStyle.dark,
   );
 }
 

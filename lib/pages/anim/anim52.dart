@@ -37,7 +37,7 @@ class _Anim52PageState extends State<Anim52Page>
   }
 
   Future<List<ParsPathModel>> _mockIconfontData() async {
-    return IconFontUtil.read('//at.alicdn.com/t/font_1950593_g48kd9v3h54.js');
+    return IconFontUtil.read('//at.alicdn.com/t/font_1950593_48mk0gqppds.js');
   }
 
   @override

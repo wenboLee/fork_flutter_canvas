@@ -21,7 +21,7 @@ class _Anim54PageState extends State<Anim54Page>
   List<Ball>? _balls;
   double dx = 0, dy = 0, springLength = 0, spring = 0.01; //弹动系数
   double easing = 0.01; //缓动系数
-  double friction = 0.9; //摩擦力
+  double friction = 0.95; //摩擦力
   Ball? draggedBall;
 
   List<Ball> _initBalls({required int num}) {

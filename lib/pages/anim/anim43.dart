@@ -77,8 +77,8 @@ class _Anim43PageState extends State<Anim43Page>
         }
 
         // 边界检测, 弹性系数-1只改变方向
-        checkBallBounce(_ball1!, _size, -1);
-        checkBallBounce(_ball2!, _size, -1);
+        checkBallBounce(_ball1!, _size);
+        checkBallBounce(_ball2!, _size);
       }
     });
     super.initState();

@@ -123,7 +123,7 @@ class _Anim37PageState extends State<Anim37Page>
         continue;
       }
       // 边界处理
-      checkBallBounce(ball, _size, bounce);
+      checkBallBounce(ball, _size, bounce: bounce);
       ball.x += ball.vx;
       ball.y += ball.vy;
     }

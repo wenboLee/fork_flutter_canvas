@@ -61,7 +61,7 @@ class _Anim42PageState extends State<Anim42Page>
         _checkBallMove(_ball!, _line1!, _line1!.rotation, 'tag1');
         _checkBallMove(_ball!, _line2!, _line2!.rotation, 'tag2');
         // 处理和边界反弹
-        checkBallBounce(_ball!, _size, bounce);
+        checkBallBounce(_ball!, _size, bounce: bounce);
       }
     });
     super.initState();

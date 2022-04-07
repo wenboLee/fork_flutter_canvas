@@ -18,7 +18,6 @@ class _Anim44PageState extends State<Anim44Page>
   late AnimationController _controller;
   Size _size = Size.zero;
   Ball? _ball1, _ball2;
-  double _bounce = -1;
 
   @override
   void initState() {
@@ -63,8 +62,8 @@ class _Anim44PageState extends State<Anim44Page>
         checkBallHit(_ball1!, _ball2!);
 
         // 边界检测
-        checkBallBounce(_ball1!, _size, _bounce);
-        checkBallBounce(_ball2!, _size, _bounce);
+        checkBallBounce(_ball1!, _size);
+        checkBallBounce(_ball2!, _size);
       }
     });
     super.initState();

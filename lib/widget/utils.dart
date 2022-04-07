@@ -58,8 +58,8 @@ bool rectHit(Box box1, Box box2) {
       box1.y <= box2.y + box2.h);
 }
 
-// 对小球进行边界反弹处理
-void checkBallBounce(Ball ball, Size size, double bounce) {
+// 对小球进行边界反弹处理,弹性系数bounce:-1只改变方向
+void checkBallBounce(Ball ball, Size size, {double bounce = -1}) {
   if (ball.x - ball.r <= 0) {
     ball.x = ball.r;
     ball.vx *= bounce;

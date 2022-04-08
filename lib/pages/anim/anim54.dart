@@ -82,8 +82,8 @@ class _Anim54PageState extends State<Anim54Page>
           _size = _globalKey.currentContext!.size!;
         }
         if (_balls == null) {
-          _balls = _initBalls(num: 20);
-          springLength = _balls!.first.r * _balls!.length / 2.5;
+          _balls = _initBalls(num: 10);
+          springLength = _balls!.first.r * _balls!.length / 2;
         }
 
         _balls!.forEach((ball) {
@@ -158,7 +158,7 @@ class _Anim54PageState extends State<Anim54Page>
       ),
       floatingActionButton: actionButton(() {
         setState(() {
-          _balls = _initBalls(num: 20);
+          _balls = _initBalls(num: 10);
           draggedBall = null;
         });
       }),

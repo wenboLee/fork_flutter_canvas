@@ -50,6 +50,11 @@ double getDist(Offset p1, Offset p2) {
   return sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));
 }
 
+// 两球圆心间距
+double getRoundDist(Ball b1, Ball b2) {
+  return getDist(Offset(b1.x, b1.y), Offset(b2.x, b2.y));
+}
+
 // 矩形之间碰撞检测
 bool rectHit(Box box1, Box box2) {
   return (box1.x + box1.w >= box2.x &&

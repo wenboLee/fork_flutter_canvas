@@ -25,6 +25,8 @@ class Ball {
   bool dragged;
   double scale;
   bool show;
+  double strength; //力量
+  double value;
 
   Ball({
     this.id = 0,
@@ -51,5 +53,7 @@ class Ball {
     this.dragged = false,
     this.scale = 0,
     this.show = true,
+    this.strength = 0,
+    this.value = 0,
   });
 }

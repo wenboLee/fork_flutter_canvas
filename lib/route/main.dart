@@ -53,6 +53,7 @@ import 'package:flutter_canvas/pages/anim/anim51.dart';
 import 'package:flutter_canvas/pages/anim/anim52.dart';
 import 'package:flutter_canvas/pages/anim/anim53.dart';
 import 'package:flutter_canvas/pages/anim/anim54.dart';
+import 'package:flutter_canvas/pages/anim/anim55.dart';
 import 'package:flutter_canvas/pages/debug/main.dart';
 import 'package:flutter_canvas/pages/main.dart';
 
@@ -113,6 +114,7 @@ class RouteConstant {
   static const String Anim52Page = '/anim52Page';
   static const String Anim53Page = '/anim53Page';
   static const String Anim54Page = '/anim54Page';
+  static const String Anim55Page = '/anim55Page';
 }
 
 String? routeWidgetName(String routeName) {
@@ -174,6 +176,7 @@ String? routeWidgetName(String routeName) {
     RouteConstant.Anim52Page: 'Anim52Page',
     RouteConstant.Anim53Page: 'Anim53Page',
     RouteConstant.Anim54Page: 'Anim54Page',
+    RouteConstant.Anim55Page: 'Anim55Page',
   };
   return map.containsKey(routeName) ? map[routeName] : defaultRouteName;
 }
@@ -236,5 +239,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim52Page: (context) => Anim52Page(title: '52绘制iconfont动画'),
     RouteConstant.Anim53Page: (context) => Anim53Page(title: '53绘制贝塞尔曲线'),
     RouteConstant.Anim54Page: (context) => Anim54Page(title: '54小球向心靠拢'),
+    RouteConstant.Anim55Page: (context) => Anim55Page(title: '55小球向心靠拢2'),
   };
 }

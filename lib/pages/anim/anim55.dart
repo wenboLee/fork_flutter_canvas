@@ -1,7 +1,6 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_canvas/widget/ball.dart';
 import 'package:flutter_canvas/widget/comm.dart';
-import 'package:flutter_canvas/widget/utils.dart';
 
 class Anim55Page extends StatefulWidget {
   final String title;
@@ -14,14 +13,8 @@ class Anim55Page extends StatefulWidget {
 
 class _Anim55PageState extends State<Anim55Page>
     with SingleTickerProviderStateMixin {
-  final GlobalKey _globalKey = GlobalKey();
   late AnimationController _controller;
-  Size _size = Size.zero;
-  List<Ball>? _balls;
-  double dx = 0, dy = 0, spring = 0.001; //弹动系数
-  double easing = 0.001; //缓动系数
-  double friction = 0.95; //摩擦力
-  Ball? draggedBall;
+  Offset _offset = Offset.zero;
 
   @override
   void initState() {
@@ -29,55 +22,13 @@ class _Anim55PageState extends State<Anim55Page>
         AnimationController(duration: Duration(seconds: 1), vsync: this)
           ..repeat();
     _controller.addListener(() {
-      // if (mounted) {
-      //   if (_size == Size.zero) {
-      //     _size = _globalKey.currentContext!.size!;
-      //   }
-      //   if (_balls == null) {
-      //     _balls = _initBalls(num: 10);
-      //   }
-      // }
+      if (mounted) {}
     });
     super.initState();
   }
 
-  List<Ball> _initBalls({required int num}) {
-    return List.generate(
-      num,
-      (index) => Ball(
-        id: index,
-        x: randomScope([50, _size.width - 50]),
-        y: randomScope([50, _size.height - 50]),
-        fillStyle: randomColor(),
-        r: 30,
-        m: 1,
-      ),
-    );
-  }
-
-  void _pointerDownEvent(event) {
-    Offset pointer = event.localPosition;
-    _balls!.forEach((ball) {
-      if (isPoint(ball, pointer)) {
-        ball.dragged = true;
-        dx = pointer.dx - ball.x;
-        dy = pointer.dy - ball.y;
-        draggedBall = ball;
-      }
-    });
-  }
-
-  void _pointerMoveEvent(event) {
-    Offset pointer = event.localPosition;
-    if (draggedBall != null) {
-      draggedBall!.x = pointer.dx - dx;
-      draggedBall!.y = pointer.dy - dy;
-    }
-  }
-
-  void _pointerUpEvent(event) {
-    draggedBall?.dragged = false;
-    draggedBall = null;
+  void _pointerMoveEvent(PointerMoveEvent event) {
+    _offset += event.delta;
   }
 
   @override
@@ -98,33 +49,27 @@ class _Anim55PageState extends State<Anim55Page>
             animation: _controller,
             builder: (context, child) {
               return CustomPaint(
-                key: _globalKey,
                 size: Size.infinite,
-                painter:
-                    _balls == null ? null : MyCustomPainter(balls: _balls!),
+                painter: MyCustomPainter(
+                    rx: _offset.dy * 0.005, ry: _offset.dx * 0.005, rz: 0),
               );
             },
           ),
           behavior: HitTestBehavior.opaque,
-          onPointerDown: _pointerDownEvent,
           onPointerMove: _pointerMoveEvent,
-          onPointerUp: _pointerUpEvent,
         ),
       ),
       floatingActionButton: actionButton(() {
-        setState(() {
-          _balls = _initBalls(num: 10);
-          draggedBall = null;
-        });
+        setState(() {});
       }),
     );
   }
 }
 
 class MyCustomPainter extends CustomPainter {
-  final List<Ball> balls;
+  final double rx, ry, rz;
 
-  MyCustomPainter({required this.balls});
+  MyCustomPainter({required this.rx, required this.ry, required this.rz});
 
   Paint _paint = Paint()
     ..strokeCap = StrokeCap.round
@@ -137,11 +82,68 @@ class MyCustomPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
     drawAuthorText(canvas);
-    balls.forEach((ball) {
-      _paint.color = ball.fillStyle;
-      _paint.style = PaintingStyle.fill;
-      canvas.drawCircle(Offset(ball.x, ball.y), ball.r, _paint);
-    });
+
+    canvas.translate(size.width / 2, size.height / 2);
+
+    const double radius = 200;
+    const int resolution = 200;
+
+    for (var i = 0; i < resolution; i++) {
+      final theta = pi * i / resolution;
+      for (var j = 0; j < resolution; j++) {
+        final phi = 2 * pi * j / resolution;
+
+        final x = radius * cos(phi) * sin(theta);
+        final y = radius * sin(phi) * sin(theta);
+        final z = radius * cos(theta);
+
+        //  final mv = Matrix4.columns(
+        //   vector.Vector(x),
+        //   vector.Vector(y),
+        //   vector.Vector(z),
+        //   vector.Vector(1),
+        // );
+        // final mx = Matrix4.columns(
+        //   vector.Vector4(1, 0, 0, 0),
+        //   vector.Vector4(0, cos(…), sin(…), 0),
+        //   vector.Vector4(0, -sin(…), cos(…), 0),
+        //   vector.Vector4(0, 0, 0, 1),
+        // );
+        // final my = Matrix4.columns(
+        //   vector.Vector4(cos(…), 0, -sin(…), 0),
+        //   vector.Vector4(0, 1, 0, 0),
+        //   vector.Vector4(sin(…), 0, cos(…), 0),
+        //   vector.Vector4(0, 0, 0, 1),
+        // );
+        // final mz = Matrix4.columns(
+        //   vector.Vector4(cos(…), -sin(…), 0, 0),
+        //   vector.Vector4(sin(…), cos(…), 0, 0),
+        //   vector.Vector4(0, 0, 1, 0),
+        //   vector.Vector4(0, 0, 0, 1),
+        // );
+        // rotate x = mv * mx
+        // rotate y = mv * my
+        // rotate z = mv * mz
+
+        // rotate x
+        double rxx = x;
+        double rxy = cos(rx) * y + sin(rx) * z;
+        double rxz = -sin(rx) * y + cos(rx) * z;
+
+        // rotate y
+        double ryx = cos(ry) * rxx - sin(ry) * rxz;
+        double ryy = rxy;
+        double ryz = sin(ry) * rxx + cos(ry) * rxz;
+
+        // rotate z
+        double rzx = cos(rz) * ryx - sin(rz) * ryy;
+        double rzy = sin(rz) * ryx + cos(rz) * ryy;
+        double rzz = ryz;
+
+        canvas.drawCircle(Offset(rzx, rzy), 1, _paint);
+      }
+    }
+
     canvas.restore();
   }
 

@@ -85,8 +85,8 @@ class MyCustomPainter extends CustomPainter {
 
     canvas.translate(size.width / 2, size.height / 2);
 
-    const double radius = 200;
-    const int resolution = 200;
+    const double radius = 180;
+    const int resolution = 180;
 
     for (var i = 0; i < resolution; i++) {
       final theta = pi * i / resolution;

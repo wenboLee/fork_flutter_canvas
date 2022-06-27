@@ -1,25 +1,28 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
 
-class Anim55Page extends StatefulWidget {
+class Anim56Page extends StatefulWidget {
   final String title;
 
-  Anim55Page({Key? key, required this.title}) : super(key: key);
+  Anim56Page({Key? key, required this.title}) : super(key: key);
 
   @override
-  _Anim55PageState createState() => _Anim55PageState();
+  _Anim56PageState createState() => _Anim56PageState();
 }
 
-class _Anim55PageState extends State<Anim55Page>
+class _Anim56PageState extends State<Anim56Page>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   final GlobalKey _globalKey = GlobalKey();
   Offset _offset = Offset.zero;
   Size _size = Size.zero;
   double _rx = 0, _ry = 0, _rz = 0, _radius = 0;
-  int _resolution = 60;
+  int _resolutionx = 30, _resolutiony = 30;
   bool _isMouseDown = false;
 
   @override
@@ -32,11 +35,24 @@ class _Anim55PageState extends State<Anim55Page>
         if (_size == Size.zero) {
           _size = _globalKey.currentContext!.size!;
           _radius = _size.width / 2 - 20;
-          setState(() {});
+          // load("assets/logo.png").then((img) {
+          //   setState(() {
+          //     _resolutionx = img.width;
+          //     _resolutiony = img.height;
+          //   });
+          // });
         }
       }
     });
+
     super.initState();
+  }
+
+  Future<ui.Image> load(String asset) async {
+    ByteData data = await rootBundle.load(asset);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return fi.image;
   }
 
   void _pointerDownEvent(event) {
@@ -85,7 +101,8 @@ class _Anim55PageState extends State<Anim55Page>
                   ry: _ry,
                   rz: _rz,
                   radius: _radius,
-                  resolution: _resolution,
+                  resolutionx: _resolutionx,
+                  resolutiony: _resolutiony,
                 ),
               );
             },
@@ -98,7 +115,8 @@ class _Anim55PageState extends State<Anim55Page>
       ),
       floatingActionButton: actionButton(() {
         setState(() {
-          _resolution = math.Random().nextInt(100) + 50;
+          _resolutionx = math.Random().nextInt(100) + 50;
+          _resolutiony = _resolutionx;
         });
       }),
     );
@@ -107,14 +125,15 @@ class _Anim55PageState extends State<Anim55Page>
 
 class MyCustomPainter extends CustomPainter {
   final double rx, ry, rz, radius;
-  final int resolution;
+  final int resolutionx, resolutiony;
 
   MyCustomPainter({
     required this.rx,
     required this.ry,
     required this.rz,
     required this.radius,
-    required this.resolution,
+    required this.resolutionx,
+    required this.resolutiony,
   });
 
   Paint _paint = Paint()
@@ -131,10 +150,10 @@ class MyCustomPainter extends CustomPainter {
 
     canvas.translate(size.width / 2, size.height / 2);
 
-    for (var i = 0; i < resolution; i++) {
-      final theta = math.pi * i / resolution;
-      for (var j = 0; j < resolution; j++) {
-        final phi = 2 * math.pi * j / resolution;
+    for (var i = 0; i < resolutionx; i++) {
+      final theta = math.pi * i / resolutionx;
+      for (var j = 0; j < resolutiony; j++) {
+        final phi = 2 * math.pi * j / resolutiony;
 
         final x = radius * math.cos(phi) * math.sin(theta);
         final y = radius * math.sin(phi) * math.sin(theta);
@@ -184,10 +203,27 @@ class MyCustomPainter extends CustomPainter {
         double rzz = ryz;
 
         canvas.drawCircle(Offset(rzx, rzy), 1, _paint);
+        // _drawText(canvas, size, Offset(rzx, rzy));
       }
     }
 
     canvas.restore();
+  }
+
+  void _drawText(Canvas canvas, Size size, Offset offset) {
+    ui.ParagraphBuilder paragraphBuilder = ui.ParagraphBuilder(
+      ui.ParagraphStyle(fontSize: 10),
+    );
+    paragraphBuilder.pushStyle(ui.TextStyle(
+      color: Colors.red,
+      fontSize: 10,
+    ));
+    paragraphBuilder.addText('钱');
+    ui.ParagraphConstraints paragraphConstraints =
+        ui.ParagraphConstraints(width: 10);
+    ui.Paragraph paragraph = paragraphBuilder.build()
+      ..layout(paragraphConstraints);
+    canvas.drawParagraph(paragraph, offset);
   }
 
   @override

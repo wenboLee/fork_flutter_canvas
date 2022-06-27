@@ -37,6 +37,12 @@ bool isPoint(Ball ball, Offset point) {
   return ball.r >= sqrt(pow(point.dx - ball.x, 2) + pow(point.dy - ball.y, 2));
 }
 
+// 是否在圆内
+bool isPointCircle(double r3d, Offset center, Offset point) {
+  return r3d >=
+      sqrt(pow(point.dx - center.dx, 2) + pow(point.dy - center.dy, 2));
+}
+
 // 点是否在盒子内
 bool isBoxPoint(Box box, Offset point) {
   return point.dx >= box.x &&

@@ -111,16 +111,10 @@ class _MainPageState extends State<MainPage>
     }
   }
 
-  bool _isPoint(double r3d, Offset center, Offset point) {
-    return r3d >=
-        math.sqrt(math.pow(point.dx - center.dx, 2) +
-            math.pow(point.dy - center.dy, 2));
-  }
-
   void _pointerDownEvent(event) {
     _pointer = event.localPosition;
     isMouseDown = false;
-    if (_isPoint(r3d, _size.center(Offset.zero), _pointer)) {
+    if (isPointCircle(r3d, _size.center(Offset.zero), _pointer)) {
       isMouseDown = true;
       startX = _pointer.dx;
       startY = _pointer.dy;

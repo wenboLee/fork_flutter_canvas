@@ -181,6 +181,7 @@ class MyCustomPainter extends CustomPainter {
         // rotate z
         double rzx = math.cos(rz) * ryx - math.sin(rz) * ryy;
         double rzy = math.sin(rz) * ryx + math.cos(rz) * ryy;
+        // ignore: unused_local_variable
         double rzz = ryz;
 
         canvas.drawCircle(Offset(rzx, rzy), 1, _paint);

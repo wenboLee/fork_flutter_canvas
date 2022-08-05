@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
@@ -200,6 +199,7 @@ class MyCustomPainter extends CustomPainter {
         // rotate z
         double rzx = math.cos(rz) * ryx - math.sin(rz) * ryy;
         double rzy = math.sin(rz) * ryx + math.cos(rz) * ryy;
+        // ignore: unused_local_variable
         double rzz = ryz;
 
         canvas.drawCircle(Offset(rzx, rzy), 1, _paint);
@@ -210,6 +210,7 @@ class MyCustomPainter extends CustomPainter {
     canvas.restore();
   }
 
+  // ignore: unused_element
   void _drawText(Canvas canvas, Size size, Offset offset) {
     ui.ParagraphBuilder paragraphBuilder = ui.ParagraphBuilder(
       ui.ParagraphStyle(fontSize: 10),

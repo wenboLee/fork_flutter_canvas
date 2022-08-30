@@ -1,9 +1,11 @@
 import 'dart:ui' as ui;
 import 'dart:math' as math;
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_canvas/widget/comm.dart';
 import 'package:flutter_canvas/widget/utils.dart';
+import 'package:image/image.dart' as img;
 
 class Anim56Page extends StatefulWidget {
   final String title;
@@ -21,8 +23,10 @@ class _Anim56PageState extends State<Anim56Page>
   Offset _offset = Offset.zero;
   Size _size = Size.zero;
   double _rx = 0, _ry = 0, _rz = 0, _radius = 0;
-  int _resolutionx = 30, _resolutiony = 30;
+  int _resolutionx = 0, _resolutiony = 0;
   bool _isMouseDown = false;
+  List<List<PixelColor>> _rgbList = [];
+  bool _showLogo1 = true;
 
   @override
   void initState() {
@@ -33,25 +37,40 @@ class _Anim56PageState extends State<Anim56Page>
       if (mounted) {
         if (_size == Size.zero) {
           _size = _globalKey.currentContext!.size!;
-          _radius = _size.width / 2 - 20;
-          // load("assets/logo.png").then((img) {
-          //   setState(() {
-          //     _resolutionx = img.width;
-          //     _resolutiony = img.height;
-          //   });
-          // });
         }
       }
     });
+    decodeRGB("assets/logo1.png");
 
     super.initState();
   }
 
-  Future<ui.Image> load(String asset) async {
-    ByteData data = await rootBundle.load(asset);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return fi.image;
+  Future<void> decodeRGB(String asset) async {
+    final Uint8List inputImg =
+        (await rootBundle.load(asset)).buffer.asUint8List();
+    final decoder = img.PngDecoder();
+    final decodedImg = decoder.decodeImage(inputImg);
+    if (decodedImg != null) {
+      _resolutionx = decodedImg.width;
+      _resolutiony = decodedImg.height;
+
+      final max = math.max(_resolutionx, _resolutiony);
+      _radius = max / 2;
+
+      final decodedBytes = decodedImg.getBytes(format: img.Format.rgb);
+      List<List<PixelColor>> rgbList = [];
+      for (int y = 0; y < decodedImg.height; y++) {
+        rgbList.add(<PixelColor>[]);
+        for (int x = 0; x < decodedImg.width; x++) {
+          int red = decodedBytes[y * decodedImg.width * 3 + x * 3];
+          int green = decodedBytes[y * decodedImg.width * 3 + x * 3 + 1];
+          int blue = decodedBytes[y * decodedImg.width * 3 + x * 3 + 2];
+          rgbList[y].add(PixelColor(red: red, green: green, blue: blue));
+        }
+      }
+      _rgbList = rgbList;
+      setState(() {});
+    }
   }
 
   void _pointerDownEvent(event) {
@@ -92,9 +111,10 @@ class _Anim56PageState extends State<Anim56Page>
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
+              final max = math.max(_resolutionx, _resolutiony).toDouble();
               return CustomPaint(
                 key: _globalKey,
-                size: Size.infinite,
+                size: Size(max, max),
                 painter: MyCustomPainter(
                   rx: _rx,
                   ry: _ry,
@@ -102,6 +122,7 @@ class _Anim56PageState extends State<Anim56Page>
                   radius: _radius,
                   resolutionx: _resolutionx,
                   resolutiony: _resolutiony,
+                  rgbList: _rgbList,
                 ),
               );
             },
@@ -114,8 +135,13 @@ class _Anim56PageState extends State<Anim56Page>
       ),
       floatingActionButton: actionButton(() {
         setState(() {
-          _resolutionx = math.Random().nextInt(100) + 50;
-          _resolutiony = _resolutionx;
+          if (_showLogo1) {
+            _showLogo1 = !_showLogo1;
+            decodeRGB("assets/logo2.png");
+          } else {
+            _showLogo1 = !_showLogo1;
+            decodeRGB("assets/logo1.png");
+          }
         });
       }),
     );
@@ -125,6 +151,7 @@ class _Anim56PageState extends State<Anim56Page>
 class MyCustomPainter extends CustomPainter {
   final double rx, ry, rz, radius;
   final int resolutionx, resolutiony;
+  final List<List<PixelColor?>?> rgbList;
 
   MyCustomPainter({
     required this.rx,
@@ -133,6 +160,7 @@ class MyCustomPainter extends CustomPainter {
     required this.radius,
     required this.resolutionx,
     required this.resolutiony,
+    required this.rgbList,
   });
 
   Paint _paint = Paint()
@@ -158,34 +186,6 @@ class MyCustomPainter extends CustomPainter {
         final y = radius * math.sin(phi) * math.sin(theta);
         final z = radius * math.cos(theta);
 
-        // final mv = [
-        //   [x],
-        //   [y],
-        //   [z],
-        //   [1],
-        // ];
-        // final mx = [
-        //   [1, 0, 0, 0],
-        //   [0, cos(rx), sin(rx), 0],
-        //   [0, -sin(rx), cos(rx), 0],
-        //   [0, 0, 0, 1],
-        // ];
-        // final my = [
-        //   [cos(ry), 0, -sin(ry), 0],
-        //   [0, 1, 0, 0],
-        //   [sin(ry), 0, cos(ry), 0],
-        //   [0, 0, 0, 1],
-        // ];
-        // final mz = [
-        //   [cos(rz), -sin(rz), 0, 0],
-        //   [sin(rz), cos(rz), 0, 0],
-        //   [0, 0, 1, 0],
-        //   [0, 0, 0, 1],
-        // ];
-        // rotate x = mv * mx
-        // rotate y = mv * my
-        // rotate z = mv * mz
-
         // rotate x
         double rxx = x;
         double rxy = math.cos(rx) * y + math.sin(rx) * z;
@@ -202,14 +202,28 @@ class MyCustomPainter extends CustomPainter {
         // ignore: unused_local_variable
         double rzz = ryz;
 
-        canvas.drawCircle(Offset(rzx, rzy), 1, _paint);
-        // _drawText(canvas, size, Offset(rzx, rzy));
+        PixelColor pixelColor;
+        if (rgbList[j] != null && rgbList[j]![i] != null) {
+          pixelColor = rgbList[j]![i]!;
+        } else {
+          pixelColor = PixelColor(red: 0, green: 0, blue: 0);
+        }
+        _paint.color = Color.fromRGBO(
+            pixelColor.red!, pixelColor.green!, pixelColor.blue!, 1);
+        canvas.drawRect(
+            Rect.fromCenter(
+              center: Offset(rzx, rzy),
+              width: 1 * window.devicePixelRatio,
+              height: 1 * window.devicePixelRatio,
+            ),
+            _paint);
       }
     }
 
     canvas.restore();
   }
 
+  // 绘制到rect中，再将rect转换到圆
   // ignore: unused_element
   void _drawText(Canvas canvas, Size size, Offset offset) {
     ui.ParagraphBuilder paragraphBuilder = ui.ParagraphBuilder(
@@ -219,7 +233,7 @@ class MyCustomPainter extends CustomPainter {
       color: Colors.red,
       fontSize: 10,
     ));
-    paragraphBuilder.addText('钱');
+    paragraphBuilder.addText('文字');
     ui.ParagraphConstraints paragraphConstraints =
         ui.ParagraphConstraints(width: 10);
     ui.Paragraph paragraph = paragraphBuilder.build()
@@ -230,5 +244,16 @@ class MyCustomPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
+  }
+}
+
+class PixelColor {
+  final int? blue, green, red;
+
+  PixelColor({this.red, this.green, this.blue});
+
+  @override
+  String toString() {
+    return 'R: $red, G: $green, B: $blue';
   }
 }

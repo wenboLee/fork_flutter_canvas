@@ -243,6 +243,6 @@ Map<String, WidgetBuilder> routes(BuildContext context) {
     RouteConstant.Anim53Page: (context) => Anim53Page(title: '53绘制贝塞尔曲线'),
     RouteConstant.Anim54Page: (context) => Anim54Page(title: '54小球向心靠拢'),
     RouteConstant.Anim55Page: (context) => Anim55Page(title: '55球体'),
-    // RouteConstant.Anim56Page: (context) => Anim56Page(title: '56球体2'),
+    RouteConstant.Anim56Page: (context) => Anim56Page(title: '56球体渲染材质'),
   };
 }
